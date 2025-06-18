@@ -1,51 +1,24 @@
+/* App.css - Modern Design with Tailwind */
 .App {
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Navigation menu items in header */
-.nav-menu-item {
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  padding: 0.5rem 1rem;
-  margin: 0 0.25rem;
-  border-radius: 0.375rem;
-  transition: all 0.15s ease-in-out;
-  font-weight: normal;
-  text-decoration: none;
-  cursor: pointer;
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.nav-menu-item:hover {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  background: none;
-}
-
-.nav-menu-item.nav-menu-active {
-  color: white;
-  font-weight: bold;
-  background: none;
-}
-
-/* Remove old navigation button styles */
-.navbar-nav .nav-link.btn {
-  background: none;
-  border: none;
-  padding: 0.5rem 1rem;
-  margin: 0 0.25rem;
-  border-radius: 0.375rem;
-  transition: background-color 0.15s ease-in-out;
-}
-
-.navbar-nav .nav-link.btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  text-decoration: none;
-}
-
-.navbar-nav .nav-link.btn.active {
-  background-color: rgba(255, 255, 255, 0.2);
-  font-weight: 500;
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
 }
 
 /* Modal styling to ensure proper z-index and backdrop blur */
@@ -380,7 +353,8 @@
 /* Priority column with integrated indicator */
 .priority-cell {
   position: relative;
-  padding-left: 20px !important; /* Space for the wider indicator */
+  padding-left: 20px !important;
+  /* Space for the wider indicator */
 }
 
 .priority-cell::before {
@@ -394,15 +368,18 @@
 }
 
 .priority-cell.priority-high::before {
-  background-color: #dc3545; /* Bootstrap danger red */
+  background-color: #dc3545;
+  /* Bootstrap danger red */
 }
 
 .priority-cell.priority-medium::before {
-  background-color: #ffc107; /* Bootstrap warning yellow */
+  background-color: #ffc107;
+  /* Bootstrap warning yellow */
 }
 
 .priority-cell.priority-low::before {
-  background-color: #198754; /* Bootstrap success green */
+  background-color: #198754;
+  /* Bootstrap success green */
 }
 
 /* Data table cell identification classes for testing */
@@ -573,10 +550,12 @@
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.2);
     opacity: 0.7;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -587,9 +566,11 @@
   0% {
     box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
   }
+
   50% {
     box-shadow: 0 0 20px rgba(40, 167, 69, 0.6);
   }
+
   100% {
     box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
   }
@@ -600,6 +581,7 @@
     transform: translateY(-10px);
     opacity: 0;
   }
+
   100% {
     transform: translateY(0);
     opacity: 1;
@@ -657,12 +639,13 @@
 
 /* Login Page Specific Styles */
 .login-container {
-  overflow: hidden; /* Prevent scrollbars if content overflows slightly */
+  overflow: hidden;
+  /* Prevent scrollbars if content overflows slightly */
 }
 
 .login-branding-column {
-  background: linear-gradient(to bottom, rgba(0, 123, 255, 0.85), rgba(0, 86, 179, 0.95)), 
-              url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+  background: linear-gradient(to bottom, rgba(0, 123, 255, 0.85), rgba(0, 86, 179, 0.95)),
+    url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
   background-size: cover;
   background-position: center;
   color: white;
@@ -699,7 +682,8 @@
 
 .login-title {
   font-size: 2rem;
-  color: #007bff; /* Changed to theme primary blue */
+  color: #007bff;
+  /* Changed to theme primary blue */
 }
 
 .login-subtitle {
@@ -733,8 +717,10 @@
   cursor: pointer;
   color: #6c757d;
   font-size: 1.1rem;
-  line-height: 1; /* Added to help with vertical alignment */
-  z-index: 3; /* Ensure it's above the input field */
+  line-height: 1;
+  /* Added to help with vertical alignment */
+  z-index: 3;
+  /* Ensure it's above the input field */
 }
 
 .login-link {
@@ -752,19 +738,26 @@
   font-size: 1rem;
   font-weight: 500;
   border-radius: 0.375rem;
-  background-color: #007bff; /* Changed to theme primary blue */
-  border-color: #007bff; /* Changed to theme primary blue */
+  background-color: #007bff;
+  /* Changed to theme primary blue */
+  border-color: #007bff;
+  /* Changed to theme primary blue */
 }
 
 .login-btn-main:hover {
-  background-color: #0056b3; /* Darker shade of theme blue for hover */
-  border-color: #0056b3; /* Darker shade of theme blue for hover */
+  background-color: #0056b3;
+  /* Darker shade of theme blue for hover */
+  border-color: #0056b3;
+  /* Darker shade of theme blue for hover */
 }
 
 .login-btn-google {
-  /* background-color: #4285F4; */ /* Google Blue - Using default outline-secondary for now */
-  /* color: white; */ /* Text color will be inherited or default for btn-outline-secondary */
-  border-color: #ced4da; /* Standard Bootstrap border color for outline buttons */
+  /* background-color: #4285F4; */
+  /* Google Blue - Using default outline-secondary for now */
+  /* color: white; */
+  /* Text color will be inherited or default for btn-outline-secondary */
+  border-color: #ced4da;
+  /* Standard Bootstrap border color for outline buttons */
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 500;
@@ -773,16 +766,23 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */ /* Optional: can add a subtle shadow */
-  text-decoration: none; /* Remove underline from link if it's an <a> tag */
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
+  /* Optional: can add a subtle shadow */
+  text-decoration: none;
+  /* Remove underline from link if it's an <a> tag */
 }
 
 .login-btn-google:hover {
-  background-color: #4285F4; /* Google Blue for hover background */
-  color: white !important; /* Ensure text is white on hover */
-  border-color: #357AE8; /* Darker Google Blue for hover border */
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */ /* Optional: darker shadow on hover */
-  text-decoration: none; /* Ensure no underline on hover */
+  background-color: #4285F4;
+  /* Google Blue for hover background */
+  color: white !important;
+  /* Ensure text is white on hover */
+  border-color: #357AE8;
+  /* Darker Google Blue for hover border */
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
+  /* Optional: darker shadow on hover */
+  text-decoration: none;
+  /* Ensure no underline on hover */
 }
 
 .login-btn-google svg {
@@ -793,7 +793,8 @@
 
 /* Ensure SVG fill color changes on hover if needed, though Google's SVG is multi-colored */
 .login-btn-google:hover svg path {
-  /* fill: white; */ /* This would make the entire Google logo white, which might not be desired */
+  /* fill: white; */
+  /* This would make the entire Google logo white, which might not be desired */
 }
 
 
@@ -897,7 +898,8 @@
 }
 
 .signup-modal-header {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); /* Blue theme gradient */
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  /* Blue theme gradient */
   color: white;
   padding: 1.25rem 1.5rem;
   border-bottom: none;
@@ -959,7 +961,8 @@
   background-color: #f8f9fa;
   border-top: 1px solid #e9ecef;
   padding: 1rem 1.5rem;
-  justify-content: center; /* Center the button */
+  justify-content: center;
+  /* Center the button */
 }
 
 .signup-modal-footer .btn {
@@ -983,9 +986,11 @@
     background-color: #e9ecef !important;
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.02);
   }
+
   100% {
     background-color: #28a745 !important;
     border-color: #28a745 !important;
@@ -1000,9 +1005,11 @@
     color: #6c757d;
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.02);
   }
+
   100% {
     background-color: #007bff;
     border-color: #007bff;
@@ -1040,5 +1047,3 @@
   font-weight: 600;
   transition: color 0.3s ease;
 }
-
-

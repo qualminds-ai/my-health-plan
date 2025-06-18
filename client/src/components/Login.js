@@ -3,235 +3,244 @@ import PropTypes from 'prop-types';
 import authService from '../services/authService';
 
 const Login = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [showSignUpModal, setShowSignUpModal] = useState(false); // New state for Sign Up modal
-  const [copiedItem, setCopiedItem] = useState(null); // Track which item was copied
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); setLoading(true);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user starts typing
+    if (error) setError('');
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  }; const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
     setError('');
 
     try {
-      const response = await authService.login({
-        email,
-        password
-      });
-
-      // Call parent function to update app state
+      const response = await authService.login(formData);
       onLogin(response.user, response.token);
-
-    } catch (error) {
-      setError(error.message || 'Login failed. Please check your credentials.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSignUpClick = (e) => {
-    e.preventDefault(); // Prevent default link behavior
-    setShowSignUpModal(true);
-  };
-
-  const handleCloseSignUpModal = () => {
-    setShowSignUpModal(false);
-  };
-
-  const demoUsers = [
-    { email: "maria.hartsell@myhealthplan.com", password: "password123" },
-    { email: "john.doe@myhealthplan.com", password: "password123" },
-    { email: "jane.smith@myhealthplan.com", password: "password123" },
-    { email: "admin@myhealthplan.com", password: "password123" }
-  ];
-
-  const handleCopyToClipboard = async (text, type, itemId) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedItem(itemId);
-      // Clear the "Copied!" message after 2 seconds
-      setTimeout(() => setCopiedItem(null), 2000);
     } catch (err) {
-      console.error('Failed to copy: ', err);
+      console.error('Login error:', err);
+      setError(err.message || 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  return (
-    <div className="login-container container-fluid vh-100 p-0">
-      <div className="row g-0 h-100">
-        {/* Left Login Form Column */}
-        <div className="col-lg-6 d-flex flex-column justify-content-center align-items-center login-form-column bg-white">
-          <div className="login-form-wrapper p-4 p-md-5">
-            <div className="text-center mb-4">
-              {/* Small logo above Login title */}
-              <i className="bi bi-heart-pulse text-primary mb-2" style={{ fontSize: '2rem' }}></i>
-              <h2 className="fw-bold login-title">My Health Plan</h2>
-              <p className="text-muted login-subtitle">Log-in to your account.</p>
+  }; return (
+    <div className="min-h-screen flex">
+      {/* Left Side - Login Form - 618px out of 1440px = ~43% */}
+      <div className="bg-white flex flex-col" style={{ width: '42.9%' }}>        <div className="flex-1 flex items-center justify-center px-12 py-12">
+        <div className="w-full max-w-xl">            {/* Logo and Header */}
+          <div className="mb-12 text-center">
+            <div className="flex items-center justify-center">
+              <svg width="56" height="57" viewBox="0 0 56 57" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-4">
+                <path d="M50.6818 28.4136H44.9686C43.9618 28.4114 42.982 28.7391 42.179 29.3465C41.3761 29.9539 40.7942 30.8076 40.5224 31.777L35.1087 51.036C35.0738 51.1556 35.001 51.2607 34.9013 51.3355C34.8017 51.4102 34.6804 51.4506 34.5558 51.4506C34.4312 51.4506 34.3099 51.4102 34.2102 51.3355C34.1105 51.2607 34.0378 51.1556 34.0029 51.036L21.2864 5.79113C21.2515 5.6715 21.1788 5.56642 21.0791 5.49165C20.9794 5.41688 20.8581 5.37646 20.7335 5.37646C20.6089 5.37646 20.4877 5.41688 20.388 5.49165C20.2883 5.56642 20.2155 5.6715 20.1806 5.79113L14.7669 25.0501C14.4962 26.0157 13.9177 26.8666 13.1195 27.4737C12.3212 28.0807 11.3467 28.4107 10.3438 28.4136H4.60757" stroke="#2563EB" strokeWidth="4.60741" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <h1 style={{ color: '#2563EB', fontSize: '37.231px', fontWeight: '700', lineHeight: 'normal' }}>MyHealthPlan</h1>
             </div>
-
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label htmlFor="email" className="form-label login-label">Email</label>
+          </div>          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">            {/* Form Container - Centers all elements */}
+            <div className="flex flex-col items-center">              {/* Email Field */}
+              <div className="relative mb-6">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  style={{ position: 'absolute', left: '-32px', top: '50%', transform: 'translateY(-50%)', aspectRatio: '1/1' }}>
+                  <path d="M8 8C8.69223 8 9.36892 7.79473 9.9445 7.41015C10.5201 7.02556 10.9687 6.47894 11.2336 5.83939C11.4985 5.19985 11.5678 4.49612 11.4327 3.81719C11.2977 3.13825 10.9644 2.51461 10.4749 2.02513C9.98539 1.53564 9.36175 1.2023 8.68282 1.06725C8.00388 0.932205 7.30015 1.00152 6.66061 1.26642C6.02107 1.53133 5.47444 1.97993 5.08986 2.55551C4.70527 3.13108 4.5 3.80777 4.5 4.5C4.5 5.42826 4.86875 6.3185 5.52513 6.97487C6.1815 7.63125 7.07174 8 8 8ZM8 9C5.83063 9 1.5 10.34 1.5 13V15H14.5V13C14.5 10.34 10.1694 9 8 9Z" fill="#8A8BA8" />
+                </svg>
                 <input
-                  type="email"
-                  className="form-control login-input"
                   id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  name="email"
+                  type="email"
+                  autoComplete="email"
                   required
-                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="focus:outline-none transition-colors duration-200"
+                  placeholder="EMAIL*"
+                  disabled={isLoading}
+                  style={{
+                    width: '484px',
+                    height: '65px',
+                    border: '1px solid #B7BABA',
+                    background: '#F4F6F5',
+                    color: '#2563EB',
+                    fontFamily: 'Inter',
+                    fontSize: '15.3px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: 'normal',
+                    paddingLeft: '20px',
+                    paddingRight: '20px'
+                  }}
                 />
-              </div>
-
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label login-label">Password</label>
-                <div className="position-relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    className="form-control login-input"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    placeholder="Enter your password"
-                  />
-                  <span
-                    onClick={() => setShowPassword(!showPassword)}
-                    className={`password-toggle-icon bi ${showPassword ? 'bi-eye' : 'bi-eye-slash'}`}
-                  ></span>
+              </div>              {/* Password Field */}
+              <div className="relative mb-10">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
+                  style={{ position: 'absolute', left: '-32px', top: '50%', transform: 'translateY(-50%)', aspectRatio: '1/1' }}>
+                  <path fillRule="evenodd" clipRule="evenodd" d="M8.00001 2.28571C7.3938 2.28571 6.81242 2.52653 6.38376 2.95518C5.95511 3.38384 5.71429 3.96522 5.71429 4.57143V5.71429H10.2857V4.57143C10.2857 3.96522 10.0449 3.38384 9.61625 2.95518C9.1876 2.52653 8.60622 2.28571 8.00001 2.28571ZM3.42858 4.57143V5.71429C2.97392 5.71429 2.53789 5.8949 2.2164 6.21639C1.89491 6.53788 1.71429 6.97392 1.71429 7.42857V14.2857C1.71429 14.7404 1.89491 15.1764 2.2164 15.4979C2.53789 15.8194 2.97392 16 3.42858 16H12.5714C13.0261 16 13.4621 15.8194 13.7836 15.4979C14.1051 15.1764 14.2857 14.7404 14.2857 14.2857V7.42857C14.2857 6.97392 14.1051 6.53788 13.7836 6.21639C13.4621 5.8949 13.0261 5.71429 12.5714 5.71429V4.57143C12.5714 3.35901 12.0898 2.19625 11.2325 1.33894C10.3752 0.481631 9.21243 0 8.00001 0C6.78759 0 5.62483 0.481631 4.76752 1.33894C3.91021 2.19625 3.42858 3.35901 3.42858 4.57143ZM8.00001 12.2857C8.18761 12.2857 8.37338 12.2488 8.5467 12.177C8.72002 12.1052 8.87751 12 9.01016 11.8673C9.14282 11.7346 9.24804 11.5772 9.31984 11.4038C9.39163 11.2305 9.42858 11.0447 9.42858 10.8571C9.42858 10.6695 9.39163 10.4838 9.31984 10.3105C9.24804 10.1371 9.14282 9.97965 9.01016 9.84699C8.87751 9.71434 8.72002 9.60911 8.5467 9.53732C8.37338 9.46552 8.18761 9.42857 8.00001 9.42857C7.62113 9.42857 7.25776 9.57908 6.98986 9.84699C6.72195 10.1149 6.57144 10.4783 6.57144 10.8571C6.57144 11.236 6.72195 11.5994 6.98986 11.8673C7.25776 12.1352 7.62113 12.2857 8.00001 12.2857Z" fill="#8A8BA8" />
+                </svg>
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="focus:outline-none transition-colors duration-200"
+                  placeholder="PASSWORD*"
+                  disabled={isLoading}
+                  style={{
+                    width: '484px',
+                    height: '65px',
+                    border: '1px solid #B7BABA',
+                    background: '#F4F6F5',
+                    color: '#2563EB',
+                    fontFamily: 'Inter',
+                    fontSize: '15.3px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: 'normal',
+                    paddingLeft: '20px',
+                    paddingRight: '50px'
+                  }}
+                />
+                <div
+                  onClick={togglePasswordVisibility}
+                  style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
+                  {showPassword ? (
+                    <svg width="26" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#8A8BA8" />
+                    </svg>
+                  ) : (
+                    <svg width="26" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#8A8BA8" />
+                      <path d="M2 2l20 20" stroke="#8A8BA8" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  )}
                 </div>
               </div>
 
-              <div className="text-end mb-3">
-                <a href="#" className="login-link">Forgot Password?</a>
-              </div>
-
+              {/* Error Message */}
               {error && (
-                <div className="alert alert-danger py-2" role="alert">
-                  {error}
+                <div className="bg-red-50 border border-red-200 rounded p-3 mb-6" style={{ width: '484px' }}>
+                  <p className="text-sm text-red-700">{error}</p>
                 </div>
-              )}
-
+              )}              {/* Login Button */}
               <button
                 type="submit"
-                className="btn btn-primary w-100 login-btn-main mb-3"
-                disabled={loading}
+                disabled={isLoading}
+                className="focus:outline-none transition-colors duration-200 mb-3"
+                style={{
+                  width: '481px',
+                  height: '57px',
+                  backgroundColor: '#2563EB',
+                  color: '#FFF',
+                  fontSize: '15.7px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: 'normal',
+                  borderRadius: '3px',
+                  border: 'none'
+                }}
               >
-                {loading ? (
-                  <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                ) : null}
-                {loading ? 'Logging in...' : 'Log In'}
+                {isLoading ? 'Signing In...' : 'LOGIN'}
               </button>
 
+              {/* Links */}
+              <div className="flex justify-between mb-6" style={{ width: '481px' }}>
+                <a href="#" className="transition-colors duration-200" style={{
+                  color: '#2563EB',
+                  fontSize: '15.2px',
+                  fontWeight: '500',
+                  fontFamily: 'Inter'
+                }}>
+                  Forgot Password
+                </a>
+                <a href="#" className="transition-colors duration-200" style={{
+                  color: '#2563EB',
+                  fontSize: '15.2px',
+                  fontWeight: '500',
+                  fontFamily: 'Inter'
+                }}>
+                  Sign Up
+                </a>
+              </div>              {/* Divider */}
+              <div className="relative mb-6" style={{ width: '481px' }}>
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full" style={{ borderTop: '1.5px solid #2563EB' }}></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-4 bg-white" style={{
+                    color: '#2563EB',
+                    fontFamily: 'Inter',
+                    fontSize: '15.5px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: 'normal'
+                  }}>OR</span>
+                </div>
+              </div>
+
+              {/* SSO Button */}
               <button
                 type="button"
-                className="btn btn-outline-secondary w-100 login-btn-google d-flex align-items-center justify-content-center"
+                className="focus:outline-none transition-colors duration-200"
+                style={{
+                  width: '481px',
+                  height: '57px',
+                  backgroundColor: '#2563EB',
+                  color: '#FFF',
+                  fontSize: '14.5px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: 'normal',
+                  borderRadius: '3px',
+                  border: 'none',
+                  fontFamily: 'Inter'
+                }}
               >
-                <svg className="me-2" width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.6404 9.18219C17.6404 8.54589 17.5823 7.93671 17.4776 7.35474H9V10.8458H13.8438C13.6363 11.9702 13.0009 12.9233 12.0478 13.5613V15.8198H14.9562C16.6582 14.2527 17.6404 11.9455 17.6404 9.18219Z" fill="#4285F4" /><path d="M9 18C11.43 18 13.4672 17.1941 14.9562 15.8198L12.0478 13.5613C11.2418 14.1013 10.2112 14.4202 9 14.4202C6.65591 14.4202 4.67182 12.8371 3.96409 10.71H0.955566V13.0418C2.43727 15.9832 5.48182 18 9 18Z" fill="#34A853" /><path d="M3.96409 10.71C3.78409 10.17 3.68182 9.59318 3.68182 9C3.68182 8.40682 3.78409 7.83 3.96409 7.29H0.955566C0.346364 8.36318 0 9.65091 0 11.0218C0 12.3932 0.346364 13.6809 0.955566 14.7541L3.96409 10.71Z" fill="#FBBC05" /><path d="M9 3.57977C10.3214 3.57977 11.5077 4.03364 12.4405 4.92545L15.0218 2.34409C13.4672 0.891818 11.43 0 9 0C5.48182 0 2.43727 2.01682 0.955566 4.95818L3.96409 7.29C4.67182 5.16295 6.65591 3.57977 9 3.57977Z" fill="#EA4335" /></svg>
-                Log in with Google
+                LOGIN via SSO
               </button>
-            </form>
-
-            <div className="mt-4 text-center login-signup-link">
-              <p className="mb-0">Don't have an account? <a href="#" onClick={handleSignUpClick} className="login-link fw-semibold">Sign Up</a></p>
             </div>
-
-          </div>
+          </form>
         </div>
-
-        {/* Right Branding Column */}
-        <div className="col-lg-6 d-none d-lg-flex flex-column justify-content-center align-items-center login-branding-column">
-          <div className="login-logo-icon mb-1" style={{ opacity: '0.6' }}>
-            <i className="bi bi-heart-pulse" style={{ fontSize: '12rem' }}></i>
-          </div>
-          <div className="text-center px-4" style={{ opacity: '0.5' }}>
-            <p className="login-tagline" style={{ fontSize: '1.8rem', fontWeight: 'bold', lineHeight: '1.7', opacity: '0.95' }}>
-              Empowering Healthcare, One Click at a Time<br />
-              <span style={{ fontSize: '1.1rem', opacity: '0.85' }}>Your Health, Your Records, Your Control</span>
-            </p>
-          </div>
+      </div>        {/* Copyright at bottom */}
+        <div className="px-16" style={{ paddingBottom: '20px' }}>
+          <p className="text-center" style={{
+            color: '#757D8A',
+            fontSize: '15.6px',
+            fontWeight: '400',
+            fontFamily: 'Inter'
+          }}>
+            Copyright 2025 MyHealthPlan
+          </p>
         </div>
       </div>
 
-      {/* Sign Up / Demo Credentials Modal */}
-      {showSignUpModal && (
-        <div className="modal fade show d-block" tabIndex="-1" role="dialog">
-          <div className="modal-backdrop-blur"></div>
-          <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div className="modal-content signup-modal-content"> {/* Added class for specific styling */}
-              <div className="modal-header signup-modal-header"> {/* Added class for specific styling */}
-                <h5 className="modal-title">Demo Account Credentials</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={handleCloseSignUpModal}
-                  aria-label="Close"
-                ></button>
-              </div>
-              <div className="modal-body signup-modal-body"> {/* Added class for specific styling */}
-                <p className="mb-3 text-muted">For demonstration purposes, you can use any of the following accounts:</p>
-                <div className="table-responsive">
-                  <table className="table table-hover table-striped demo-credentials-table">
-                    <thead className="table-light">
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Email Address</th>
-                        <th scope="col">Password</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {demoUsers.map((user, index) => (
-                        <tr key={index}>
-                          <th scope="row">{index + 1}</th>
-                          <td>
-                            <div className="d-flex align-items-center">
-                              <span className="me-2">{user.email}</span>
-                              <button
-                                className="btn btn-outline-primary btn-sm copy-btn"
-                                onClick={() => handleCopyToClipboard(user.email, 'Email', `email-${index}`)}
-                                title="Copy email"
-                              >
-                                {copiedItem === `email-${index}` ? 'Copied!' : '📋'}
-                              </button>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="d-flex align-items-center">
-                              <span className="me-2">{user.password}</span>
-                              <button
-                                className="btn btn-outline-primary btn-sm copy-btn"
-                                onClick={() => handleCopyToClipboard(user.password, 'Password', `password-${index}`)}
-                                title="Copy password"
-                              >
-                                {copiedItem === `password-${index}` ? 'Copied!' : '📋'}
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <p className="mt-3 small text-center text-danger">
-                  Note: This is for demo purposes only. In a real application, users would register through a secure sign-up process.
-                </p>
-              </div>
-              <div className="modal-footer signup-modal-footer"> {/* Added class for specific styling */}
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleCloseSignUpModal}
-                >
-                  Got it!
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>);
+      {/* Right Side - Background Image - 822px out of 1440px = ~57% */}
+      <div
+        className="bg-cover bg-center bg-no-repeat relative"
+        style={{
+          width: '57.1%',
+          backgroundImage: `url('/e98c1df0a2e1528278f53f8e1982321197654854.jpg')`,
+        }}
+      >
+        {/* Optional overlay for better contrast if needed */}
+        <div className="absolute inset-0 bg-blue-600 bg-opacity-5"></div>
+      </div>
+    </div>
+  );
 };
 
 Login.propTypes = {
