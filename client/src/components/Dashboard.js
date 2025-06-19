@@ -267,438 +267,437 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-white font-inter">
-      <Header user={user} onLogout={onLogout} onNavigate={onNavigate} activeTab="Dashboard" />      {/* Main Content */}
-      <main style={{ maxWidth: '95%', margin: '0 auto', padding: '0 20px', background: 'white' }}>{/* Top Section: Title, Tabs, Date - All in one line */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 32, marginBottom: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div style={{
-              color: '#737373',
-              fontFamily: 'Inter',
-              fontSize: '18px',
-              fontStyle: 'normal',
-              fontWeight: 700,
-              lineHeight: 'normal',
-              marginRight: '20px'
-            }}>UM Dashboard</div>
-
-            <div style={{
-              display: 'flex',
-              background: '#FFF',
-              border: '0.327px solid #E9E8EC',
-              borderRadius: '6.545px',
-              overflow: 'hidden'
-            }}>
-              {['My Tasks', 'My Cases', 'Risk Stratification'].map((tab, index) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  style={{
-                    padding: '3.273px 13.909px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    border: 'none',
-                    borderRight: index < 2 ? '0.327px solid #E9E8EC' : 'none',
-                    borderRadius: index === 0 ? '6.545px 0px 0px 6.545px' :
-                      index === 2 ? '0px 6.545px 6.545px 0px' : '0px',
-                    background: activeTab === tab ? '#838383' : '#FFF',
-                    color: activeTab === tab ? '#FFFFFF' : '#727272',
-                    fontFamily: 'Inter',
-                    fontSize: '9.818px',
-                    fontStyle: 'normal',
-                    fontWeight: 500,
-                    lineHeight: 'normal',
-                    cursor: 'pointer',
-                    outline: 'none',
-                    minWidth: 'fit-content',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-          </div>
-
+  return (<div className="min-h-screen bg-white font-inter">
+    <Header user={user} onLogout={onLogout} onNavigate={onNavigate} activeTab="Dashboard" />      {/* Main Content */}
+    <main style={{ maxWidth: '97%', margin: '0 auto', padding: '0 20px', background: 'white' }}>{/* Top Section: Title, Tabs, Date - All in one line */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 32, marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{
-            color: '#11273D',
+            color: '#737373',
             fontFamily: 'Inter',
             fontSize: '18px',
             fontStyle: 'normal',
             fontWeight: 700,
-            lineHeight: 'normal'
-          }}>{'Thursday, May 2'}</div>        </div>
+            lineHeight: 'normal',
+            marginRight: '20px'
+          }}>UM Dashboard</div>
 
-        {/* Main Content Container */}
-        <div style={{
-          borderRadius: '16px',
-          background: '#F6F6F6',
-          padding: '24px'
-        }}>          {/* Stats Cards Row */}
-          <div style={{ display: 'flex', gap: 24, marginTop: 0, marginBottom: 0 }}>
-            {statsCards.map((card, idx) => (
-              <div
-                key={card.title}
+          <div style={{
+            display: 'flex',
+            background: '#FFF',
+            border: '0.327px solid #E9E8EC',
+            borderRadius: '6.545px',
+            overflow: 'hidden'
+          }}>
+            {['My Tasks', 'My Cases', 'Risk Stratification'].map((tab, index) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
                 style={{
-                  ...card.containerStyle,
+                  padding: '3.273px 13.909px',
                   display: 'flex',
-                  flexDirection: 'row',
-                  height: '60px',
+                  justifyContent: 'center',
                   alignItems: 'center',
-                  padding: '12px'
+                  border: 'none',
+                  borderRight: index < 2 ? '0.327px solid #E9E8EC' : 'none',
+                  borderRadius: index === 0 ? '6.545px 0px 0px 6.545px' :
+                    index === 2 ? '0px 6.545px 6.545px 0px' : '0px',
+                  background: activeTab === tab ? '#838383' : '#FFF',
+                  color: activeTab === tab ? '#FFFFFF' : '#727272',
+                  fontFamily: 'Inter',
+                  fontSize: '9.818px',
+                  fontStyle: 'normal',
+                  fontWeight: 500,
+                  lineHeight: 'normal',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  minWidth: 'fit-content',
+                  whiteSpace: 'nowrap'
                 }}
               >
-                {/* Left side: Icon and Text */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: '1' }}>
-                  {/* Icon Container - positioned to align with text */}
-                  <div
-                    style={{
-                      ...card.iconStyle,
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{
+          color: '#11273D',
+          fontFamily: 'Inter',
+          fontSize: '18px',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          lineHeight: 'normal'
+        }}>{'Thursday, May 2'}</div>        </div>
+
+      {/* Main Content Container */}
+      <div style={{
+        borderRadius: '16px',
+        background: '#F6F6F6',
+        padding: '24px'
+      }}>          {/* Stats Cards Row */}
+        <div style={{ display: 'flex', gap: 24, marginTop: 0, marginBottom: 0 }}>
+          {statsCards.map((card, idx) => (
+            <div
+              key={card.title}
+              style={{
+                ...card.containerStyle,
+                display: 'flex',
+                flexDirection: 'row',
+                height: '60px',
+                alignItems: 'center',
+                padding: '12px'
+              }}
+            >
+              {/* Left side: Icon and Text */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: '1' }}>
+                {/* Icon Container - positioned to align with text */}
+                <div
+                  style={{
+                    ...card.iconStyle,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '4px',
+                    marginLeft: '0px'
+                  }}
+                >
+                  {card.iconSvg}
+                </div>
+
+                {/* Label - aligned with icon */}
+                <div
+                  style={{
+                    ...card.textStyle,
+                    textAlign: 'left',
+                    lineHeight: '12px'
+                  }}
+                >
+                  {card.label}
+                </div>
+              </div>
+
+              {/* Right side: Number */}
+              <div
+                style={{
+                  ...card.numberStyle,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: '8px'
+                }}
+              >
+                {card.value}
+              </div>
+            </div>
+          ))}
+        </div>          {/* Section Title Below Cards */}
+        <div style={{ marginTop: 32, marginBottom: 0, color: '#737373', fontFamily: 'Inter', fontSize: '16px', fontStyle: 'normal', fontWeight: 600, lineHeight: 'normal', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          Inpatient Tasks - Due Today (56)
+          <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '17px', height: '17px', aspectRatio: '1/1' }}>
+            <path d="M9.91667 2.125H14.875V7.08333M14.875 10.4387V13.8125C14.875 14.0943 14.7631 14.3645 14.5638 14.5638C14.3645 14.7631 14.0943 14.875 13.8125 14.875H3.1875C2.90571 14.875 2.63546 14.7631 2.4362 14.5638C2.23694 14.3645 2.125 14.0943 2.125 13.8125V3.1875C2.125 2.90571 2.23694 2.63546 2.4362 2.4362C2.63546 2.23694 2.90571 2.125 3.1875 2.125H6.375M9.1375 7.8625L14.5562 2.44375" stroke="#737373" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+
+        {/* ...existing code for table, etc... */}          {/* Table Section - Clean, Figma-aligned, no border container, no tab nav */}
+        <div style={{ marginTop: 32, position: 'relative' }}>            {/* Blue arrow positioned to the left of the first table row */}
+          {authorizations.length > 0 && (
+            <div style={{
+              position: 'absolute',
+              left: '-18px',
+              top: '87px',
+              zIndex: 1000,
+              width: '20px',
+              height: '20px'
+            }}>
+              <svg width="16" height="20" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block' }}>
+                <path d="M0 0.0908203V17.909L14 8.99991L0 0.0908203Z" fill="#03045E" />
+              </svg>
+            </div>
+          )}            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8, gap: '5px' }}>
+            <span style={{ color: '#737373', fontFamily: 'Inter', fontSize: '10px', fontStyle: 'italic', fontWeight: 500, lineHeight: 'normal' }}>Last Updated: 1 min ago</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '12px', height: '12px', aspectRatio: '1/1' }}>
+              <g clipPath="url(#clip0_454_1258)">
+                <path d="M10.5 6.00008C10.5 7.06161 10.1247 8.08896 9.44048 8.90055C8.75625 9.71214 7.80715 10.2557 6.76091 10.4352C5.71466 10.6147 4.63865 10.4186 3.72304 9.88143C2.80743 9.34431 2.11118 8.5008 1.75735 7.49997C1.40351 6.49915 1.41488 5.40547 1.78943 4.41221C2.16398 3.41896 2.87761 2.59009 3.80418 2.07211C4.73075 1.55413 5.81061 1.38038 6.85289 1.58157C7.89518 1.78277 8.83279 2.34595 9.5 3.17158" stroke="#737373" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M9.75 1.5L9.75 3.5L7.75 3.5" stroke="#737373" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_454_1258">
+                  <rect width="12" height="12" fill="white" transform="translate(12) rotate(90)" />
+                </clipPath>
+              </defs>
+            </svg>
+          </div><div style={{ overflowX: 'auto', position: 'relative' }}>
+            <table style={{ width: '100%', minWidth: 1400, borderCollapse: 'collapse', background: 'none', marginLeft: '0px' }}>
+              <thead>                <tr style={{ height: 44, background: '#EDEDED' }}>
+                <th style={{ padding: 0, width: 20, background: 'none', borderBottom: '2px solid #B5B7BA' }}></th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', background: 'none', borderBottom: '2px solid #B5B7BA', position: 'relative' }}>Priority <span style={{ color: '#8C8C8C', fontWeight: 400, fontSize: 10, position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)' }}>↓</span></th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Authorization #</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Received Date</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Admission Date</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Diagnosis</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>DRG</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Request Type</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>POS</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Type</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Member Name</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Approved Days</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Next Review Date</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Status</th>
+                <th style={{ padding: '0 16px', background: 'none', borderBottom: '2px solid #B5B7BA', color: '#737373', fontWeight: 700, fontSize: 10 }}>Action</th>
+              </tr>
+              </thead>
+              <tbody style={{ background: 'none' }}>                {authorizations.map((auth, idx) => (
+                <tr
+                  key={auth.authorization_number || auth.id}
+                  style={{
+                    cursor: 'pointer',
+                    borderBottom: '1px solid #E9E9E9',
+                    height: 48,
+                    background: idx === 0 ? '#F8F9FB' : '#fff',
+                    position: 'relative',
+                  }}
+                  onClick={() => handleRowClick(auth)}
+                  onMouseOver={e => (e.currentTarget.style.background = '#F8F9FB')}
+                  onFocus={e => (e.currentTarget.style.background = '#F8F9FB')}
+                  onMouseOut={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}
+                  onBlur={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}                >{/* Priority left strip - reduced width, no rounding */}                  <td style={{
+                    padding: 0,
+                    width: 20,
+                    background: auth.priority === 'High' ? '#A8A8A8' :
+                      auth.priority === 'Medium' ? '#8E8E8E' : '#E0E0E0',
+                    position: 'relative'
+                  }}>
+                  </td>
+                  <td style={{ padding: '0 16px', color: '#02060E', fontWeight: 600, fontSize: 10, verticalAlign: 'middle' }}>{auth.priority}</td>
+                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.authorization_number}</td>
+                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDateTime(auth.received_date)}</td>
+                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDate(auth.admission_date)}</td>
+                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.diagnosis_code}</td>
+                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.drg_code}</td>
+                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.request_type}</td>
+                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.pos}</td>
+                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.type}</td>
+                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.member_name}</td>
+                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{auth.approved_days}</td>
+                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDateTime(auth.next_review_date)}</td>
+                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{auth.status}</td>                  <td style={{ padding: '0 16px', textAlign: 'right' }}>
+                    <button style={{
+                      borderRadius: '40px',
+                      background: '#E7F8F3',
+                      border: 'none',
+                      cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      marginBottom: '4px',
-                      marginLeft: '0px'
-                    }}
-                  >
-                    {card.iconSvg}
-                  </div>
-
-                  {/* Label - aligned with icon */}
-                  <div
-                    style={{
-                      ...card.textStyle,
-                      textAlign: 'left',
-                      lineHeight: '12px'
-                    }}
-                  >
-                    {card.label}
-                  </div>
-                </div>
-
-                {/* Right side: Number */}
-                <div
-                  style={{
-                    ...card.numberStyle,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginLeft: '8px'
-                  }}
-                >
-                  {card.value}
-                </div>
-              </div>
-            ))}
-          </div>          {/* Section Title Below Cards */}
-          <div style={{ marginTop: 32, marginBottom: 0, color: '#737373', fontFamily: 'Inter', fontSize: '16px', fontStyle: 'normal', fontWeight: 600, lineHeight: 'normal', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            Inpatient Tasks - Due Today (56)
-            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '17px', height: '17px', aspectRatio: '1/1' }}>
-              <path d="M9.91667 2.125H14.875V7.08333M14.875 10.4387V13.8125C14.875 14.0943 14.7631 14.3645 14.5638 14.5638C14.3645 14.7631 14.0943 14.875 13.8125 14.875H3.1875C2.90571 14.875 2.63546 14.7631 2.4362 14.5638C2.23694 14.3645 2.125 14.0943 2.125 13.8125V3.1875C2.125 2.90571 2.23694 2.63546 2.4362 2.4362C2.63546 2.23694 2.90571 2.125 3.1875 2.125H6.375M9.1375 7.8625L14.5562 2.44375" stroke="#737373" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-
-          {/* ...existing code for table, etc... */}          {/* Table Section - Clean, Figma-aligned, no border container, no tab nav */}
-          <div style={{ marginTop: 32, position: 'relative' }}>            {/* Blue arrow positioned to the left of the first table row */}
-            {authorizations.length > 0 && (
-              <div style={{
-                position: 'absolute',
-                left: '-18px',
-                top: '87px',
-                zIndex: 1000,
-                width: '20px',
-                height: '20px'
-              }}>
-                <svg width="16" height="20" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block' }}>
-                  <path d="M0 0.0908203V17.909L14 8.99991L0 0.0908203Z" fill="#03045E" />
-                </svg>
-              </div>
-            )}            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8, gap: '5px' }}>
-              <span style={{ color: '#737373', fontFamily: 'Inter', fontSize: '10px', fontStyle: 'italic', fontWeight: 500, lineHeight: 'normal' }}>Last Updated: 1 min ago</span>
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '12px', height: '12px', aspectRatio: '1/1' }}>
-                <g clipPath="url(#clip0_454_1258)">
-                  <path d="M10.5 6.00008C10.5 7.06161 10.1247 8.08896 9.44048 8.90055C8.75625 9.71214 7.80715 10.2557 6.76091 10.4352C5.71466 10.6147 4.63865 10.4186 3.72304 9.88143C2.80743 9.34431 2.11118 8.5008 1.75735 7.49997C1.40351 6.49915 1.41488 5.40547 1.78943 4.41221C2.16398 3.41896 2.87761 2.59009 3.80418 2.07211C4.73075 1.55413 5.81061 1.38038 6.85289 1.58157C7.89518 1.78277 8.83279 2.34595 9.5 3.17158" stroke="#737373" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M9.75 1.5L9.75 3.5L7.75 3.5" stroke="#737373" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                </g>
-                <defs>
-                  <clipPath id="clip0_454_1258">
-                    <rect width="12" height="12" fill="white" transform="translate(12) rotate(90)" />
-                  </clipPath>
-                </defs>
-              </svg>
-            </div><div style={{ overflowX: 'auto', position: 'relative' }}>
-              <table style={{ width: '100%', minWidth: 1400, borderCollapse: 'collapse', background: 'none', marginLeft: '0px' }}>
-                <thead>                <tr style={{ height: 44, background: '#EDEDED' }}>
-                  <th style={{ padding: 0, width: 20, background: 'none', borderBottom: '2px solid #B5B7BA' }}></th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', background: 'none', borderBottom: '2px solid #B5B7BA', position: 'relative' }}>Priority <span style={{ color: '#8C8C8C', fontWeight: 400, fontSize: 10, position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)' }}>↓</span></th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Authorization #</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Received Date</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Admission Date</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Diagnosis</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>DRG</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Request Type</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>POS</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Type</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Member Name</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Approved Days</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Next Review Date</th>
-                  <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Status</th>
-                  <th style={{ padding: '0 16px', background: 'none', borderBottom: '2px solid #B5B7BA', color: '#737373', fontWeight: 700, fontSize: 10 }}>Action</th>
-                </tr>
-                </thead>
-                <tbody style={{ background: 'none' }}>                {authorizations.map((auth, idx) => (
-                  <tr
-                    key={auth.authorization_number || auth.id}
-                    style={{
-                      cursor: 'pointer',
-                      borderBottom: '1px solid #E9E9E9',
-                      height: 48,
-                      background: idx === 0 ? '#F8F9FB' : '#fff',
-                      position: 'relative',
-                    }}
-                    onClick={() => handleRowClick(auth)}
-                    onMouseOver={e => (e.currentTarget.style.background = '#F8F9FB')}
-                    onFocus={e => (e.currentTarget.style.background = '#F8F9FB')}
-                    onMouseOut={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}
-                    onBlur={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}                >{/* Priority left strip - reduced width, no rounding */}                  <td style={{
-                      padding: 0,
-                      width: 20,
-                      background: auth.priority === 'High' ? '#A8A8A8' :
-                        auth.priority === 'Medium' ? '#8E8E8E' : '#E0E0E0',
-                      position: 'relative'
+                      padding: '6px 8px'
                     }}>
-                    </td>
-                    <td style={{ padding: '0 16px', color: '#02060E', fontWeight: 600, fontSize: 10, verticalAlign: 'middle' }}>{auth.priority}</td>
-                    <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.authorization_number}</td>
-                    <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDateTime(auth.received_date)}</td>
-                    <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDate(auth.admission_date)}</td>
-                    <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.diagnosis_code}</td>
-                    <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.drg_code}</td>
-                    <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.request_type}</td>
-                    <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.pos}</td>
-                    <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.type}</td>
-                    <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.member_name}</td>
-                    <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{auth.approved_days}</td>
-                    <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDateTime(auth.next_review_date)}</td>
-                    <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{auth.status}</td>                  <td style={{ padding: '0 16px', textAlign: 'right' }}>
-                      <button style={{
-                        borderRadius: '40px',
-                        background: '#E7F8F3',
-                        border: 'none',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '6px 8px'
-                      }}>
-                        <svg width="20" height="5" viewBox="0 0 20 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#02060E" /><circle cx="10" cy="2.5" r="2.5" fill="#02060E" /><circle cx="17.5" cy="2.5" r="2.5" fill="#02060E" /></svg>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>            {/* Pagination and page size selector */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '16px 0 40px 0', gap: 12, fontFamily: 'Inter' }}>              {/* Items per page dropdown */}
-                <div style={{ position: 'relative' }}>
-                  <select style={{
-                    width: '112.6px',
-                    height: '22px',
-                    borderRadius: '2.794px',
-                    border: '0.699px solid #DFE3E8',
-                    background: '#FFF',
-                    padding: '2.794px 2.441px 2.441px 11px',
-                    fontSize: '9.779px',
-                    fontFamily: 'Inter',
-                    fontWeight: 400,
-                    color: '#212B36',
-                    justifyContent: 'flex-end',
-                    alignItems: 'flex-start',
-                    lineHeight: '13.971px',
-                    appearance: 'none',
-                    cursor: 'pointer'
-                  }} defaultValue="10">
-                    <option value="10">10 per page</option>
-                    <option value="20">20 per page</option>
-                    <option value="50">50 per page</option>
-                  </select>                <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg" style={{
-                    position: 'absolute',
-                    right: 10,
-                    top: '60%',
-                    transform: 'translateY(-50%)',
-                    pointerEvents: 'none'
-                  }}>
-                    <path d="M1 1L6 6L11 1" stroke="#212B36" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <svg width="20" height="5" viewBox="0 0 20 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#02060E" /><circle cx="10" cy="2.5" r="2.5" fill="#02060E" /><circle cx="17.5" cy="2.5" r="2.5" fill="#02060E" /></svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              </tbody>
+            </table>            {/* Pagination and page size selector */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '16px 0 40px 0', gap: 12, fontFamily: 'Inter' }}>              {/* Items per page dropdown */}
+              <div style={{ position: 'relative' }}>
+                <select style={{
+                  width: '112.6px',
+                  height: '22px',
+                  borderRadius: '2.794px',
+                  border: '0.699px solid #DFE3E8',
+                  background: '#FFF',
+                  padding: '2.794px 2.441px 2.441px 11px',
+                  fontSize: '9.779px',
+                  fontFamily: 'Inter',
+                  fontWeight: 400,
+                  color: '#212B36',
+                  justifyContent: 'flex-end',
+                  alignItems: 'flex-start',
+                  lineHeight: '13.971px',
+                  appearance: 'none',
+                  cursor: 'pointer'
+                }} defaultValue="10">
+                  <option value="10">10 per page</option>
+                  <option value="20">20 per page</option>
+                  <option value="50">50 per page</option>
+                </select>                <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg" style={{
+                  position: 'absolute',
+                  right: 10,
+                  top: '60%',
+                  transform: 'translateY(-50%)',
+                  pointerEvents: 'none'
+                }}>
+                  <path d="M1 1L6 6L11 1" stroke="#212B36" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+
+              {/* Pagination buttons */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {/* Previous button (disabled) */}
+                <button style={{
+                  width: '22.353px',
+                  height: '22.353px',
+                  padding: '2.794px',
+                  borderRadius: '2.794px',
+                  opacity: 0.5,
+                  background: '#919EAB',
+                  border: 'none',
+                  cursor: 'not-allowed',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }} disabled>
+                  <svg width="16.765" height="16.765" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="#C4CDD5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                </div>
+                </button>                  {/* Page 1 (active) */}
+                <button style={{
+                  display: 'flex',
+                  width: '22.353px',
+                  height: '22.353px',
+                  padding: '3.493px 2.794px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '2.794px',
+                  border: '0.699px solid #737373',
+                  background: '#FFF',
+                  color: '#737373',
+                  fontSize: '9.779px',
+                  fontFamily: 'Inter',
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}>
+                  1
+                </button>
 
-                {/* Pagination buttons */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  {/* Previous button (disabled) */}
-                  <button style={{
-                    width: '22.353px',
-                    height: '22.353px',
-                    padding: '2.794px',
-                    borderRadius: '2.794px',
-                    opacity: 0.5,
-                    background: '#919EAB',
-                    border: 'none',
-                    cursor: 'not-allowed',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }} disabled>
-                    <svg width="16.765" height="16.765" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M15 18L9 12L15 6" stroke="#C4CDD5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>                  {/* Page 1 (active) */}
-                  <button style={{
-                    display: 'flex',
-                    width: '22.353px',
-                    height: '22.353px',
-                    padding: '3.493px 2.794px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: '2.794px',
-                    border: '0.699px solid #737373',
-                    background: '#FFF',
-                    color: '#737373',
-                    fontSize: '9.779px',
-                    fontFamily: 'Inter',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                  }}>
-                    1
-                  </button>
+                {/* Page 2 */}
+                <button style={{
+                  display: 'flex',
+                  width: '22.353px',
+                  height: '22.353px',
+                  padding: '3.493px 2.794px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '2.794px',
+                  border: '0.699px solid #737373',
+                  background: '#FFF',
+                  color: '#212B36',
+                  fontSize: '9.779px',
+                  fontFamily: 'Inter',
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}>
+                  2
+                </button>
 
-                  {/* Page 2 */}
-                  <button style={{
-                    display: 'flex',
-                    width: '22.353px',
-                    height: '22.353px',
-                    padding: '3.493px 2.794px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: '2.794px',
-                    border: '0.699px solid #737373',
-                    background: '#FFF',
-                    color: '#212B36',
-                    fontSize: '9.779px',
-                    fontFamily: 'Inter',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                  }}>
-                    2
-                  </button>
+                {/* Ellipsis */}
+                <button style={{
+                  display: 'flex',
+                  width: '22.353px',
+                  height: '22.353px',
+                  padding: '3.493px 2.794px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '2.794px',
+                  border: '0.699px solid #737373',
+                  background: '#FFF',
+                  color: '#212B36',
+                  fontSize: '9.779px',
+                  fontFamily: 'Inter',
+                  fontWeight: 700,
+                  cursor: 'default'
+                }} disabled>
+                  ...
+                </button>
 
-                  {/* Ellipsis */}
-                  <button style={{
-                    display: 'flex',
-                    width: '22.353px',
-                    height: '22.353px',
-                    padding: '3.493px 2.794px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: '2.794px',
-                    border: '0.699px solid #737373',
-                    background: '#FFF',
-                    color: '#212B36',
-                    fontSize: '9.779px',
-                    fontFamily: 'Inter',
-                    fontWeight: 700,
-                    cursor: 'default'
-                  }} disabled>
-                    ...
-                  </button>
+                {/* Page 8 */}
+                <button style={{
+                  display: 'flex',
+                  width: '22.353px',
+                  height: '22.353px',
+                  padding: '3.493px 2.794px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '2.794px',
+                  border: '0.699px solid #737373',
+                  background: '#FFF',
+                  color: '#212B36',
+                  fontSize: '9.779px',
+                  fontFamily: 'Inter',
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}>
+                  8
+                </button>
 
-                  {/* Page 8 */}
-                  <button style={{
-                    display: 'flex',
-                    width: '22.353px',
-                    height: '22.353px',
-                    padding: '3.493px 2.794px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: '2.794px',
-                    border: '0.699px solid #737373',
-                    background: '#FFF',
-                    color: '#212B36',
-                    fontSize: '9.779px',
-                    fontFamily: 'Inter',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                  }}>
-                    8
-                  </button>
+                {/* Page 9 */}
+                <button style={{
+                  display: 'flex',
+                  width: '22.353px',
+                  height: '22.353px',
+                  padding: '3.493px 2.794px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '2.794px',
+                  border: '0.699px solid #737373',
+                  background: '#FFF',
+                  color: '#212B36',
+                  fontSize: '9.779px',
+                  fontFamily: 'Inter',
+                  fontWeight: 700,
+                  cursor: 'pointer'
+                }}>
+                  9
+                </button>
 
-                  {/* Page 9 */}
-                  <button style={{
-                    display: 'flex',
-                    width: '22.353px',
-                    height: '22.353px',
-                    padding: '3.493px 2.794px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: '2.794px',
-                    border: '0.699px solid #737373',
-                    background: '#FFF',
-                    color: '#212B36',
-                    fontSize: '9.779px',
-                    fontFamily: 'Inter',
-                    fontWeight: 700,
-                    cursor: 'pointer'
-                  }}>
-                    9
-                  </button>
-
-                  {/* Next button (enabled) */}
-                  <button style={{
-                    width: '22.353px',
-                    height: '22.353px',
-                    padding: '2.794px',
-                    borderRadius: '2.794px',
-                    border: '0.699px solid #DFE3E8',
-                    background: '#FFF',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <svg width="16.765" height="16.765" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9 18L15 12L9 6" stroke="#C4CDD5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
-                </div>
+                {/* Next button (enabled) */}
+                <button style={{
+                  width: '22.353px',
+                  height: '22.353px',
+                  padding: '2.794px',
+                  borderRadius: '2.794px',
+                  border: '0.699px solid #DFE3E8',
+                  background: '#FFF',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <svg width="16.765" height="16.765" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18L15 12L9 6" stroke="#C4CDD5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
-          {/* Empty State */}
-          {authorizations.length === 0 && (
-            <div className="text-center py-12">
-              <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </div>
+        {/* Empty State */}
+        {authorizations.length === 0 && (
+          <div className="text-center py-12">
+            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">No authorizations</h3>
+            <p className="mt-1 text-sm text-gray-500">Get started by creating a new authorization.</p>
+          </div>
+        )}
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div className="flex">
+              <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">No authorizations</h3>
-              <p className="mt-1 text-sm text-gray-500">Get started by creating a new authorization.</p>
-            </div>
-          )}
-          {/* Error State */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-              <div className="flex">
-                <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">Error loading dashboard</h3>
-                  <p className="text-sm text-red-700 mt-1">{error}</p>
-                </div>
-              </div>          </div>
-          )}
-        </div> {/* End of Main Content Container */}
-      </main>
-    </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-red-800">Error loading dashboard</h3>
+                <p className="text-sm text-red-700 mt-1">{error}</p>
+              </div>
+            </div>          </div>
+        )}
+      </div> {/* End of Main Content Container */}
+    </main>
+  </div>
   );
 };
 
