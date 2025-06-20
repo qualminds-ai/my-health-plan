@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Header from './Header';
 import apiService from '../services/apiService';
-// Dashboard icons from assets
-import IconBell from '../assets/dashboard/Group-bell.svg';
-import IconShare from '../assets/dashboard/icon-park-outline_share.svg';
-import IconRestart from '../assets/dashboard/iconamoon_restart-bold.svg';
-import IconArrowUp from '../assets/dashboard/tabler_arrow-up.svg';
 
 const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
   const [dashboardStats, setDashboardStats] = useState({
@@ -442,9 +437,8 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
                 </clipPath>
               </defs>
             </svg>
-          </div><div style={{ overflowX: 'auto', position: 'relative' }}>            <table style={{ width: '100%', borderCollapse: 'collapse', background: 'none', marginLeft: '0px', tableLayout: 'auto' }}>            <thead>                <tr style={{ height: 44, background: '#EDEDED' }}>
-            <th style={{ padding: 0, width: 20, background: 'none', borderBottom: '2px solid #B5B7BA' }}></th>
-            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', background: 'none', borderBottom: '2px solid #B5B7BA', position: 'relative', maxWidth: '150px' }}>Priority <span style={{ color: '#8C8C8C', fontWeight: 400, fontSize: 10, position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)' }}>↓</span></th>
+          </div><div style={{ overflowX: 'auto', position: 'relative' }}>            <table style={{ width: '100%', borderCollapse: 'collapse', background: 'none', marginLeft: '0px', tableLayout: 'auto' }}>            <thead>                <tr style={{ height: 44, background: '#EDEDED' }}>            <th style={{ padding: 0, width: 20, background: 'none', borderBottom: '2px solid #B5B7BA' }}></th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', background: 'none', borderBottom: '2px solid #B5B7BA', position: 'relative', maxWidth: '150px', minWidth: '80px' }}>Priority <span style={{ color: '#8C8C8C', fontWeight: 400, fontSize: 10, marginLeft: '5px' }}>↓</span></th>
             <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Authorization #</th>
             <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Received Date</th>
             <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Admission Date</th>              <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Diagnosis</th>
@@ -465,66 +459,64 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
             <th style={{ padding: '12px', background: 'none', borderBottom: '2px solid #B5B7BA', color: '#737373', fontWeight: 700, fontSize: 10, maxWidth: '150px' }}>Action</th>
           </tr>
           </thead>
-            <tbody style={{ background: 'none' }}>                {authorizations.map((auth, idx) => (
-              <tr
-                key={auth.authorization_number || auth.id} style={{
-                  cursor: 'pointer',
-                  borderBottom: '1px solid #E9E9E9',
-                  height: 31,
-                  background: idx === 0 ? '#F8F9FB' : '#fff',
+            <tbody style={{ background: 'none' }}>                {authorizations.map((auth, idx) => (<tr
+              key={auth.authorization_number || auth.id} style={{
+                cursor: 'pointer',
+                borderBottom: '1px solid #E9E9E9',
+                background: idx === 0 ? '#F8F9FB' : '#fff',
+                position: 'relative',
+              }}
+              onClick={() => handleRowClick(auth)}
+              onMouseOver={e => (e.currentTarget.style.background = '#F8F9FB')}
+              onFocus={e => (e.currentTarget.style.background = '#F8F9FB')}
+              onMouseOut={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}
+              onBlur={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}                >{/* Priority left strip - reduced width, no rounding */}                  <td style={{
+                padding: 0,
+                width: 20,
+                background: auth.priority === 'High' ? '#A8A8A8' :
+                  auth.priority === 'Medium' ? '#8E8E8E' : '#E0E0E0',
+                position: 'relative'
+              }}>
+              </td>                <td style={{ padding: '12px', color: '#02060E', fontWeight: 600, fontSize: 10, verticalAlign: 'middle', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.priority}</td>
+              <td style={{ padding: '12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.authorization_number}</td>
+              <td style={{ padding: '12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formatDateTime(auth.received_date)}</td>
+              <td style={{ padding: '12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formatDate(auth.admission_date)}</td>
+              <td style={{ padding: '12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.diagnosis_code}</td>                <td style={{ padding: '12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.drg_code}</td>                  <td style={{ padding: '12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.request_type}</td>                  <td
+                className="pos-cell"
+                style={{
+                  padding: '12px',
+                  color: '#737373',
+                  fontSize: 10,
+                  maxWidth: '80px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                   position: 'relative',
+                  cursor: 'help'
                 }}
-                onClick={() => handleRowClick(auth)}
-                onMouseOver={e => (e.currentTarget.style.background = '#F8F9FB')}
-                onFocus={e => (e.currentTarget.style.background = '#F8F9FB')}
-                onMouseOut={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}
-                onBlur={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}                >{/* Priority left strip - reduced width, no rounding */}                  <td style={{
-                  padding: 0,
-                  width: 20,
-                  background: auth.priority === 'High' ? '#A8A8A8' :
-                    auth.priority === 'Medium' ? '#8E8E8E' : '#E0E0E0',
-                  position: 'relative'
+                data-full-text={auth.pos}
+                title={auth.pos}
+              >
+                {auth.pos}
+              </td>                <td style={{ padding: '12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.review_type}</td>
+              <td style={{ padding: '12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.member_name}</td>
+              <td style={{ padding: '12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.approved_days}</td>
+              <td style={{ padding: '12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formatDateTime(auth.next_review_date)}</td>
+              <td style={{ padding: '12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.status}</td>                  <td style={{ padding: '12px', textAlign: 'right', maxWidth: '150px' }}>
+                <button style={{
+                  borderRadius: '40px',
+                  background: '#E7F8F3',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '6px 8px'
                 }}>
-                </td>                <td style={{ padding: '16px 12px', color: '#02060E', fontWeight: 600, fontSize: 10, verticalAlign: 'middle', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.priority}</td>
-                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.authorization_number}</td>
-                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formatDateTime(auth.received_date)}</td>
-                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formatDate(auth.admission_date)}</td>
-                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.diagnosis_code}</td>                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.drg_code}</td>                  <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.request_type}</td>                  <td
-                  className="pos-cell"
-                  style={{
-                    padding: '16px 12px',
-                    color: '#737373',
-                    fontSize: 10,
-                    maxWidth: '80px',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    position: 'relative',
-                    cursor: 'help'
-                  }}
-                  data-full-text={auth.pos}
-                  title={auth.pos}
-                >
-                  {auth.pos}
-                </td>                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.review_type}</td>
-                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.member_name}</td>
-                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.approved_days}</td>
-                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formatDateTime(auth.next_review_date)}</td>
-                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.status}</td>                  <td style={{ padding: '16px 12px', textAlign: 'right', maxWidth: '150px' }}>
-                  <button style={{
-                    borderRadius: '40px',
-                    background: '#E7F8F3',
-                    border: 'none',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '6px 8px'
-                  }}>
-                    <svg width="20" height="5" viewBox="0 0 20 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#02060E" /><circle cx="10" cy="2.5" r="2.5" fill="#02060E" /><circle cx="17.5" cy="2.5" r="2.5" fill="#02060E" /></svg>
-                  </button>
-                </td>
-              </tr>
+                  <svg width="20" height="5" viewBox="0 0 20 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#02060E" /><circle cx="10" cy="2.5" r="2.5" fill="#02060E" /><circle cx="17.5" cy="2.5" r="2.5" fill="#02060E" /></svg>
+                </button>
+              </td>
+            </tr>
             ))}
             </tbody>
           </table>            {/* Pagination and page size selector */}
