@@ -35,31 +35,30 @@ const Header = ({ user, onLogout, onNavigate, activeTab = 'Dashboard' }) => {
         </div>
         {/* Navigation */}
         <nav className="flex" style={{ flex: 1, marginLeft: 60 }}>
-          {navItems.map((item, idx) => (
-            <button
-              key={item.name}
-              onClick={() => handleNavClick(item.name)}
-              style={{
-                color: item.active ? '#E1E1E1' : '#fff',
-                fontWeight: item.active ? 700 : 400,
-                fontSize: '13.089px',
-                fontStyle: 'normal',
-                lineHeight: 'normal',
-                background: 'none',
-                border: 'none',
-                outline: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                marginRight: idx !== navItems.length - 1 ? 22 : 0,
-                letterSpacing: 0.1,
-                transition: 'color 0.2s',
-                height: '60px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              {item.name === 'Dashboard' ? 'My Dashboard' : item.name}
-            </button>
+          {navItems.map((item, idx) => (<button
+            key={item.name}
+            onClick={() => handleNavClick(item.name)}
+            style={{
+              color: item.active ? '#E1E1E1' : '#E1E1E1',
+              fontWeight: item.active ? 700 : 400,
+              fontSize: '13.089px',
+              fontStyle: 'normal',
+              lineHeight: 'normal',
+              background: 'none',
+              border: 'none',
+              outline: 'none',
+              cursor: 'pointer',
+              padding: 0,
+              marginRight: idx !== navItems.length - 1 ? 22 : 0,
+              letterSpacing: 0.1,
+              transition: 'color 0.2s',
+              height: '60px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            {item.name === 'Dashboard' ? 'My Dashboard' : item.name}
+          </button>
           ))}
         </nav>
         {/* Right icons and user */}
@@ -92,10 +91,9 @@ const Header = ({ user, onLogout, onNavigate, activeTab = 'Dashboard' }) => {
                 padding: 0,
                 display: 'flex',
                 alignItems: 'center',
-              }}
-              onClick={() => setShowUserMenu((v) => !v)}
+              }} onClick={() => setShowUserMenu((v) => !v)}
             >
-              {user?.name || 'User'}{user?.role ? ` (${user.role})` : ''}
+              {user?.fullName || user?.full_name || user?.name || `${user?.first_name || ''} ${user?.last_name || ''}`.trim() || 'User'}{user?.role ? ` (${user.role})` : ''}
             </button>
             {showUserMenu && (
               <div style={{ position: 'absolute', right: 0, top: '110%', background: '#fff', borderRadius: 6, boxShadow: '0 2px 8px rgba(0,0,0,0.15)', minWidth: 120, zIndex: 100 }}>

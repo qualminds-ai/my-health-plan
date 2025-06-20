@@ -288,47 +288,45 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
             border: '0.327px solid #E9E8EC',
             borderRadius: '6.545px',
             overflow: 'hidden'
-          }}>
-            {['My Tasks', 'My Cases', 'Risk Stratification'].map((tab, index) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                style={{
-                  padding: '3.273px 13.909px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  border: 'none',
-                  borderRight: index < 2 ? '0.327px solid #E9E8EC' : 'none',
-                  borderRadius: index === 0 ? '6.545px 0px 0px 6.545px' :
-                    index === 2 ? '0px 6.545px 6.545px 0px' : '0px',
-                  background: activeTab === tab ? '#838383' : '#FFF',
-                  color: activeTab === tab ? '#FFFFFF' : '#727272',
-                  fontFamily: 'Inter',
-                  fontSize: '9.818px',
-                  fontStyle: 'normal',
-                  fontWeight: 500,
-                  lineHeight: 'normal',
-                  cursor: 'pointer',
-                  outline: 'none',
-                  minWidth: 'fit-content',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                {tab}
-              </button>
-            ))}
+          }}>            {['My Tasks', 'My Cases', 'Risk Stratification'].map((tab, index) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              style={{
+                padding: '4px 14px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                border: 'none',
+                borderRight: index < 2 ? '0.327px solid #E9E8EC' : 'none',
+                borderRadius: index === 0 ? '6.545px 0px 0px 6.545px' :
+                  index === 2 ? '0px 6.545px 6.545px 0px' : '0px',
+                background: activeTab === tab ? '#838383' : '#FFF',
+                color: activeTab === tab ? '#FFFFFF' : '#727272',
+                fontFamily: 'Inter',
+                fontSize: '9.818px',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                lineHeight: 'normal',
+                cursor: 'pointer',
+                outline: 'none',
+                minWidth: 'fit-content',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {tab}
+            </button>
+          ))}
           </div>
         </div>
 
         <div style={{
-          color: '#11273D',
-          fontFamily: 'Inter',
+          color: '#11273D', fontFamily: 'Inter',
           fontSize: '18px',
           fontStyle: 'normal',
           fontWeight: 700,
           lineHeight: 'normal'
-        }}>{'Thursday, May 2'}</div>        </div>
+        }}>{'Friday, June 20'}</div>        </div>
 
       {/* Main Content Container */}
       <div style={{
@@ -336,61 +334,78 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
         background: '#F6F6F6',
         padding: '24px'
       }}>          {/* Stats Cards Row */}
-        <div style={{ display: 'flex', gap: 24, marginTop: 0, marginBottom: 0 }}>
-          {statsCards.map((card, idx) => (
-            <div
-              key={card.title}
-              style={{
-                ...card.containerStyle,
-                display: 'flex',
-                flexDirection: 'row',
-                height: '60px',
-                alignItems: 'center',
-                padding: '12px'
-              }}
-            >
-              {/* Left side: Icon and Text */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: '1' }}>
-                {/* Icon Container - positioned to align with text */}
-                <div
-                  style={{
-                    ...card.iconStyle,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '4px',
-                    marginLeft: '0px'
-                  }}
-                >
-                  {card.iconSvg}
-                </div>
-
-                {/* Label - aligned with icon */}
-                <div
-                  style={{
-                    ...card.textStyle,
-                    textAlign: 'left',
-                    lineHeight: '12px'
-                  }}
-                >
-                  {card.label}
-                </div>
-              </div>
-
-              {/* Right side: Number */}
+        <div style={{ display: 'flex', gap: 24, marginTop: 0, marginBottom: 0 }}>          {statsCards.map((card, idx) => (
+          <div
+            key={card.title}
+            style={{
+              ...card.containerStyle,
+              display: 'flex',
+              flexDirection: 'row',
+              height: '78px',
+              alignItems: 'center',
+              padding: '12px',
+              position: 'relative'
+            }}
+          >
+            {/* Down arrow extension for Due Today (primary) card */}
+            {card.isPrimary && (
               <div
                 style={{
-                  ...card.numberStyle,
+                  position: 'absolute',
+                  bottom: '-10px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: 0,
+                  height: 0,
+                  borderLeft: '10px solid transparent',
+                  borderRight: '10px solid transparent',
+                  borderTop: '10px solid #8E8E8E',
+                  zIndex: 1
+                }}
+              />
+            )}
+            {/* Left side: Icon and Text */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', flex: '1' }}>
+              {/* Icon Container - positioned to align with text */}
+              <div
+                style={{
+                  ...card.iconStyle,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  marginLeft: '8px'
+                  marginBottom: '4px',
+                  marginLeft: '0px'
                 }}
               >
-                {card.value}
+                {card.iconSvg}
+              </div>
+
+              {/* Label - aligned with icon */}
+              <div
+                style={{
+                  ...card.textStyle,
+                  textAlign: 'left',
+                  lineHeight: '12px'
+                }}
+              >
+                {card.label}
               </div>
             </div>
-          ))}
+
+            {/* Right side: Number */}
+            <div
+              style={{
+                ...card.numberStyle,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: '8px'
+              }}
+            >
+              {card.value}
+            </div>
+          </div>
+        ))}
         </div>        {/* Section Title Below Cards */}
         <div style={{ marginTop: 32, marginBottom: 0, color: '#737373', fontFamily: 'Inter', fontSize: '16px', fontStyle: 'normal', fontWeight: 600, lineHeight: 'normal', display: 'flex', alignItems: 'center', gap: '8px' }}>
           Inpatient Tasks - Due Today ({dashboardStats.due_today_count || 0})
@@ -427,94 +442,92 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
                 </clipPath>
               </defs>
             </svg>
-          </div><div style={{ overflowX: 'auto', position: 'relative' }}>
-            <table style={{ width: '100%', minWidth: 1400, borderCollapse: 'collapse', background: 'none', marginLeft: '0px' }}>
-              <thead>                <tr style={{ height: 44, background: '#EDEDED' }}>
-                <th style={{ padding: 0, width: 20, background: 'none', borderBottom: '2px solid #B5B7BA' }}></th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', background: 'none', borderBottom: '2px solid #B5B7BA', position: 'relative' }}>Priority <span style={{ color: '#8C8C8C', fontWeight: 400, fontSize: 10, position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)' }}>↓</span></th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Authorization #</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Received Date</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Admission Date</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Diagnosis</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>DRG</th>                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Request Type</th>
-                <th style={{
-                  padding: '0 16px',
-                  color: '#737373',
-                  fontWeight: 700,
-                  fontSize: 10,
-                  textAlign: 'left',
-                  borderBottom: '2px solid #B5B7BA',
-                  maxWidth: '120px',
-                  width: '120px'
-                }}>POS</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Type</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Member Name</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Approved Days</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Next Review Date</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Status</th>
-                <th style={{ padding: '0 16px', background: 'none', borderBottom: '2px solid #B5B7BA', color: '#737373', fontWeight: 700, fontSize: 10 }}>Action</th>
-              </tr>
-              </thead>
-              <tbody style={{ background: 'none' }}>                {authorizations.map((auth, idx) => (
-                <tr
-                  key={auth.authorization_number || auth.id}
+          </div><div style={{ overflowX: 'auto', position: 'relative' }}>            <table style={{ width: '100%', borderCollapse: 'collapse', background: 'none', marginLeft: '0px', tableLayout: 'auto' }}>            <thead>                <tr style={{ height: 44, background: '#EDEDED' }}>
+            <th style={{ padding: 0, width: 20, background: 'none', borderBottom: '2px solid #B5B7BA' }}></th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', background: 'none', borderBottom: '2px solid #B5B7BA', position: 'relative', maxWidth: '150px' }}>Priority <span style={{ color: '#8C8C8C', fontWeight: 400, fontSize: 10, position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)' }}>↓</span></th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Authorization #</th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Received Date</th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Admission Date</th>              <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Diagnosis</th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>DRG</th>                <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Request Type</th>            <th style={{
+              padding: '12px',
+              color: '#737373',
+              fontWeight: 700,
+              fontSize: 10,
+              textAlign: 'left',
+              borderBottom: '2px solid #B5B7BA',
+              maxWidth: '80px',
+              width: '80px'
+            }}>POS</th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Type</th>              <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Member Name</th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Approved Days</th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Next Review Date</th>
+            <th style={{ padding: '12px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA', maxWidth: '150px' }}>Status</th>
+            <th style={{ padding: '12px', background: 'none', borderBottom: '2px solid #B5B7BA', color: '#737373', fontWeight: 700, fontSize: 10, maxWidth: '150px' }}>Action</th>
+          </tr>
+          </thead>
+            <tbody style={{ background: 'none' }}>                {authorizations.map((auth, idx) => (
+              <tr
+                key={auth.authorization_number || auth.id} style={{
+                  cursor: 'pointer',
+                  borderBottom: '1px solid #E9E9E9',
+                  height: 31,
+                  background: idx === 0 ? '#F8F9FB' : '#fff',
+                  position: 'relative',
+                }}
+                onClick={() => handleRowClick(auth)}
+                onMouseOver={e => (e.currentTarget.style.background = '#F8F9FB')}
+                onFocus={e => (e.currentTarget.style.background = '#F8F9FB')}
+                onMouseOut={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}
+                onBlur={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}                >{/* Priority left strip - reduced width, no rounding */}                  <td style={{
+                  padding: 0,
+                  width: 20,
+                  background: auth.priority === 'High' ? '#A8A8A8' :
+                    auth.priority === 'Medium' ? '#8E8E8E' : '#E0E0E0',
+                  position: 'relative'
+                }}>
+                </td>                <td style={{ padding: '16px 12px', color: '#02060E', fontWeight: 600, fontSize: 10, verticalAlign: 'middle', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.priority}</td>
+                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.authorization_number}</td>
+                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formatDateTime(auth.received_date)}</td>
+                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formatDate(auth.admission_date)}</td>
+                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.diagnosis_code}</td>                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.drg_code}</td>                  <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.request_type}</td>                  <td
+                  className="pos-cell"
                   style={{
-                    cursor: 'pointer',
-                    borderBottom: '1px solid #E9E9E9',
-                    height: 48,
-                    background: idx === 0 ? '#F8F9FB' : '#fff',
+                    padding: '16px 12px',
+                    color: '#737373',
+                    fontSize: 10,
+                    maxWidth: '80px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
                     position: 'relative',
+                    cursor: 'help'
                   }}
-                  onClick={() => handleRowClick(auth)}
-                  onMouseOver={e => (e.currentTarget.style.background = '#F8F9FB')}
-                  onFocus={e => (e.currentTarget.style.background = '#F8F9FB')}
-                  onMouseOut={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}
-                  onBlur={e => (e.currentTarget.style.background = idx === 0 ? '#F8F9FB' : '#fff')}                >{/* Priority left strip - reduced width, no rounding */}                  <td style={{
-                    padding: 0,
-                    width: 20,
-                    background: auth.priority === 'High' ? '#A8A8A8' :
-                      auth.priority === 'Medium' ? '#8E8E8E' : '#E0E0E0',
-                    position: 'relative'
+                  data-full-text={auth.pos}
+                  title={auth.pos}
+                >
+                  {auth.pos}
+                </td>                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.review_type}</td>
+                <td style={{ padding: '16px 12px', color: '#737373', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.member_name}</td>
+                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.approved_days}</td>
+                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{formatDateTime(auth.next_review_date)}</td>
+                <td style={{ padding: '16px 12px', color: '#02060E', fontSize: 10, maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{auth.status}</td>                  <td style={{ padding: '16px 12px', textAlign: 'right', maxWidth: '150px' }}>
+                  <button style={{
+                    borderRadius: '40px',
+                    background: '#E7F8F3',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '6px 8px'
                   }}>
-                  </td>
-                  <td style={{ padding: '0 16px', color: '#02060E', fontWeight: 600, fontSize: 10, verticalAlign: 'middle' }}>{auth.priority}</td>
-                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.authorization_number}</td>
-                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDateTime(auth.received_date)}</td>
-                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDate(auth.admission_date)}</td>
-                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.diagnosis_code}</td>
-                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.drg_code}</td>                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.request_type}</td>                  <td
-                    className="pos-cell"
-                    style={{
-                      padding: '0 16px',
-                      color: '#737373',
-                      fontSize: 10
-                    }}
-                    data-full-text={auth.pos}
-                  >
-                    {auth.pos}
-                  </td>
-                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.review_type}</td>
-                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.member_name}</td>
-                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{auth.approved_days}</td>
-                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDateTime(auth.next_review_date)}</td>
-                  <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{auth.status}</td>                  <td style={{ padding: '0 16px', textAlign: 'right' }}>
-                    <button style={{
-                      borderRadius: '40px',
-                      background: '#E7F8F3',
-                      border: 'none',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: '6px 8px'
-                    }}>
-                      <svg width="20" height="5" viewBox="0 0 20 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#02060E" /><circle cx="10" cy="2.5" r="2.5" fill="#02060E" /><circle cx="17.5" cy="2.5" r="2.5" fill="#02060E" /></svg>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              </tbody>
-            </table>            {/* Pagination and page size selector */}
+                    <svg width="20" height="5" viewBox="0 0 20 5" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="2.5" cy="2.5" r="2.5" fill="#02060E" /><circle cx="10" cy="2.5" r="2.5" fill="#02060E" /><circle cx="17.5" cy="2.5" r="2.5" fill="#02060E" /></svg>
+                  </button>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>            {/* Pagination and page size selector */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '16px 0 40px 0', gap: 12, fontFamily: 'Inter' }}>              {/* Items per page dropdown */}
               <div style={{ position: 'relative' }}>
                 <select style={{

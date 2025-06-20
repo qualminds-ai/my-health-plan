@@ -1050,7 +1050,7 @@
 
 /* POS Column Styling for Dashboard Table */
 .pos-cell {
-  max-width: 120px;
+  max-width: 80px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1076,6 +1076,9 @@
   max-width: 300px;
   word-wrap: break-word;
   text-align: center;
+  min-width: 60px;
+  opacity: 0;
+  animation: fadeIn 0.2s ease-in-out 0.5s forwards;
 }
 
 .pos-cell:hover::before {
@@ -1088,4 +1091,16 @@
   border-top-color: #333;
   z-index: 1000;
   margin-bottom: 2px;
+  opacity: 0;
+  animation: fadeIn 0.2s ease-in-out 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
