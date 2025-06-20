@@ -33,29 +33,27 @@ WHERE NOT EXISTS (SELECT 1 FROM drg_codes WHERE drg_codes.drg_code = v.drg_code)
 -- Insert sample members (only if they don't exist)
 INSERT INTO members (id, member_number, first_name, last_name, date_of_birth, gender, phone, email, address, insurance_group, policy_number, created_at, updated_at) 
 SELECT * FROM (VALUES
-(1, 'MEM001', 'Robert', 'Abbott', '1985-03-15'::date, 'M', NULL, NULL, NULL, 'Silvermine', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'MEM002', 'Samuel', 'Perry', '1978-07-22'::date, 'M', NULL, NULL, NULL, 'Evernorth', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'MEM003', 'Kate', 'Sawyer', '1992-11-08'::date, 'F', NULL, NULL, NULL, 'Cascade I', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 'MEM004', 'Laura', 'Smith', '1981-05-30'::date, 'F', NULL, NULL, NULL, 'Palicade R', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 'MEM005', 'Renee', 'Rutherford', '1975-09-12'::date, 'F', NULL, NULL, NULL, 'Trinity Oal', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(6, 'MEM006', 'Mike', 'Andrews', '1988-12-04'::date, 'M', NULL, NULL, NULL, 'LumenPoi', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(7, 'MEM007', 'James', 'Oliver', '1973-04-18'::date, 'M', NULL, NULL, NULL, 'St. Aureliu', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(8, 'MEM008', 'John', 'Emerson', '1990-08-25'::date, 'M', NULL, NULL, NULL, 'Cobalt Bay', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(9, 'MEM009', 'Samuel', 'Perry', '1982-01-14'::date, 'M', NULL, NULL, NULL, 'Trinity Oal', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(10, 'MEM010', 'Laura', 'Smith', '1987-06-09'::date, 'F', NULL, NULL, NULL, 'St. Aureliu', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+(1, 'MEM001', 'Robert', 'Abbott', '1985-03-15'::date, 'M', NULL, NULL, NULL, 'Health Plan A', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'MEM002', 'Samuel', 'Perry', '1978-07-22'::date, 'M', NULL, NULL, NULL, 'Health Plan B', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'MEM003', 'Kate', 'Sawyer', '1992-11-08'::date, 'F', NULL, NULL, NULL, 'Health Plan C', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 'MEM004', 'Laura', 'Smith', '1981-05-30'::date, 'F', NULL, NULL, NULL, 'Health Plan D', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 'MEM005', 'Renee', 'Rutherford', '1975-09-12'::date, 'F', NULL, NULL, NULL, 'Health Plan E', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 'MEM006', 'Mike', 'Andrews', '1988-12-04'::date, 'M', NULL, NULL, NULL, 'Health Plan F', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 'MEM007', 'James', 'Oliver', '1973-04-18'::date, 'M', NULL, NULL, NULL, 'Health Plan G', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(8, 'MEM008', 'John', 'Emerson', '1990-08-25'::date, 'M', NULL, NULL, NULL, 'Health Plan H', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ) AS v(id, member_number, first_name, last_name, date_of_birth, gender, phone, email, address, insurance_group, policy_number, created_at, updated_at)
 WHERE NOT EXISTS (SELECT 1 FROM members WHERE members.member_number = v.member_number);
 
 -- Insert sample providers (only if they don't exist)
 INSERT INTO providers (id, provider_code, provider_name, provider_type, address, phone, fax, email, npi, tax_id, contract_status, created_at, updated_at) 
 SELECT * FROM (VALUES
-(1, 'SILV001', 'Silvermine Medical Center', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'EVER001', 'Evernorth Healthcare', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'CASC001', 'Cascade I Medical', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 'PALI001', 'Palicade Regional', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(5, 'TRIN001', 'Trinity Oal Hospital', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(6, 'LUME001', 'LumenPoi Medical Center', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(7, 'SAUR001', 'St. Aurelius Hospital', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(1, 'SILV001', 'Silverpine Medical Center', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'EVER001', 'Evernorth Health', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'CASC001', 'Cascade Heart & Wellness', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 'PALI001', 'Palisade Regional Hospital', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(5, 'TRIN001', 'Trinity Oaks Health Alliance', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(6, 'LUME001', 'LumenPoint Healthcare', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(7, 'SAUR001', 'St. Aurelius General', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (8, 'COBA001', 'Cobalt Bay Medical', 'Hospital', NULL, NULL, NULL, NULL, NULL, NULL, 'Active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ) AS v(id, provider_code, provider_name, provider_type, address, phone, fax, email, npi, tax_id, contract_status, created_at, updated_at)
 WHERE NOT EXISTS (SELECT 1 FROM providers WHERE providers.provider_code = v.provider_code);
@@ -104,16 +102,16 @@ WHERE NOT EXISTS (SELECT 1 FROM status_types WHERE status_types.status_code = v.
 -- Insert sample authorizations (only if we don't have any existing data)
 INSERT INTO authorizations (id, authorization_number, member_id, provider_id, diagnosis_id, drg_code_id, request_type, review_type, priority, received_date, admission_date, requested_los, approved_days, next_review_date, last_review_date, status, pos, medical_necessity, clinical_notes, denial_reason, appeal_notes, created_by, assigned_to, created_at, updated_at) 
 SELECT * FROM (VALUES
-(1, '2025OP000389', 1, 1, 1, 1, 'Inpatient', 'Initial Review', 'High', '2025-06-16 01:15:00'::timestamp, '2025-06-15'::date, 3, 3, '2025-06-16 01:15:00'::timestamp, NULL::timestamp, 'Pending', '637', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-15 00:00:00'::timestamp, CURRENT_TIMESTAMP),
-(2, '2025OP000387', 2, 2, 2, 2, 'Inpatient', 'Initial Review', 'High', '2025-06-16 02:30:00'::timestamp, '2025-06-16'::date, 4, 3, '2025-06-16 02:30:00'::timestamp, NULL::timestamp, 'Pending', '291', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-14 00:00:00'::timestamp, CURRENT_TIMESTAMP),
-(3, '2025OP000928', 3, 3, 3, 3, 'Inpatient', 'Concurrent Review', 'High', '2025-06-16 03:45:00'::timestamp, '2025-06-15'::date, 5, 3, '2025-06-16 03:45:00'::timestamp, NULL::timestamp, 'Pending', '687', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-13 00:00:00'::timestamp, CURRENT_TIMESTAMP),
-(4, '2025OP000278', 4, 4, 3, 4, 'Inpatient', 'Initial Review', 'High', '2025-06-16 04:00:00'::timestamp, '2025-06-16'::date, 3, 3, '2025-06-16 04:00:00'::timestamp, NULL::timestamp, 'Pending', '688', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-12 00:00:00'::timestamp, CURRENT_TIMESTAMP),
-(5, '2025OP000378', 5, 5, 1, 1, 'Inpatient', 'Initial Review', 'High', '2025-06-16 05:15:00'::timestamp, '2025-06-15'::date, 4, 3, '2025-06-16 05:15:00'::timestamp, NULL::timestamp, 'Pending', '637', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-11 00:00:00'::timestamp, CURRENT_TIMESTAMP),
-(6, '2025OP000312', 6, 6, 1, 5, 'Inpatient', 'Concurrent Review', 'High', '2025-06-16 06:30:00'::timestamp, '2025-06-16'::date, 5, 3, '2025-06-16 06:30:00'::timestamp, NULL::timestamp, 'Appeal', '638', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-10 00:00:00'::timestamp, CURRENT_TIMESTAMP),
-(7, '2025OP000152', 7, 7, 6, 6, 'Inpatient', 'Concurrent Review', 'Medium', '2025-06-16 07:45:00'::timestamp, '2025-06-15'::date, 3, 3, '2025-06-16 07:45:00'::timestamp, NULL::timestamp, 'In Review', '602', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-16 00:00:00'::timestamp, CURRENT_TIMESTAMP),
-(8, '2025OP000369', 8, 8, 4, 7, 'Inpatient', 'Initial Review', 'Medium', '2025-06-16 08:00:00'::timestamp, '2025-06-16'::date, 4, 3, '2025-06-16 08:00:00'::timestamp, NULL::timestamp, 'Pending', '191', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-15 00:00:00'::timestamp, CURRENT_TIMESTAMP),
-(9, '2025OP000189', 9, 5, 5, 8, 'Inpatient', 'Concurrent Review', 'Medium', '2025-06-16 09:15:00'::timestamp, '2025-06-15'::date, 3, 3, '2025-06-17 09:00:00'::timestamp, NULL::timestamp, 'Pending', '690', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-14 00:00:00'::timestamp, CURRENT_TIMESTAMP),
-(10, '2025OP000390', 10, 7, 1, 1, 'Inpatient', 'Initial Review', 'Medium', '2025-06-16 10:30:00'::timestamp, '2025-06-16'::date, 4, 3, '2025-06-18 10:00:00'::timestamp, NULL::timestamp, 'In Review', '637', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-13 00:00:00'::timestamp, CURRENT_TIMESTAMP)
+(1, '2025OP000389', 1, 1, 1, 1, 'Inpatient', 'Initial Review', 'High', '2025-06-19 08:47:01'::timestamp, '2025-06-19'::date, 3, 3, '2025-06-19 16:00:00'::timestamp, NULL::timestamp, 'Pending', 'Silverpine Medical Center', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-19 08:47:01'::timestamp, CURRENT_TIMESTAMP),
+(2, '2025OP000387', 2, 2, 2, 2, 'Inpatient', 'Initial Review', 'High', '2025-06-19 09:35:02'::timestamp, '2025-06-19'::date, 3, 3, '2025-06-19 17:00:00'::timestamp, NULL::timestamp, 'Pending', 'Evernorth Health', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-19 09:35:02'::timestamp, CURRENT_TIMESTAMP),
+(3, '2025OP000928', 3, 3, 3, 3, 'Inpatient', 'Concurrent Review', 'High', '2025-06-18 14:02:03'::timestamp, '2025-06-18'::date, 3, 3, '2025-06-19 14:00:00'::timestamp, NULL::timestamp, 'Pending', 'Cascade Heart & Wellness', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-18 14:02:03'::timestamp, CURRENT_TIMESTAMP),
+(4, '2025OP000278', 4, 4, 3, 4, 'Inpatient', 'Initial Review', 'High', '2025-06-19 06:47:04'::timestamp, '2025-06-20'::date, 3, 3, '2025-06-19 18:00:00'::timestamp, NULL::timestamp, 'Pending', 'Palisade Regional Hospital', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-19 06:47:04'::timestamp, CURRENT_TIMESTAMP),
+(5, '2025OP000378', 5, 5, 1, 1, 'Inpatient', 'Initial Review', 'High', '2025-06-19 07:14:05'::timestamp, '2025-06-19'::date, 3, 3, '2025-06-19 19:00:00'::timestamp, NULL::timestamp, 'Pending', 'Trinity Oaks Health Alliance', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-19 07:14:05'::timestamp, CURRENT_TIMESTAMP),
+(6, '2025OP000312', 6, 6, 1, 5, 'Inpatient', 'Concurrent Review', 'High', '2025-06-17 17:38:06'::timestamp, '2025-06-17'::date, 3, 3, '2025-06-20 10:00:00'::timestamp, NULL::timestamp, 'APPEAL', 'LumenPoint Healthcare', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-17 17:38:06'::timestamp, CURRENT_TIMESTAMP),
+(7, '2025OP000152', 7, 7, 6, 6, 'Inpatient', 'Concurrent Review', 'Medium', '2025-06-16 14:34:07'::timestamp, '2025-06-16'::date, 3, 3, '2025-06-20 11:00:00'::timestamp, NULL::timestamp, 'In Review', 'St. Aurelius General', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-16 14:34:07'::timestamp, CURRENT_TIMESTAMP),
+(8, '2025OP000369', 8, 8, 4, 7, 'Inpatient', 'Initial Review', 'Medium', '2025-06-18 07:33:08'::timestamp, '2025-06-18'::date, 3, 3, '2025-06-20 14:00:00'::timestamp, NULL::timestamp, 'Pending', 'Cobalt Bay Medical', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-18 07:33:08'::timestamp, CURRENT_TIMESTAMP),
+(9, '2025OP003189', 2, 5, 5, 8, 'Inpatient', 'Concurrent Review', 'Medium', '2025-06-17 08:16:09'::timestamp, '2025-06-17'::date, 3, 3, '2025-06-20 15:00:00'::timestamp, NULL::timestamp, 'Pending', 'Trinity Oaks Health Alliance', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-17 08:16:09'::timestamp, CURRENT_TIMESTAMP),
+(10, '2025OP000390', 4, 7, 1, 1, 'Inpatient', 'Initial Review', 'Medium', '2025-06-15 16:16:10'::timestamp, '2025-06-15'::date, 3, 3, '2025-06-21 10:00:00'::timestamp, NULL::timestamp, 'In Review', 'St. Aurelius General', NULL, NULL, NULL, NULL, NULL::integer, NULL::integer, '2025-06-15 16:16:10'::timestamp, CURRENT_TIMESTAMP)
 ) AS v(id, authorization_number, member_id, provider_id, diagnosis_id, drg_code_id, request_type, review_type, priority, received_date, admission_date, requested_los, approved_days, next_review_date, last_review_date, status, pos, medical_necessity, clinical_notes, denial_reason, appeal_notes, created_by, assigned_to, created_at, updated_at)
 WHERE NOT EXISTS (SELECT 1 FROM authorizations WHERE authorizations.authorization_number = v.authorization_number);
 

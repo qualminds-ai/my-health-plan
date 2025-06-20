@@ -61,10 +61,9 @@ router.get('/authorizations', async (req, res) => {
     }
 
     if (search) {
-      paramCount++;
-      whereConditions.push(`(
+      paramCount++; whereConditions.push(`(
         a.authorization_number ILIKE $${paramCount} OR
-        CONCAT(m.first_name, ' ', m.last_name) ILIKE $${paramCount} OR
+        CONCAT(m.last_name, ', ', m.first_name) ILIKE $${paramCount} OR
         d.diagnosis_code ILIKE $${paramCount} OR
         p.provider_name ILIKE $${paramCount}
       )`);
@@ -87,9 +86,8 @@ router.get('/authorizations', async (req, res) => {
         a.admission_date,
         a.approved_days,
         a.next_review_date,
-        a.pos,
-        -- Member info
-        CONCAT(m.first_name, ' ', m.last_name) as member_name,
+        a.pos,        -- Member info
+        CONCAT(m.last_name, ', ', m.first_name) as member_name,
         m.member_number,
         -- Provider info
         p.provider_name,
@@ -111,9 +109,9 @@ router.get('/authorizations', async (req, res) => {
       LEFT JOIN members m ON a.member_id = m.id
       LEFT JOIN providers p ON a.provider_id = p.id
       LEFT JOIN diagnoses d ON a.diagnosis_id = d.id
-      LEFT JOIN drg_codes drg ON a.drg_code_id = drg.id
-      ${whereClause}
+      LEFT JOIN drg_codes drg ON a.drg_code_id = drg.id      ${whereClause}
       ORDER BY 
+        CASE WHEN m.member_number = 'MEM001' THEN 0 ELSE 1 END,
         CASE a.priority 
           WHEN 'High' THEN 1 
           WHEN 'Medium' THEN 2 
@@ -166,10 +164,9 @@ router.get('/member/:memberNumber', async (req, res) => {
     const query = `
       SELECT 
         m.id, 
-        m.member_number, 
-        m.first_name, 
+        m.member_number,        m.first_name, 
         m.last_name, 
-        CONCAT(m.first_name, ' ', m.last_name) as name, 
+        CONCAT(m.last_name, ', ', m.first_name) as name, 
         m.date_of_birth as dob,
         -- m.pcp_name as pcp, -- pcp_name does not exist in members table
         m.insurance_group as plan, -- Renamed from insurance_plan to insurance_group
@@ -200,9 +197,8 @@ router.get('/authorizations/:id', async (req, res) => {
     const { id } = req.params;
 
     const query = `
-      SELECT 
-        a.*,
-        CONCAT(m.first_name, ' ', m.last_name) as member_name,
+      SELECT        a.*,
+        CONCAT(m.last_name, ', ', m.first_name) as member_name,
         m.member_number,
         m.date_of_birth,
         m.insurance_group,

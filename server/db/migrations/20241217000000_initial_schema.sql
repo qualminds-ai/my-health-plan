@@ -58,8 +58,7 @@ BEGIN
         COUNT(*) FILTER (WHERE priority = 'High'),
         COUNT(*) FILTER (WHERE next_review_date::date = CURRENT_DATE),
         COUNT(*) FILTER (WHERE admission_date >= date_trunc('week', CURRENT_DATE) 
-                          AND admission_date < date_trunc('week', CURRENT_DATE) + INTERVAL '1 week'),
-        COUNT(*) FILTER (WHERE status = 'Pending'),
+                          AND admission_date < date_trunc('week', CURRENT_DATE) + INTERVAL '1 week'),        COUNT(*) FILTER (WHERE status = 'Pending'),
         COUNT(*) FILTER (WHERE status = 'In Review'),
         COUNT(*) FILTER (WHERE status = 'Approved'),
         COUNT(*) FILTER (WHERE status = 'Denied')
@@ -196,10 +195,9 @@ CREATE TABLE IF NOT EXISTS authorizations (
     admission_date DATE,
     requested_los INTEGER,
     approved_days INTEGER DEFAULT 0,
-    next_review_date TIMESTAMP WITH TIME ZONE,
-    last_review_date TIMESTAMP WITH TIME ZONE,
+    next_review_date TIMESTAMP WITH TIME ZONE,    last_review_date TIMESTAMP WITH TIME ZONE,
     status VARCHAR(50) DEFAULT 'Pending' NOT NULL,
-    pos VARCHAR(10),
+    pos VARCHAR(255),
     medical_necessity TEXT,
     clinical_notes TEXT,
     denial_reason TEXT,

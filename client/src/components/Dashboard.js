@@ -391,9 +391,9 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
               </div>
             </div>
           ))}
-        </div>          {/* Section Title Below Cards */}
+        </div>        {/* Section Title Below Cards */}
         <div style={{ marginTop: 32, marginBottom: 0, color: '#737373', fontFamily: 'Inter', fontSize: '16px', fontStyle: 'normal', fontWeight: 600, lineHeight: 'normal', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          Inpatient Tasks - Due Today (56)
+          Inpatient Tasks - Due Today ({dashboardStats.due_today_count || 0})
           <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '17px', height: '17px', aspectRatio: '1/1' }}>
             <path d="M9.91667 2.125H14.875V7.08333M14.875 10.4387V13.8125C14.875 14.0943 14.7631 14.3645 14.5638 14.5638C14.3645 14.7631 14.0943 14.875 13.8125 14.875H3.1875C2.90571 14.875 2.63546 14.7631 2.4362 14.5638C2.23694 14.3645 2.125 14.0943 2.125 13.8125V3.1875C2.125 2.90571 2.23694 2.63546 2.4362 2.4362C2.63546 2.23694 2.90571 2.125 3.1875 2.125H6.375M9.1375 7.8625L14.5562 2.44375" stroke="#737373" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -436,9 +436,17 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
                 <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Received Date</th>
                 <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Admission Date</th>
                 <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Diagnosis</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>DRG</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Request Type</th>
-                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>POS</th>
+                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>DRG</th>                <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Request Type</th>
+                <th style={{
+                  padding: '0 16px',
+                  color: '#737373',
+                  fontWeight: 700,
+                  fontSize: 10,
+                  textAlign: 'left',
+                  borderBottom: '2px solid #B5B7BA',
+                  maxWidth: '120px',
+                  width: '120px'
+                }}>POS</th>
                 <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Type</th>
                 <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Member Name</th>
                 <th style={{ padding: '0 16px', color: '#737373', fontWeight: 700, fontSize: 10, textAlign: 'left', borderBottom: '2px solid #B5B7BA' }}>Approved Days</th>
@@ -474,10 +482,18 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
                   <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDateTime(auth.received_date)}</td>
                   <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDate(auth.admission_date)}</td>
                   <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.diagnosis_code}</td>
-                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.drg_code}</td>
-                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.request_type}</td>
-                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.pos}</td>
-                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.type}</td>
+                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.drg_code}</td>                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.request_type}</td>                  <td
+                    className="pos-cell"
+                    style={{
+                      padding: '0 16px',
+                      color: '#737373',
+                      fontSize: 10
+                    }}
+                    data-full-text={auth.pos}
+                  >
+                    {auth.pos}
+                  </td>
+                  <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.review_type}</td>
                   <td style={{ padding: '0 16px', color: '#737373', fontSize: 10 }}>{auth.member_name}</td>
                   <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{auth.approved_days}</td>
                   <td style={{ padding: '0 16px', color: '#02060E', fontSize: 10 }}>{formatDateTime(auth.next_review_date)}</td>
