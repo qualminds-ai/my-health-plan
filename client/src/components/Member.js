@@ -14,10 +14,21 @@ import watchIcon from '../assets/authorizations/watch-icon.png';
 import userIcon from '../assets/authorizations/mingcute_user-x-fill.svg';
 
 const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate }) => {
-  const topRef = useRef(null);
-  const authContentRef = useRef(null); const [activeTab, setActiveTab] = useState('Authorizations');
+  const topRef = useRef(null); const authContentRef = useRef(null); const [activeTab, setActiveTab] = useState('Authorizations');
   const [activeAuthTab, setActiveAuthTab] = useState('Request Submitted');
-  const [activeRequestTab, setActiveRequestTab] = useState('20250P000367');
+  const [activeRequestTab, setActiveRequestTab] = useState('20250P000367'); const [clinicalReviewStep, setClinicalReviewStep] = useState(1);
+  const [showClinicalIndicators, setShowClinicalIndicators] = useState([false, false, false]);
+  const [selectedCriteria, setSelectedCriteria] = useState({
+    dka: false,
+    physInstability: false,
+    hemodynamicInstability: false,
+    severeDehydration: false,
+    severeDKA: false,
+    severeHypoglycemia: false,
+    complicatingFactors: false,
+    inadequateSupport: false,
+    pediatricConsiderations: false
+  });
 
   // Use prop data if available, otherwise use static demo data
   const memberData = propMemberData || {
@@ -180,8 +191,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
     { id: 'MD Review', label: 'MD Review', status: 'pending' },
     { id: 'Concurrent Review', label: 'Concurrent Review', status: 'pending' },
     { id: 'Closed', label: 'Closed', status: 'pending' }
-  ];
-  // Handle auth tab click - simplified without animations
+  ];  // Handle auth tab click - simplified without animations
   const handleAuthTabClick = (tabId) => {
     setActiveAuthTab(tabId);
 
@@ -191,6 +201,28 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
       const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
       const targetScrollY = currentScrollY + rect.top - 20;
       window.scrollTo({ top: targetScrollY, behavior: 'smooth' });
+    }
+  };
+
+  // Handle clinical review step navigation
+  const handleClinicalReviewNext = () => {
+    if (clinicalReviewStep < 4) {
+      setClinicalReviewStep(clinicalReviewStep + 1);
+
+      // Reset indicators for step 2 animation
+      if (clinicalReviewStep === 1) {
+        setShowClinicalIndicators([false, false, false]);
+        // Animate indicators one by one
+        setTimeout(() => setShowClinicalIndicators([true, false, false]), 300);
+        setTimeout(() => setShowClinicalIndicators([true, true, false]), 800);
+        setTimeout(() => setShowClinicalIndicators([true, true, true]), 1300);
+      }
+    }
+  };
+
+  const handleClinicalReviewPrev = () => {
+    if (clinicalReviewStep > 1) {
+      setClinicalReviewStep(clinicalReviewStep - 1);
     }
   };
   return (
@@ -842,10 +874,930 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                               ))}
                             </div>
                           </div>
+                        )}                        {/* Clinical Review Content */}
+                        {activeRequestTab === '20250P000367' && activeAuthTab === 'Clinical Review' && (
+                          <div className="clinical-review-content" style={{ padding: '24px 0' }}>
+                            {/* Medical Necessity Guidelines Section */}
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              marginBottom: '24px',
+                              gap: '12px'
+                            }}>
+                              <div style={{
+                                width: '0',
+                                height: '0',
+                                borderTop: '20px solid transparent',
+                                borderBottom: '20px solid transparent',
+                                borderLeft: '20px solid #D2691E'
+                              }}></div>
+                              <h2 style={{
+                                color: '#1D2939',
+                                fontFamily: 'Inter',
+                                fontSize: '18px',
+                                fontWeight: '600',
+                                margin: '0'
+                              }}>
+                                Medical Necessity Guidelines
+                              </h2>
+                            </div>
+
+                            {/* Step 1: Guidelines Search and Selection */}
+                            {clinicalReviewStep === 1 && (
+                              <div>
+                                {/* Guideline Selection Checkboxes */}
+                                <div style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '16px',
+                                  marginBottom: '16px',
+                                  fontSize: '12px',
+                                  color: '#667085'
+                                }}>
+                                  <span style={{ fontWeight: '500' }}>1st Edition</span>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    ACO
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    ISC
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    GRC
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    MCM
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    RFC
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    HHC
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    CCG
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    TC
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    DBHC
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    PIP
+                                  </label>
+                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <input type="checkbox" />
+                                    MCR
+                                  </label>
+                                </div>
+
+                                {/* Quick Search */}
+                                <div style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '12px',
+                                  marginBottom: '20px'
+                                }}>
+                                  <span style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '12px',
+                                    fontWeight: '500',
+                                    color: '#667085'
+                                  }}>
+                                    Quick Search
+                                  </span>
+                                  <input
+                                    type="text"
+                                    defaultValue="DKA"
+                                    style={{
+                                      border: '1px solid #D0D5DD',
+                                      borderRadius: '6px',
+                                      padding: '6px 12px',
+                                      fontSize: '12px',
+                                      width: '120px'
+                                    }}
+                                  />
+                                  <button
+                                    style={{
+                                      backgroundColor: '#F9FAFB',
+                                      border: '1px solid #D0D5DD',
+                                      borderRadius: '6px',
+                                      padding: '6px 16px',
+                                      fontSize: '12px',
+                                      fontWeight: '500',
+                                      cursor: 'pointer'
+                                    }}
+                                  >
+                                    Search
+                                  </button>
+                                </div>
+
+                                {/* Results Summary */}
+                                <div style={{
+                                  fontSize: '12px',
+                                  color: '#667085',
+                                  marginBottom: '16px'
+                                }}>
+                                  6 results for DKA
+                                  <span style={{ float: 'right' }}>(Results 1 - 6 of 6)</span>
+                                </div>
+
+                                {/* Guidelines Table */}
+                                <div style={{
+                                  border: '1px solid #E5E7EB',
+                                  borderRadius: '8px',
+                                  overflow: 'hidden',
+                                  marginBottom: '24px'
+                                }}>
+                                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                    <thead style={{ backgroundColor: '#F9FAFB' }}>
+                                      <tr>
+                                        <th style={{
+                                          padding: '12px 16px',
+                                          textAlign: 'left',
+                                          fontSize: '12px',
+                                          fontWeight: '600',
+                                          color: '#374151',
+                                          borderBottom: '1px solid #E5E7EB'
+                                        }}>
+                                          Guideline Code
+                                        </th>
+                                        <th style={{
+                                          padding: '12px 16px',
+                                          textAlign: 'left',
+                                          fontSize: '12px',
+                                          fontWeight: '600',
+                                          color: '#374151',
+                                          borderBottom: '1px solid #E5E7EB'
+                                        }}>
+                                          Product
+                                        </th>
+                                        <th style={{
+                                          padding: '12px 16px',
+                                          textAlign: 'left',
+                                          fontSize: '12px',
+                                          fontWeight: '600',
+                                          color: '#374151',
+                                          borderBottom: '1px solid #E5E7EB'
+                                        }}>
+                                          Type
+                                        </th>
+                                        <th style={{
+                                          padding: '12px 16px',
+                                          textAlign: 'left',
+                                          fontSize: '12px',
+                                          fontWeight: '600',
+                                          color: '#374151',
+                                          borderBottom: '1px solid #E5E7EB'
+                                        }}>
+                                          Title
+                                        </th>
+                                        <th style={{
+                                          padding: '12px 16px',
+                                          textAlign: 'left',
+                                          fontSize: '12px',
+                                          fontWeight: '600',
+                                          color: '#374151',
+                                          borderBottom: '1px solid #E5E7EB'
+                                        }}>
+                                          GLOS/MBLOS
+                                        </th>
+                                        <th style={{
+                                          padding: '12px 16px',
+                                          textAlign: 'left',
+                                          fontSize: '12px',
+                                          fontWeight: '600',
+                                          color: '#374151',
+                                          borderBottom: '1px solid #E5E7EB'
+                                        }}>
+                                          Codes
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          M-130
+                                        </td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ORG</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#9CA3AF' }}>(DS)</td>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          View Codes
+                                        </td>
+                                      </tr>
+                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          P-140
+                                        </td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ORG-P</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes, Pediatric</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#9CA3AF' }}>(DS)</td>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          View Codes
+                                        </td>
+                                      </tr>
+                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          M-130-RRG
+                                        </td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>RRG</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes RRG</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#9CA3AF' }}>2(DS)</td>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          View Codes
+                                        </td>
+                                      </tr>
+                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          P-140-RRG
+                                        </td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>RRG-P</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes, Pediatric RRG</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#9CA3AF' }}>(DS)</td>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          View Codes
+                                        </td>
+                                      </tr>
+                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          OC-014
+                                        </td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>OCG</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes: Observation Care</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}></td>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          View Codes
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          CCC-015
+                                        </td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>CCC</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Hyperglycemia and Diabetes Control: Common Complications and Conditions</td>
+                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}></td>
+                                        <td style={{
+                                          padding: '12px 16px',
+                                          fontSize: '12px',
+                                          color: '#6366F1',
+                                          textDecoration: 'underline',
+                                          cursor: 'pointer'
+                                        }}>
+                                          View Codes
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Step 2: Clinical Indications for Admission to Inpatient Care */}
+                            {clinicalReviewStep === 2 && (
+                              <div>
+                                {/* Main Title */}
+                                <h1 style={{
+                                  color: '#1D2939',
+                                  fontFamily: 'Inter',
+                                  fontSize: '28px',
+                                  fontWeight: '700',
+                                  marginBottom: '8px'
+                                }}>
+                                  Clinical Indications for Admission to Inpatient Care
+                                </h1>
+
+                                {/* Subtitle Link */}
+                                <div style={{
+                                  color: '#6366F1',
+                                  fontFamily: 'Inter',
+                                  fontSize: '14px',
+                                  fontWeight: '400',
+                                  marginBottom: '32px',
+                                  textDecoration: 'underline',
+                                  cursor: 'pointer'
+                                }}>
+                                  Return to top of Diabetes - ISC
+                                </div>
+
+                                {/* Note Section */}
+                                <div style={{
+                                  marginBottom: '24px',
+                                  fontSize: '14px',
+                                  lineHeight: '1.5'
+                                }}>
+                                  <span style={{ color: '#1D2939', fontWeight: '500' }}>Note: Some patients may be appropriate for </span>
+                                  <span style={{ color: '#6366F1', textDecoration: 'underline', cursor: 'pointer' }}>Observation care.</span>
+                                  <span style={{ color: '#1D2939' }}> For consideration of observation care, see </span>
+                                  <span style={{ color: '#6366F1', textDecoration: 'underline', cursor: 'pointer' }}>
+                                    Diabetes: Observation Care
+                                    <span style={{ fontSize: '12px', marginLeft: '4px' }}>🔗 ISC.</span>
+                                  </span>
+                                </div>
+
+                                {/* Expand/Collapse Controls */}
+                                <div style={{
+                                  color: '#6B7280',
+                                  fontSize: '12px',
+                                  marginBottom: '16px'
+                                }}>
+                                  [Expand All / Collapse All]
+                                </div>
+
+                                {/* Admission Criteria */}
+                                <div style={{
+                                  color: '#1D2939',
+                                  fontSize: '14px',
+                                  marginBottom: '16px'
+                                }}>
+                                  <span style={{ marginRight: '8px' }}>●</span>
+                                  <span style={{ fontWeight: '500' }}>Admission is indicated for 1 or more of the following</span>
+                                  <span style={{ color: '#6366F1', cursor: 'pointer' }}>(1)(2)(3): </span>
+                                  <span style={{
+                                    backgroundColor: '#E0E7FF',
+                                    padding: '2px 6px',
+                                    borderRadius: '4px',
+                                    fontSize: '12px',
+                                    fontWeight: '600'
+                                  }}>
+                                    [I]
+                                  </span>
+                                </div>
+
+                                {/* Clinical Indicators with Animation */}
+                                <div style={{ marginLeft: '24px' }}>
+                                  {/* First Indicator */}
+                                  <div
+                                    style={{
+                                      opacity: showClinicalIndicators[0] ? 1 : 0,
+                                      transform: showClinicalIndicators[0] ? 'translateY(0)' : 'translateY(-10px)',
+                                      transition: 'all 0.5s ease-in-out',
+                                      marginBottom: '12px',
+                                      display: 'flex',
+                                      alignItems: 'flex-start',
+                                      gap: '8px'
+                                    }}
+                                  >
+                                    <span style={{
+                                      display: 'inline-block',
+                                      width: '16px',
+                                      height: '16px',
+                                      backgroundColor: '#10B981',
+                                      color: 'white',
+                                      fontSize: '12px',
+                                      fontWeight: 'bold',
+                                      textAlign: 'center',
+                                      lineHeight: '16px',
+                                      borderRadius: '2px',
+                                      marginTop: '2px'
+                                    }}>
+                                      +
+                                    </span>
+                                    <span style={{
+                                      color: '#1D2939',
+                                      fontSize: '14px',
+                                      fontWeight: '500'
+                                    }}>
+                                      Diabetic ketoacidosis that requires inpatient management, as indicated by
+                                    </span>
+                                  </div>
+
+                                  {/* Second Indicator */}
+                                  <div
+                                    style={{
+                                      opacity: showClinicalIndicators[1] ? 1 : 0,
+                                      transform: showClinicalIndicators[1] ? 'translateY(0)' : 'translateY(-10px)',
+                                      transition: 'all 0.5s ease-in-out',
+                                      marginBottom: '12px',
+                                      display: 'flex',
+                                      alignItems: 'flex-start',
+                                      gap: '8px'
+                                    }}
+                                  >
+                                    <span style={{
+                                      display: 'inline-block',
+                                      width: '16px',
+                                      height: '16px',
+                                      backgroundColor: '#10B981',
+                                      color: 'white',
+                                      fontSize: '12px',
+                                      fontWeight: 'bold',
+                                      textAlign: 'center',
+                                      lineHeight: '16px',
+                                      borderRadius: '2px',
+                                      marginTop: '2px'
+                                    }}>
+                                      +
+                                    </span>
+                                    <span style={{
+                                      color: '#1D2939',
+                                      fontSize: '14px',
+                                      fontWeight: '500'
+                                    }}>
+                                      Hyperglycemic hyperosmolar state, as indicated by
+                                    </span>
+                                  </div>
+
+                                  {/* Third Indicator */}
+                                  <div
+                                    style={{
+                                      opacity: showClinicalIndicators[2] ? 1 : 0,
+                                      transform: showClinicalIndicators[2] ? 'translateY(0)' : 'translateY(-10px)',
+                                      transition: 'all 0.5s ease-in-out',
+                                      marginBottom: '12px',
+                                      display: 'flex',
+                                      alignItems: 'flex-start',
+                                      gap: '8px'
+                                    }}
+                                  >
+                                    <span style={{
+                                      display: 'inline-block',
+                                      width: '16px',
+                                      height: '16px',
+                                      backgroundColor: '#10B981',
+                                      color: 'white',
+                                      fontSize: '12px',
+                                      fontWeight: 'bold',
+                                      textAlign: 'center',
+                                      lineHeight: '16px',
+                                      borderRadius: '2px',
+                                      marginTop: '2px'
+                                    }}>
+                                      +
+                                    </span>
+                                    <span style={{
+                                      color: '#1D2939',
+                                      fontSize: '14px',
+                                      fontWeight: '500'
+                                    }}>
+                                      Hyperglycemia requiring inpatient care, as indicated by
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}                            {/* Step 3: Care Planning - Inpatient Admission and Alternatives */}
+                            {clinicalReviewStep === 3 && (
+                              <div>
+                                {/* Success Banner */}
+                                <div style={{
+                                  backgroundColor: '#10B981',
+                                  color: 'white',
+                                  padding: '12px 24px',
+                                  borderRadius: '8px',
+                                  marginBottom: '24px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between'
+                                }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div style={{
+                                      width: '20px',
+                                      height: '20px',
+                                      borderRadius: '50%',
+                                      border: '2px solid white',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '12px',
+                                      fontWeight: 'bold'
+                                    }}>
+                                      ✓
+                                    </div>
+                                    <span style={{
+                                      fontFamily: 'Inter',
+                                      fontSize: '14px',
+                                      fontWeight: '600'
+                                    }}>
+                                      Selections Made, Criteria Met
+                                    </span>
+                                  </div>
+                                  <div style={{ display: 'flex', gap: '12px' }}>
+                                    <button style={{
+                                      backgroundColor: 'white',
+                                      color: '#10B981',
+                                      border: 'none',
+                                      borderRadius: '6px',
+                                      padding: '8px 16px',
+                                      fontSize: '12px',
+                                      fontWeight: '600',
+                                      cursor: 'pointer'
+                                    }}>
+                                      Save
+                                    </button>
+                                    <button style={{
+                                      backgroundColor: 'transparent',
+                                      color: 'white',
+                                      border: '1px solid white',
+                                      borderRadius: '6px',
+                                      padding: '8px 16px',
+                                      fontSize: '12px',
+                                      fontWeight: '600',
+                                      cursor: 'pointer'
+                                    }}>
+                                      Cancel
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Main Title */}
+                                <h1 style={{
+                                  color: '#1D2939',
+                                  fontFamily: 'Inter',
+                                  fontSize: '20px',
+                                  fontWeight: '700',
+                                  marginBottom: '8px'
+                                }}>
+                                  Care Planning - Inpatient Admission and Alternatives
+                                </h1>
+
+                                {/* Subtitle */}
+                                <h2 style={{
+                                  color: '#1D2939',
+                                  fontFamily: 'Inter',
+                                  fontSize: '16px',
+                                  fontWeight: '600',
+                                  marginBottom: '16px'
+                                }}>
+                                  Clinical Indications for Admission to Inpatient Care
+                                </h2>
+
+                                {/* Note Section */}
+                                <div style={{
+                                  marginBottom: '24px',
+                                  fontSize: '13px',
+                                  lineHeight: '1.5',
+                                  color: '#374151'
+                                }}>
+                                  <div style={{ marginBottom: '8px' }}>
+                                    <strong>Note:</strong>
+                                  </div>
+                                  <div style={{ marginBottom: '4px' }}>
+                                    Some patients may be appropriate for Observation care.
+                                  </div>
+                                  <div>
+                                    For consideration of observation care, see <span style={{ color: '#6366F1', textDecoration: 'underline', cursor: 'pointer' }}>Diabetes: Observation Care.</span>
+                                  </div>
+                                </div>
+
+                                {/* Clinical Indications Section */}
+                                <div style={{
+                                  fontSize: '13px',
+                                  lineHeight: '1.4',
+                                  color: '#374151'
+                                }}>
+                                  <div style={{ marginBottom: '16px', fontWeight: '600' }}>
+                                    Clinical Indications for Inpatient Admission - Diabetic Ketoacidosis (DKA)
+                                  </div>
+
+                                  <div style={{ marginBottom: '16px' }}>
+                                    <strong>Confirmed diagnosis of DKA, typically with:</strong>
+                                  </div>
+
+                                  {/* DKA Criteria List */}                                  <ul style={{
+                                    marginLeft: '20px',
+                                    marginBottom: '20px',
+                                    listStyleType: 'disc'
+                                  }}>
+                                    <li style={{ marginBottom: '4px' }}>Blood glucose &gt;250 mg/dL</li>
+                                    <li style={{ marginBottom: '4px' }}>Arterial pH &lt;7.30</li>
+                                    <li style={{ marginBottom: '4px' }}>Serum bicarbonate &lt;18 mEq/L</li>
+                                    <li style={{ marginBottom: '4px' }}>Presence of ketones and moderate/severe ketosis</li>
+                                    <li style={{ marginBottom: '4px' }}>Elevated anion gap metabolic acidosis</li>
+                                  </ul>
+
+                                  {/* Physiologic Instability Section */}
+                                  <div style={{ marginBottom: '16px' }}>
+                                    <strong>Physiologic Instability / Severity Indicators</strong>
+                                  </div>
+                                  <ul style={{
+                                    marginLeft: '20px',
+                                    marginBottom: '20px',
+                                    listStyleType: 'disc'
+                                  }}>
+                                    <li style={{ marginBottom: '4px' }}>Altered mental status (e.g., confusion, stupor, coma)</li>
+                                    <li style={{ marginBottom: '4px' }}>Hemodynamic instability (e.g., hypotension, tachycardia unresponsive to fluid resuscitation)</li>
+                                    <li style={{ marginBottom: '4px' }}>Severe dehydration with poor oral intake or need for IV fluids</li>
+                                    <li style={{ marginBottom: '4px' }}>Significant electrolyte disturbances, such as:</li>
+                                    <ul style={{ marginLeft: '20px', listStyleType: 'circle' }}>
+                                      <li style={{ marginBottom: '2px' }}>Severe hyponatremia</li>
+                                      <li style={{ marginBottom: '2px' }}>Hyperkalemia with ECG changes</li>
+                                      <li style={{ marginBottom: '2px' }}>Severe hypokalemia</li>
+                                      <li style={{ marginBottom: '2px' }}>Severe hypophosphatemia</li>
+                                    </ul>
+                                    <li style={{ marginBottom: '4px' }}>Severe hyperglycemia (typically &gt;400 mg/dL despite initial treatment)</li>
+                                    <li style={{ marginBottom: '4px' }}>Inability to tolerate oral intake due to nausea, vomiting, or ileus</li>
+                                    <li style={{ marginBottom: '4px' }}>Respiratory distress or Kussmaul breathing</li>
+                                  </ul>
+
+                                  {/* Comorbidities Section */}
+                                  <div style={{ marginBottom: '16px' }}>
+                                    <strong>Comorbidities / Complicating Factors</strong>
+                                  </div>
+                                  <ul style={{
+                                    marginLeft: '20px',
+                                    marginBottom: '20px',
+                                    listStyleType: 'disc'
+                                  }}>
+                                    <li style={{ marginBottom: '4px' }}>Renal insufficiency / acute kidney injury (AKI)</li>
+                                    <li style={{ marginBottom: '4px' }}>Congestive heart failure</li>
+                                    <li style={{ marginBottom: '4px' }}>History of recent stroke or cardiac event</li>
+                                    <li style={{ marginBottom: '4px' }}>Sepsis or suspected infection</li>
+                                    <li style={{ marginBottom: '4px' }}>Concurrent medical conditions requiring observation (e.g., pancreatitis, MI)</li>
+                                  </ul>
+
+                                  {/* Inadequate Outpatient Support Section */}
+                                  <div style={{ marginBottom: '16px' }}>
+                                    <strong>Inadequate Outpatient Support or Risk Factors:</strong>
+                                  </div>
+                                  <ul style={{
+                                    marginLeft: '20px',
+                                    marginBottom: '20px',
+                                    listStyleType: 'disc'
+                                  }}>
+                                    <li style={{ marginBottom: '4px' }}>Inability to safely manage at home due to social or environmental factors</li>
+                                    <li style={{ marginBottom: '4px' }}>History of noncompliance or poor follow-up</li>
+                                    <li style={{ marginBottom: '4px' }}>No access to insulin or inability to administer insulin safely</li>
+                                    <li style={{ marginBottom: '4px' }}>Lack of adequate support system</li>
+                                    <li style={{ marginBottom: '4px' }}>Recent psychiatric illness or suicidal ideation</li>
+                                  </ul>
+
+                                  {/* Pediatric Considerations Section */}
+                                  <div style={{ marginBottom: '16px' }}>
+                                    <strong>Pediatric Considerations (if applicable)</strong>
+                                  </div>
+                                  <ul style={{
+                                    marginLeft: '20px',
+                                    marginBottom: '20px',
+                                    listStyleType: 'disc'
+                                  }}>
+                                    <li style={{ marginBottom: '4px' }}>Age &lt;2 years</li>
+                                    <li style={{ marginBottom: '4px' }}>Risk of cerebral edema, especially in pediatric patients</li>
+                                    <li style={{ marginBottom: '4px' }}>Parental inability to manage condition at home</li>
+                                  </ul>
+                                </div>
+
+                                {/* Bottom Success Banner */}
+                                <div style={{
+                                  backgroundColor: '#10B981',
+                                  color: 'white',
+                                  padding: '12px 24px',
+                                  borderRadius: '8px',
+                                  marginTop: '32px',
+                                  marginBottom: '24px',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'space-between'
+                                }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div style={{
+                                      width: '20px',
+                                      height: '20px',
+                                      borderRadius: '50%',
+                                      border: '2px solid white',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: '12px',
+                                      fontWeight: 'bold'
+                                    }}>
+                                      ✓
+                                    </div>
+                                    <span style={{
+                                      fontFamily: 'Inter',
+                                      fontSize: '14px',
+                                      fontWeight: '600'
+                                    }}>
+                                      Selections Made, Criteria Met
+                                    </span>
+                                  </div>
+                                  <div style={{ display: 'flex', gap: '12px' }}>
+                                    <button style={{
+                                      backgroundColor: 'white',
+                                      color: '#10B981',
+                                      border: 'none',
+                                      borderRadius: '6px',
+                                      padding: '8px 16px',
+                                      fontSize: '12px',
+                                      fontWeight: '600',
+                                      cursor: 'pointer'
+                                    }}>
+                                      Save
+                                    </button>
+                                    <button style={{
+                                      backgroundColor: 'transparent',
+                                      color: 'white',
+                                      border: '1px solid white',
+                                      borderRadius: '6px',
+                                      padding: '8px 16px',
+                                      fontSize: '12px',
+                                      fontWeight: '600',
+                                      cursor: 'pointer'
+                                    }}>
+                                      Cancel
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div style={{
+                                  display: 'flex',
+                                  gap: '12px',
+                                  marginBottom: '24px'
+                                }}>
+                                  <button style={{
+                                    backgroundColor: '#F3F4F6',
+                                    color: '#374151',
+                                    border: '1px solid #D1D5DB',
+                                    borderRadius: '6px',
+                                    padding: '8px 16px',
+                                    fontSize: '12px',
+                                    fontWeight: '500',
+                                    cursor: 'pointer'
+                                  }}>
+                                    View Note History
+                                  </button>
+                                  <button style={{
+                                    backgroundColor: '#F3F4F6',
+                                    color: '#374151',
+                                    border: '1px solid #D1D5DB',
+                                    borderRadius: '6px',
+                                    padding: '8px 16px',
+                                    fontSize: '12px',
+                                    fontWeight: '500',
+                                    cursor: 'pointer'
+                                  }}>
+                                    Edit Note
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Step 4 Placeholder */}
+                            {clinicalReviewStep === 4 && (
+                              <div>
+                                <h2 style={{
+                                  color: '#1D2939',
+                                  fontFamily: 'Inter',
+                                  fontSize: '24px',
+                                  fontWeight: '600',
+                                  marginBottom: '20px'
+                                }}>
+                                  Step 4 Content
+                                </h2>
+                                <div style={{
+                                  backgroundColor: '#F9FAFB',
+                                  border: '1px solid #E5E7EB',
+                                  borderRadius: '8px',
+                                  padding: '40px',
+                                  textAlign: 'center'
+                                }}>
+                                  <div style={{ color: '#6B7280', fontSize: '48px', marginBottom: '16px' }}>
+                                    🔄
+                                  </div>
+                                  <p style={{ color: '#6B7280', fontSize: '16px' }}>
+                                    Step 4 content will be implemented next
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Navigation Controls */}
+                            <div style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              marginTop: '24px'
+                            }}>
+                              <button
+                                onClick={handleClinicalReviewPrev}
+                                disabled={clinicalReviewStep === 1}
+                                style={{
+                                  backgroundColor: clinicalReviewStep === 1 ? '#F3F4F6' : '#F9FAFB',
+                                  border: '1px solid #D1D5DB',
+                                  borderRadius: '6px',
+                                  padding: '8px 12px',
+                                  fontSize: '12px',
+                                  cursor: clinicalReviewStep === 1 ? 'not-allowed' : 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  color: clinicalReviewStep === 1 ? '#9CA3AF' : '#374151'
+                                }}
+                              >
+                                <span>‹</span>
+                              </button>
+                              <div style={{
+                                fontSize: '12px',
+                                color: '#6B7280'
+                              }}>
+                                Step {clinicalReviewStep} of 4
+                              </div>
+                              <button
+                                onClick={handleClinicalReviewNext}
+                                disabled={clinicalReviewStep === 4}
+                                style={{
+                                  backgroundColor: clinicalReviewStep === 4 ? '#F3F4F6' : '#F9FAFB',
+                                  border: '1px solid #D1D5DB',
+                                  borderRadius: '6px',
+                                  padding: '8px 12px',
+                                  fontSize: '12px',
+                                  cursor: clinicalReviewStep === 4 ? 'not-allowed' : 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  color: clinicalReviewStep === 4 ? '#9CA3AF' : '#374151'
+                                }}
+                              >
+                                <span>›</span>
+                              </button>
+                            </div>
+                          </div>
                         )}
 
                         {/* Other Auth Tab Contents */}
-                        {activeRequestTab === '20250P000367' && activeAuthTab !== 'Request Submitted' && (
+                        {activeRequestTab === '20250P000367' && activeAuthTab !== 'Request Submitted' && activeAuthTab !== 'Clinical Review' && (
                           <div className="authorization-content">
                             <h2 className="text-lg font-semibold text-gray-800 mb-4">{activeAuthTab}</h2>
                             <div className="bg-gray-50 border border-gray-200 rounded p-6 text-center">
