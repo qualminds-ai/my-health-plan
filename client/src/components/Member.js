@@ -12,13 +12,40 @@ import textChatIcon from '../assets/authorizations/text-chat-icon.png';
 import messageIcon from '../assets/authorizations/message-icon.png';
 import watchIcon from '../assets/authorizations/watch-icon.png';
 import userIcon from '../assets/authorizations/mingcute_user-x-fill.svg';
+import leftArrowTriangleIcon from '../assets/authorizations/clinical_review/left-arrow-triangle.svg';
+import caratLeftIcon from '../assets/authorizations/clinical_review/carat-left.svg';
+import caratRightIcon from '../assets/authorizations/clinical_review/carat-right.svg';
+
+// Custom checkbox styles
+const checkboxStyles = `
+  .custom-checkbox {
+    accent-color: #3276f6;
+    width: 16px;
+    height: 16px;
+    position: relative;
+  }
+  
+  /* Overlay a thinner tick mark */
+  .custom-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 0px;
+    left: 2px;
+    color: white;
+    font-size: 9px;
+    font-weight: 100;
+    line-height: 14px;
+    font-family: 'Arial', sans-serif;
+    pointer-events: none;
+    text-shadow: 0 0 1px rgba(0,0,0,0.3);
+  }
+`;
 
 const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate }) => {
   const topRef = useRef(null); const authContentRef = useRef(null); const [activeTab, setActiveTab] = useState('Authorizations');
   const [activeAuthTab, setActiveAuthTab] = useState('Request Submitted');
   const [activeRequestTab, setActiveRequestTab] = useState('20250P000367'); const [clinicalReviewStep, setClinicalReviewStep] = useState(1);
-  const [showClinicalIndicators, setShowClinicalIndicators] = useState([false, false, false]);
-  const [selectedCriteria, setSelectedCriteria] = useState({
+  const [showClinicalIndicators, setShowClinicalIndicators] = useState([false, false, false]); const [selectedCriteria, setSelectedCriteria] = useState({
     dka: false,
     physInstability: false,
     hemodynamicInstability: false,
@@ -29,6 +56,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
     inadequateSupport: false,
     pediatricConsiderations: false
   });
+  const [selectedGuidelineRows, setSelectedGuidelineRows] = useState(new Set());
 
   // Use prop data if available, otherwise use static demo data
   const memberData = propMemberData || {
@@ -224,10 +252,10 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
     if (clinicalReviewStep > 1) {
       setClinicalReviewStep(clinicalReviewStep - 1);
     }
-  };
-  return (
+  }; return (
     <div className="min-h-screen">
-      <div ref={topRef} id="top"></div>      <Header user={user} onLogout={onLogout} onNavigate={onNavigate} activeTab="Members" />      {/* Main Content */}
+      <style>{checkboxStyles}</style>
+      <div ref={topRef} id="top"></div><Header user={user} onLogout={onLogout} onNavigate={onNavigate} activeTab="Members" />      {/* Main Content */}
       <div className="main-content" style={{ width: '97%', margin: '0px auto', padding: '0px 20px', background: 'white' }}>        {/* Member Header Content */}
         <div style={{ width: '100%' }}>
           <div className="flex items-center py-3">
@@ -876,92 +904,308 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                           </div>
                         )}                        {/* Clinical Review Content */}
                         {activeRequestTab === '20250P000367' && activeAuthTab === 'Clinical Review' && (
-                          <div className="clinical-review-content" style={{ padding: '24px 0' }}>
-                            {/* Medical Necessity Guidelines Section */}
+                          <div className="clinical-review-content" >                            {/* Medical Necessity Guidelines Section */}
                             <div style={{
                               display: 'flex',
+                              flexDirection: 'column'
+                            }}>                              <div style={{
+                              display: 'flex',
                               alignItems: 'center',
-                              marginBottom: '24px',
-                              gap: '12px'
+                              gap: '10px'
                             }}>
-                              <div style={{
-                                width: '0',
-                                height: '0',
-                                borderTop: '20px solid transparent',
-                                borderBottom: '20px solid transparent',
-                                borderLeft: '20px solid #D2691E'
-                              }}></div>
-                              <h2 style={{
-                                color: '#1D2939',
-                                fontFamily: 'Inter',
-                                fontSize: '18px',
-                                fontWeight: '600',
-                                margin: '0'
-                              }}>
-                                Medical Necessity Guidelines
-                              </h2>
-                            </div>
-
-                            {/* Step 1: Guidelines Search and Selection */}
+                                <img src={leftArrowTriangleIcon} alt="Left Arrow Triangle Icon" style={{ width: 'auto', height: '73.982px' }} />
+                                <div style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  gap: '4px'
+                                }}>
+                                  <span style={{
+                                    color: '#000',
+                                    fontFamily: 'Teachers',
+                                    fontSize: '18px',
+                                    fontStyle: 'normal',
+                                    fontWeight: 500,
+                                    lineHeight: 'normal',
+                                    margin: 0
+                                  }}>
+                                    Medical
+                                  </span>
+                                  <span style={{
+                                    color: '#000',
+                                    fontFamily: 'Teachers',
+                                    fontSize: '18px',
+                                    fontStyle: 'normal',
+                                    fontWeight: 500,
+                                    lineHeight: 'normal',
+                                    margin: 0
+                                  }}>
+                                    Necessity
+                                  </span>
+                                  <span style={{
+                                    color: '#000',
+                                    fontFamily: 'Teachers',
+                                    fontSize: '18px',
+                                    fontStyle: 'normal',
+                                    fontWeight: 500,
+                                    lineHeight: 'normal',
+                                    margin: 0
+                                  }}>
+                                    Guidelines
+                                  </span>                                </div>
+                              </div>
+                              <div style={{ height: '2px', background: '#CACACA', width: '100%', marginTop: '15px' }} />
+                            </div>                            {/* Step 1: Guidelines Search and Selection */}
                             {clinicalReviewStep === 1 && (
-                              <div>
+                              <div style={{ marginTop: '20px' }}>
                                 {/* Guideline Selection Checkboxes */}
                                 <div style={{
                                   display: 'flex',
                                   alignItems: 'center',
-                                  gap: '16px',
-                                  marginBottom: '16px',
-                                  fontSize: '12px',
-                                  color: '#667085'
+                                  gap: '8px',
+                                  marginBottom: '16px'
                                 }}>
-                                  <span style={{ fontWeight: '500' }}>1st Edition</span>
+                                  <span style={{
+                                    color: '#9C9D9C',
+                                    fontFamily: 'Inter',
+                                    fontSize: '14.069px',
+                                    fontStyle: 'normal',
+                                    fontWeight: 600,
+                                    lineHeight: 'normal'
+                                  }}>
+                                    1st Edition
+                                  </span>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    ACO
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      ACO
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    ISC
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      ISC
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    GRC
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      GRC
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    MCM
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      MCM
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    RFC
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      RFC
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    HHC
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      HHC
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    CCG
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      CCG
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    TC
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      TC
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    DBHC
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      DBHC
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    PIP
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      PIP
+                                    </span>
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <input type="checkbox" />
-                                    MCR
+                                    <input
+                                      type="checkbox" className="custom-checkbox"
+                                      style={{
+                                        width: '13.164px',
+                                        height: '12.341px',
+                                        border: '1px solid lightgray',
+                                        borderRadius: '50%'
+                                      }}
+                                    />
+                                    <span style={{
+                                      color: '#646389',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14.809px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      MCR
+                                    </span>
                                   </label>
-                                </div>
-
-                                {/* Quick Search */}
+                                </div>                                {/* Quick Search */}
                                 <div style={{
                                   display: 'flex',
                                   alignItems: 'center',
@@ -969,262 +1213,671 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   marginBottom: '20px'
                                 }}>
                                   <span style={{
+                                    color: '#33333A',
                                     fontFamily: 'Inter',
-                                    fontSize: '12px',
-                                    fontWeight: '500',
-                                    color: '#667085'
+                                    fontSize: '13.081px',
+                                    fontStyle: 'normal',
+                                    fontWeight: 500,
+                                    lineHeight: 'normal'
                                   }}>
                                     Quick Search
-                                  </span>
-                                  <input
+                                  </span>                                  <input
                                     type="text"
                                     defaultValue="DKA"
                                     style={{
-                                      border: '1px solid #D0D5DD',
-                                      borderRadius: '6px',
-                                      padding: '6px 12px',
-                                      fontSize: '12px',
-                                      width: '120px'
+                                      width: '344px',
+                                      height: '22px',
+                                      border: '1px solid lightgray',
+                                      background: '#FFFEFF',
+                                      padding: '6px',
+                                      color: '#444753',
+                                      fontFamily: 'Inter',
+                                      fontSize: '13.328px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
                                     }}
                                   />
                                   <button
                                     style={{
-                                      backgroundColor: '#F9FAFB',
-                                      border: '1px solid #D0D5DD',
-                                      borderRadius: '6px',
-                                      padding: '6px 16px',
-                                      fontSize: '12px',
-                                      fontWeight: '500',
+                                      width: '59.236px',
+                                      height: '20px',
+                                      borderRadius: '0.823px 0.617px 0px 0.617px',
+                                      border: '0.823px solid #696669',
+                                      background: '#EFEFED',
+                                      color: '#4C4C51',
+                                      fontFamily: 'Inter',
+                                      fontSize: '12.176px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal',
                                       cursor: 'pointer'
                                     }}
                                   >
                                     Search
                                   </button>
-                                </div>
-
-                                {/* Results Summary */}
+                                </div>                                {/* Results Summary */}
                                 <div style={{
-                                  fontSize: '12px',
-                                  color: '#667085',
+                                  color: '#474952',
+                                  fontFamily: 'Inter',
+                                  fontSize: '12.752px',
+                                  fontStyle: 'normal',
+                                  fontWeight: 400,
+                                  lineHeight: 'normal',
                                   marginBottom: '16px'
                                 }}>
                                   6 results for DKA
-                                  <span style={{ float: 'right' }}>(Results 1 - 6 of 6)</span>
-                                </div>
-
-                                {/* Guidelines Table */}
+                                  <span style={{
+                                    float: 'right',
+                                    color: '#3F4045',
+                                    fontFamily: 'Inter',
+                                    fontSize: '9.873px',
+                                    fontStyle: 'normal',
+                                    fontWeight: 400,
+                                    lineHeight: 'normal'
+                                  }}>(Results 1 - 6 of 6)</span>
+                                </div>                                {/* Guidelines Table */}
                                 <div style={{
-                                  border: '1px solid #E5E7EB',
-                                  borderRadius: '8px',
-                                  overflow: 'hidden',
                                   marginBottom: '24px'
                                 }}>
                                   <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                                    <thead style={{ backgroundColor: '#F9FAFB' }}>
+                                    <thead>
                                       <tr>
                                         <th style={{
-                                          padding: '12px 16px',
+                                          padding: '4px 8px',
                                           textAlign: 'left',
-                                          fontSize: '12px',
-                                          fontWeight: '600',
-                                          color: '#374151',
-                                          borderBottom: '1px solid #E5E7EB'
+                                          color: '#000',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.164px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal',
+                                          textDecoration: 'underline',
+                                          textDecorationStyle: 'solid',
+                                          textDecorationSkipInk: 'auto',
+                                          textDecorationThickness: 'auto',
+                                          textUnderlineOffset: 'auto',
+                                          textUnderlinePosition: 'from-font'
                                         }}>
                                           Guideline Code
                                         </th>
                                         <th style={{
-                                          padding: '12px 16px',
+                                          padding: '4px 8px',
                                           textAlign: 'left',
-                                          fontSize: '12px',
-                                          fontWeight: '600',
-                                          color: '#374151',
-                                          borderBottom: '1px solid #E5E7EB'
+                                          color: '#000',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.164px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal',
+                                          textDecoration: 'underline',
+                                          textDecorationStyle: 'solid',
+                                          textDecorationSkipInk: 'auto',
+                                          textDecorationThickness: 'auto',
+                                          textUnderlineOffset: 'auto',
+                                          textUnderlinePosition: 'from-font'
                                         }}>
                                           Product
                                         </th>
                                         <th style={{
-                                          padding: '12px 16px',
+                                          padding: '4px 8px',
                                           textAlign: 'left',
-                                          fontSize: '12px',
-                                          fontWeight: '600',
-                                          color: '#374151',
-                                          borderBottom: '1px solid #E5E7EB'
+                                          color: '#000',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.164px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal',
+                                          textDecoration: 'underline',
+                                          textDecorationStyle: 'solid',
+                                          textDecorationSkipInk: 'auto',
+                                          textDecorationThickness: 'auto',
+                                          textUnderlineOffset: 'auto',
+                                          textUnderlinePosition: 'from-font'
                                         }}>
                                           Type
                                         </th>
                                         <th style={{
-                                          padding: '12px 16px',
+                                          padding: '4px 8px',
                                           textAlign: 'left',
-                                          fontSize: '12px',
-                                          fontWeight: '600',
-                                          color: '#374151',
-                                          borderBottom: '1px solid #E5E7EB'
+                                          color: '#000',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.164px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal',
+                                          textDecoration: 'underline',
+                                          textDecorationStyle: 'solid',
+                                          textDecorationSkipInk: 'auto',
+                                          textDecorationThickness: 'auto',
+                                          textUnderlineOffset: 'auto',
+                                          textUnderlinePosition: 'from-font'
                                         }}>
                                           Title
                                         </th>
                                         <th style={{
-                                          padding: '12px 16px',
+                                          padding: '4px 8px',
                                           textAlign: 'left',
-                                          fontSize: '12px',
-                                          fontWeight: '600',
-                                          color: '#374151',
-                                          borderBottom: '1px solid #E5E7EB'
+                                          color: '#000',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.164px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal',
+                                          textDecoration: 'underline',
+                                          textDecorationStyle: 'solid',
+                                          textDecorationSkipInk: 'auto',
+                                          textDecorationThickness: 'auto',
+                                          textUnderlineOffset: 'auto',
+                                          textUnderlinePosition: 'from-font'
                                         }}>
                                           GLOS/MBLOS
                                         </th>
                                         <th style={{
-                                          padding: '12px 16px',
+                                          padding: '4px 8px',
                                           textAlign: 'left',
-                                          fontSize: '12px',
-                                          fontWeight: '600',
-                                          color: '#374151',
-                                          borderBottom: '1px solid #E5E7EB'
+                                          color: '#000',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.164px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal',
+                                          textDecoration: 'underline',
+                                          textDecorationStyle: 'solid',
+                                          textDecorationSkipInk: 'auto',
+                                          textDecorationThickness: 'auto',
+                                          textUnderlineOffset: 'auto',
+                                          textUnderlinePosition: 'from-font'
                                         }}>
                                           Codes
                                         </th>
                                       </tr>
                                     </thead>
-                                    <tbody>
-                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                                    <tbody>                                      <tr>                                      <td style={{
+                                      padding: '4px 8px',
+                                      color: '#6B5722',
+                                      fontFamily: 'Inter',
+                                      fontSize: '13.904px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal',
+                                      cursor: 'pointer',
+                                      borderRadius: '0.617px 2.468px 0px 0px',
+                                      backgroundColor: selectedGuidelineRows.has('M-130') ? '#e4de77' : 'transparent'
+                                    }}
+                                      onClick={() => {
+                                        const newSelected = new Set(selectedGuidelineRows);
+                                        if (newSelected.has('M-130')) {
+                                          newSelected.delete('M-130');
+                                        } else {
+                                          newSelected.add('M-130');
+                                        }
+                                        setSelectedGuidelineRows(newSelected);
+                                      }}
+                                      onMouseEnter={(e) => {
+                                        if (!selectedGuidelineRows.has('M-130')) {
+                                          e.target.style.backgroundColor = '#e4de77';
+                                        }
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        if (!selectedGuidelineRows.has('M-130')) {
+                                          e.target.style.backgroundColor = 'transparent';
+                                        }
+                                      }}
+                                    >
+                                      M-130
+                                    </td>
+                                      <td style={{
+                                        padding: '4px 8px',
+                                        color: '#424149',
+                                        fontFamily: 'Inter',
+                                        fontSize: '12.176px',
+                                        fontStyle: 'normal',
+                                        fontWeight: 300,
+                                        lineHeight: 'normal'
+                                      }}>ISC</td>
+                                      <td style={{
+                                        padding: '4px 8px',
+                                        color: '#424149',
+                                        fontFamily: 'Inter',
+                                        fontSize: '12.176px',
+                                        fontStyle: 'normal',
+                                        fontWeight: 300,
+                                        lineHeight: 'normal'
+                                      }}>ORG</td>
+                                      <td style={{
+                                        padding: '4px 8px',
+                                        color: '#484C56',
+                                        fontFamily: 'Inter',
+                                        fontSize: '13.74px',
+                                        fontStyle: 'normal',
+                                        fontWeight: 400,
+                                        lineHeight: 'normal'
+                                      }}>Diabetes</td>
+                                      <td style={{
+                                        padding: '4px 8px',
+                                        color: '#B2B4BB',
+                                        fontFamily: 'Inter',
+                                        fontSize: '14.974px',
+                                        fontStyle: 'normal',
+                                        fontWeight: 600,
+                                        lineHeight: 'normal'
+                                      }}>(DS)</td>
+                                      <td style={{
+                                        padding: '4px 8px',
+                                        color: '#4E4DA2',
+                                        fontFamily: 'Inter',
+                                        fontSize: '13.575px',
+                                        fontStyle: 'normal',
+                                        fontWeight: 400,
+                                        lineHeight: 'normal'
+                                      }}>
+                                        View Codes
+                                      </td>
+                                    </tr>                                      <tr>                                        <td style={{
+                                      padding: '4px 8px',
+                                      color: '#4444A2',
+                                      fontFamily: 'Inter',
+                                      fontSize: '13.904px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal',
+                                      cursor: 'pointer',
+                                      borderRadius: '0.617px 2.468px 0px 0px',
+                                      backgroundColor: selectedGuidelineRows.has('P-140') ? '#e4de77' : 'transparent'
+                                    }}
+                                      onClick={() => {
+                                        const newSelected = new Set(selectedGuidelineRows);
+                                        if (newSelected.has('P-140')) {
+                                          newSelected.delete('P-140');
+                                        } else {
+                                          newSelected.add('P-140');
+                                        }
+                                        setSelectedGuidelineRows(newSelected);
+                                      }}
+                                      onMouseEnter={(e) => {
+                                        if (!selectedGuidelineRows.has('P-140')) {
+                                          e.target.style.backgroundColor = '#e4de77';
+                                        }
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        if (!selectedGuidelineRows.has('P-140')) {
+                                          e.target.style.backgroundColor = 'transparent';
+                                        }
+                                      }}
+                                    >
+                                      P-140
+                                    </td>
                                         <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
-                                        }}>
-                                          M-130
-                                        </td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ORG</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#9CA3AF' }}>(DS)</td>
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>ISC</td>
                                         <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>ORG-P</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#484C56',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.74px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
+                                        }}>Diabetes, Pediatric</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#B2B4BB',
+                                          fontFamily: 'Inter',
+                                          fontSize: '14.974px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 600,
+                                          lineHeight: 'normal'
+                                        }}>(DS)</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#4E4DA2',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.575px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
                                         }}>
                                           View Codes
                                         </td>
                                       </tr>
-                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                                      <tr>                                      <td style={{
+                                        padding: '4px 8px',
+                                        color: '#675786',
+                                        fontFamily: 'Inter',
+                                        fontSize: '13.904px',
+                                        fontStyle: 'normal',
+                                        fontWeight: 400,
+                                        lineHeight: 'normal',
+                                        cursor: 'pointer',
+                                        borderRadius: '0.617px 2.468px 0px 0px',
+                                        backgroundColor: selectedGuidelineRows.has('M-130-RRG') ? '#e4de77' : 'transparent'
+                                      }}
+                                        onClick={() => {
+                                          const newSelected = new Set(selectedGuidelineRows);
+                                          if (newSelected.has('M-130-RRG')) {
+                                            newSelected.delete('M-130-RRG');
+                                          } else {
+                                            newSelected.add('M-130-RRG');
+                                          }
+                                          setSelectedGuidelineRows(newSelected);
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          if (!selectedGuidelineRows.has('M-130-RRG')) {
+                                            e.target.style.backgroundColor = '#e4de77';
+                                          }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          if (!selectedGuidelineRows.has('M-130-RRG')) {
+                                            e.target.style.backgroundColor = 'transparent';
+                                          }
+                                        }}
+                                      >
+                                        M-130-RRG
+                                      </td>
                                         <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
-                                        }}>
-                                          P-140
-                                        </td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ORG-P</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes, Pediatric</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#9CA3AF' }}>(DS)</td>
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>ISC</td>
                                         <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
-                                        }}>
-                                          View Codes
-                                        </td>
-                                      </tr>
-                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>RRG</td>
                                         <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
-                                        }}>
-                                          M-130-RRG
-                                        </td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>RRG</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes RRG</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#9CA3AF' }}>2(DS)</td>
+                                          padding: '4px 8px',
+                                          color: '#484C56',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.74px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
+                                        }}>Diabetes RRG</td>                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#B2B4BB',
+                                          fontFamily: 'Inter',
+                                          fontSize: '14.974px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 600,
+                                          lineHeight: 'normal'
+                                        }}>2(DS)</td>
                                         <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
-                                        }}>
-                                          View Codes
-                                        </td>
-                                      </tr>
-                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                                        <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
-                                        }}>
-                                          P-140-RRG
-                                        </td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>RRG-P</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes, Pediatric RRG</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#9CA3AF' }}>(DS)</td>
-                                        <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
-                                        }}>
-                                          View Codes
-                                        </td>
-                                      </tr>
-                                      <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                                        <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
-                                        }}>
-                                          OC-014
-                                        </td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>OCG</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Diabetes: Observation Care</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}></td>
-                                        <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
+                                          padding: '4px 8px',
+                                          color: '#4E4DA2',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.575px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
                                         }}>
                                           View Codes
                                         </td>
                                       </tr>
-                                      <tr>
+                                      <tr>                                        <td style={{
+                                        padding: '4px 8px',
+                                        color: '#4444A2',
+                                        fontFamily: 'Inter',
+                                        fontSize: '13.904px',
+                                        fontStyle: 'normal',
+                                        fontWeight: 400,
+                                        lineHeight: 'normal',
+                                        cursor: 'pointer',
+                                        borderRadius: '0.617px 2.468px 0px 0px',
+                                        backgroundColor: selectedGuidelineRows.has('P-140-RRG') ? '#e4de77' : 'transparent'
+                                      }}
+                                        onClick={() => {
+                                          const newSelected = new Set(selectedGuidelineRows);
+                                          if (newSelected.has('P-140-RRG')) {
+                                            newSelected.delete('P-140-RRG');
+                                          } else {
+                                            newSelected.add('P-140-RRG');
+                                          }
+                                          setSelectedGuidelineRows(newSelected);
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          if (!selectedGuidelineRows.has('P-140-RRG')) {
+                                            e.target.style.backgroundColor = '#e4de77';
+                                          }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          if (!selectedGuidelineRows.has('P-140-RRG')) {
+                                            e.target.style.backgroundColor = 'transparent';
+                                          }
+                                        }}
+                                      >
+                                        P-140-RRG
+                                      </td>
                                         <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>ISC</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>RRG-P</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#484C56',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.74px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
+                                        }}>Diabetes, Pediatric RRG</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#C7C9C8',
+                                          fontFamily: 'Inter',
+                                          fontSize: '15.879px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 600,
+                                          lineHeight: 'normal'
+                                        }}>(DS)</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#4E4DA2',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.575px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
                                         }}>
-                                          CCC-015
+                                          View Codes
                                         </td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>ISC</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>CCC</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}>Hyperglycemia and Diabetes Control: Common Complications and Conditions</td>
-                                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#374151' }}></td>
+                                      </tr>
+                                      <tr>                                        <td style={{
+                                        padding: '4px 8px',
+                                        color: '#4444A2',
+                                        fontFamily: 'Inter',
+                                        fontSize: '13.904px',
+                                        fontStyle: 'normal',
+                                        fontWeight: 400,
+                                        lineHeight: 'normal',
+                                        cursor: 'pointer',
+                                        borderRadius: '0.617px 2.468px 0px 0px',
+                                        backgroundColor: selectedGuidelineRows.has('OC-014') ? '#e4de77' : 'transparent'
+                                      }}
+                                        onClick={() => {
+                                          const newSelected = new Set(selectedGuidelineRows);
+                                          if (newSelected.has('OC-014')) {
+                                            newSelected.delete('OC-014');
+                                          } else {
+                                            newSelected.add('OC-014');
+                                          }
+                                          setSelectedGuidelineRows(newSelected);
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          if (!selectedGuidelineRows.has('OC-014')) {
+                                            e.target.style.backgroundColor = '#e4de77';
+                                          }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          if (!selectedGuidelineRows.has('OC-014')) {
+                                            e.target.style.backgroundColor = 'transparent';
+                                          }
+                                        }}
+                                      >
+                                        OC-014
+                                      </td>
                                         <td style={{
-                                          padding: '12px 16px',
-                                          fontSize: '12px',
-                                          color: '#6366F1',
-                                          textDecoration: 'underline',
-                                          cursor: 'pointer'
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>ISC</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>OCG</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#484C56',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.74px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
+                                        }}>Diabetes: Observation Care</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#C7C9C8',
+                                          fontFamily: 'Inter',
+                                          fontSize: '15.879px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 600,
+                                          lineHeight: 'normal'
+                                        }}></td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#4E4DA2',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.575px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
+                                        }}>
+                                          View Codes
+                                        </td>
+                                      </tr>
+                                      <tr>                                        <td style={{
+                                        padding: '4px 8px',
+                                        color: '#4444A2',
+                                        fontFamily: 'Inter',
+                                        fontSize: '13.904px',
+                                        fontStyle: 'normal',
+                                        fontWeight: 400,
+                                        lineHeight: 'normal', cursor: 'pointer',
+                                        borderRadius: '0.617px 2.468px 0px 0px',
+                                        backgroundColor: selectedGuidelineRows.has('CCC-015') ? '#e4de77' : 'transparent'
+                                      }}
+                                        onClick={() => {
+                                          const newSelected = new Set(selectedGuidelineRows);
+                                          if (newSelected.has('CCC-015')) {
+                                            newSelected.delete('CCC-015');
+                                          } else {
+                                            newSelected.add('CCC-015');
+                                          }
+                                          setSelectedGuidelineRows(newSelected);
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          if (!selectedGuidelineRows.has('CCC-015')) {
+                                            e.target.style.backgroundColor = '#e4de77';
+                                          }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          if (!selectedGuidelineRows.has('CCC-015')) {
+                                            e.target.style.backgroundColor = 'transparent';
+                                          }
+                                        }}
+                                      >
+                                        CCC-015
+                                      </td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>ISC</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#424149',
+                                          fontFamily: 'Inter',
+                                          fontSize: '12.176px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 300,
+                                          lineHeight: 'normal'
+                                        }}>CCC</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#484C56',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.74px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
+                                        }}>Hyperglycemia and Diabetes Control: Common Complications and Conditions</td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#C7C9C8',
+                                          fontFamily: 'Inter',
+                                          fontSize: '15.879px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 600,
+                                          lineHeight: 'normal'
+                                        }}></td>
+                                        <td style={{
+                                          padding: '4px 8px',
+                                          color: '#4E4DA2',
+                                          fontFamily: 'Inter',
+                                          fontSize: '13.575px',
+                                          fontStyle: 'normal',
+                                          fontWeight: 400,
+                                          lineHeight: 'normal'
                                         }}>
                                           View Codes
                                         </td>
@@ -1712,85 +2365,316 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </button>
                                 </div>
                               </div>
-                            )}
-
-                            {/* Step 4 Placeholder */}
+                            )}                            {/* Step 4: Medical Necessity Guidelines - Goal Length of Stay */}
                             {clinicalReviewStep === 4 && (
-                              <div>
-                                <h2 style={{
-                                  color: '#1D2939',
-                                  fontFamily: 'Inter',
-                                  fontSize: '24px',
-                                  fontWeight: '600',
-                                  marginBottom: '20px'
-                                }}>
-                                  Step 4 Content
-                                </h2>
+                              <div style={{ backgroundColor: '#FFFFFF', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+                                {/* Header Section */}
                                 <div style={{
-                                  backgroundColor: '#F9FAFB',
-                                  border: '1px solid #E5E7EB',
-                                  borderRadius: '8px',
-                                  padding: '40px',
-                                  textAlign: 'center'
+                                  padding: '24px 0',
+                                  borderBottom: '1px solid #E5E7EB',
+                                  marginBottom: '32px'
                                 }}>
-                                  <div style={{ color: '#6B7280', fontSize: '48px', marginBottom: '16px' }}>
-                                    🔄
+                                  <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'flex-start'
+                                  }}>
+                                    {/* Left Side */}
+                                    <div>
+                                      <h1 style={{
+                                        color: '#333333',
+                                        fontSize: '24px',
+                                        fontWeight: 'bold',
+                                        marginBottom: '8px',
+                                        margin: '0 0 8px 0'
+                                      }}>
+                                        Medical Necessity Guidelines
+                                      </h1>
+                                      <p style={{
+                                        color: '#333333',
+                                        fontSize: '14px',
+                                        margin: '0'
+                                      }}>
+                                        Informed Care Strategies
+                                      </p>
+                                    </div>
+
+                                    {/* Right Side Navigation */}
+                                    <div style={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: '8px',
+                                      fontSize: '12px',
+                                      textTransform: 'uppercase',
+                                      color: '#333333'
+                                    }}>
+                                      <span style={{ cursor: 'pointer' }}>LOG OUT</span>
+                                      <span>|</span>
+                                      <span style={{ cursor: 'pointer' }}>SEARCH</span>
+                                      <span>|</span>
+                                      <span style={{ cursor: 'pointer' }}>MY PRODUCTS</span>
+                                      <span>|</span>
+                                      <span style={{ cursor: 'pointer' }}>CONTACT US</span>
+                                      <span>|</span>
+                                      <span style={{ cursor: 'pointer' }}>USER GUIDE</span>
+                                    </div>
                                   </div>
-                                  <p style={{ color: '#6B7280', fontSize: '16px' }}>
-                                    Step 4 content will be implemented next
-                                  </p>
+                                </div>
+
+                                {/* Main Content */}
+                                <div style={{ padding: '0 32px' }}>
+                                  {/* Primary Title */}
+                                  <h2 style={{
+                                    color: '#333333',
+                                    fontSize: '22px',
+                                    fontWeight: 'bold',
+                                    marginBottom: '32px',
+                                    margin: '0 0 32px 0'
+                                  }}>
+                                    Goal Length of Stay : 2 Days
+                                  </h2>
+
+                                  {/* Section 1: Brief Stay */}
+                                  <div style={{ marginBottom: '40px' }}>
+                                    <h3 style={{
+                                      color: '#333333',
+                                      fontSize: '18px',
+                                      fontWeight: 'bold',
+                                      marginBottom: '16px',
+                                      margin: '0 0 16px 0'
+                                    }}>
+                                      Brief Stay (1 to 3 Days) – Target LOS: 2 Days
+                                    </h3>
+
+                                    <ul style={{
+                                      fontSize: '16px',
+                                      color: '#333333',
+                                      lineHeight: '1.5',
+                                      marginBottom: '16px',
+                                      paddingLeft: '20px'
+                                    }}>
+                                      <li style={{ marginBottom: '8px' }}>Initial stabilization within first 12-24 hours</li>
+                                      <li style={{ marginBottom: '8px' }}>Transition from IV insulin to subcutaneous insulin regimen on Day 2</li>
+                                      <li style={{ marginBottom: '8px' }}>
+                                        Correction of:
+                                        <ul style={{ marginTop: '4px', marginLeft: '20px' }}>
+                                          <li>Acidosis</li>
+                                          <li>Ketosis</li>
+                                          <li>Electrolyte imbalances</li>
+                                        </ul>
+                                      </li>
+                                      <li style={{ marginBottom: '8px' }}>Nutritional intake established with adequate PO hydration</li>
+                                      <li style={{ marginBottom: '8px' }}>Ongoing monitoring of labs and vitals for stability</li>
+                                      <li style={{ marginBottom: '8px' }}>
+                                        Diabetes education and discharge planning initiated:
+                                        <ul style={{ marginTop: '4px', marginLeft: '20px' }}>
+                                          <li>Insulin use, glucose monitoring</li>
+                                          <li>Sick-day management</li>
+                                          <li>Social work consult as needed (e.g., cost of insulin, access to care)</li>
+                                        </ul>
+                                      </li>
+                                      <li style={{ marginBottom: '8px' }}>Outpatient endocrinology follow-up arranged</li>
+                                      <li style={{ marginBottom: '8px' }}>Documented improvement in mental status and vitals</li>
+                                    </ul>
+
+                                    <p style={{
+                                      fontSize: '14px',
+                                      color: '#333333',
+                                      fontStyle: 'italic',
+                                      marginTop: '16px',
+                                      margin: '16px 0 0 0'
+                                    }}>
+                                      Represents a well-executed, protocol-based DKA management plan with effective interdisciplinary care coordination
+                                    </p>
+                                  </div>
+
+                                  {/* Section 2: Moderate Stay */}
+                                  <div style={{ marginBottom: '40px' }}>
+                                    <h3 style={{
+                                      color: '#333333',
+                                      fontSize: '18px',
+                                      fontWeight: 'bold',
+                                      marginBottom: '16px',
+                                      margin: '0 0 16px 0'
+                                    }}>
+                                      Moderate Stay (4 to 7 Days)
+                                    </h3>
+
+                                    <ul style={{
+                                      fontSize: '16px',
+                                      color: '#333333',
+                                      lineHeight: '1.5',
+                                      marginBottom: '16px',
+                                      paddingLeft: '20px'
+                                    }}>
+                                      <li style={{ marginBottom: '8px' }}>Delayed response to treatment (e.g., persistent acidosis or ketosis)</li>
+                                      <li style={{ marginBottom: '8px' }}>
+                                        Complicating factors, such as:
+                                        <ul style={{ marginTop: '4px', marginLeft: '20px' }}>
+                                          <li>Infection requiring IV antibiotics</li>
+                                          <li>Renal insufficiency delaying fluid or insulin management</li>
+                                          <li>Nutrition or GI issues (e.g., nausea, gastroparesis) prolonging PO tolerance</li>
+                                        </ul>
+                                      </li>
+                                      <li style={{ marginBottom: '8px' }}>Slow weaning off insulin drip due to rebound hyperglycemia</li>
+                                      <li style={{ marginBottom: '8px' }}>Psychosocial or discharge barriers (e.g., homelessness, no caregiver)</li>
+                                      <li style={{ marginBottom: '8px' }}>Diabetes education prolonged or not yet completed</li>
+                                    </ul>
+
+                                    <p style={{
+                                      fontSize: '14px',
+                                      color: '#333333',
+                                      fontStyle: 'italic',
+                                      marginTop: '16px',
+                                      margin: '16px 0 0 0'
+                                    }}>
+                                      Indicates medical or social complexity requiring extended monitoring or coordination
+                                    </p>
+                                  </div>
+
+                                  {/* Section 3: Prolonged Stay */}
+                                  <div style={{ marginBottom: '40px' }}>
+                                    <h3 style={{
+                                      color: '#333333',
+                                      fontSize: '18px',
+                                      fontWeight: 'bold',
+                                      marginBottom: '16px',
+                                      margin: '0 0 16px 0'
+                                    }}>
+                                      Prolonged Stay (&gt; 7 Days)
+                                    </h3>
+
+                                    <ul style={{
+                                      fontSize: '16px',
+                                      color: '#333333',
+                                      lineHeight: '1.5',
+                                      marginBottom: '16px',
+                                      paddingLeft: '20px'
+                                    }}>
+                                      <li style={{ marginBottom: '8px' }}>Severe or refractory DKA (e.g., pH &lt; 7.0 not improving)</li>
+                                      <li style={{ marginBottom: '8px' }}>Major comorbidities (e.g., MI, stroke, sepsis, pancreatitis)</li>
+                                      <li style={{ marginBottom: '8px' }}>ICU-level complications (e.g., cerebral edema, ARDS)</li>
+                                      <li style={{ marginBottom: '8px' }}>Psychiatric decompensation or suicide risk requiring inpatient psych</li>
+                                      <li style={{ marginBottom: '8px' }}>Lack of safe discharge plan or need for long-term placement</li>
+                                      <li style={{ marginBottom: '8px' }}>Multidisciplinary involvement (e.g., case management, psychiatry, rehab)</li>
+                                    </ul>
+
+                                    <p style={{
+                                      fontSize: '14px',
+                                      color: '#333333',
+                                      fontStyle: 'italic',
+                                      marginTop: '16px',
+                                      margin: '16px 0 0 0'
+                                    }}>
+                                      Represents a highly complex patient requiring extended inpatient resources beyond standard DKA care
+                                    </p>
+                                  </div>
+                                </div>
+
+                                {/* Footer / Action Buttons */}
+                                <div style={{
+                                  padding: '0 32px 32px 32px'
+                                }}>
+                                  <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px'
+                                  }}>                                    <button
+                                    onClick={handleClinicalReviewPrev}
+                                    style={{
+                                      width: '50px',
+                                      height: '20px',
+                                      padding: '2.443px 17.443px 2.898px 17.898px',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      borderRadius: '2.443px',
+                                      border: '1px solid #BDBDBD',
+                                      background: '#DEDEDE',
+                                      cursor: 'pointer',
+                                      display: 'flex'
+                                    }}
+                                  >
+                                      <img
+                                        src={caratLeftIcon}
+                                        alt="Back"
+                                        style={{
+                                          width: 'auto',
+                                          height: '12px'
+                                        }}
+                                      />
+                                    </button>
+
+                                    <button
+                                      style={{
+                                        backgroundColor: '#F0F0F0',
+                                        border: '1px solid #CCCCCC',
+                                        borderRadius: '4px',
+                                        padding: '8px 12px',
+                                        fontSize: '14px',
+                                        color: '#333333',
+                                        cursor: 'pointer'
+                                      }}
+                                    >
+                                      Close
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
-                            )}
-
-                            {/* Navigation Controls */}
+                            )}                            {/* Navigation Controls */}
                             <div style={{
                               display: 'flex',
-                              justifyContent: 'space-between',
+                              justifyContent: 'flex-start',
                               alignItems: 'center',
-                              marginTop: '24px'
-                            }}>
-                              <button
-                                onClick={handleClinicalReviewPrev}
-                                disabled={clinicalReviewStep === 1}
-                                style={{
-                                  backgroundColor: clinicalReviewStep === 1 ? '#F3F4F6' : '#F9FAFB',
-                                  border: '1px solid #D1D5DB',
-                                  borderRadius: '6px',
-                                  padding: '8px 12px',
-                                  fontSize: '12px',
-                                  cursor: clinicalReviewStep === 1 ? 'not-allowed' : 'pointer',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '4px',
-                                  color: clinicalReviewStep === 1 ? '#9CA3AF' : '#374151'
-                                }}
-                              >
-                                <span>‹</span>
-                              </button>
-                              <div style={{
-                                fontSize: '12px',
-                                color: '#6B7280'
-                              }}>
-                                Step {clinicalReviewStep} of 4
-                              </div>
-                              <button
+                              marginTop: '40px',
+                              gap: '25px'
+                            }}>                              <button
+                              onClick={handleClinicalReviewPrev}
+                              disabled={clinicalReviewStep === 1}
+                              style={{
+                                width: '50px',
+                                height: '20px',
+                                padding: '1px 15px',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '2.443px',
+                                border: '1px solid #BDBDBD',
+                                background: '#DEDEDE',
+                                cursor: clinicalReviewStep === 1 ? 'not-allowed' : 'pointer',
+                                display: 'flex'
+                              }}
+                            >
+                                <img
+                                  src={caratLeftIcon}
+                                  alt="Previous"
+                                  style={{
+                                    width: 'auto',
+                                    height: '20px'
+                                  }}
+                                />
+                              </button>                              <button
                                 onClick={handleClinicalReviewNext}
                                 disabled={clinicalReviewStep === 4}
                                 style={{
-                                  backgroundColor: clinicalReviewStep === 4 ? '#F3F4F6' : '#F9FAFB',
-                                  border: '1px solid #D1D5DB',
-                                  borderRadius: '6px',
-                                  padding: '8px 12px',
-                                  fontSize: '12px',
-                                  cursor: clinicalReviewStep === 4 ? 'not-allowed' : 'pointer',
-                                  display: 'flex',
+                                  width: '50px',
+                                  height: '20px',
+                                  padding: '1px 15px',
+                                  justifyContent: 'center',
                                   alignItems: 'center',
-                                  gap: '4px',
-                                  color: clinicalReviewStep === 4 ? '#9CA3AF' : '#374151'
+                                  borderRadius: '2.443px',
+                                  border: '1px solid #BDBDBD',
+                                  background: '#DEDEDE',
+                                  cursor: clinicalReviewStep === 4 ? 'not-allowed' : 'pointer',
+                                  display: 'flex'
                                 }}
                               >
-                                <span>›</span>
+                                <img
+                                  src={caratRightIcon}
+                                  alt="Next"
+                                  style={{
+                                    width: 'auto',
+                                    height: '20px'
+                                  }}
+                                />
                               </button>
                             </div>
                           </div>
@@ -1898,3 +2782,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
 };
 
 export default Member;
+
+
+
+
