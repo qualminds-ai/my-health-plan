@@ -15,6 +15,9 @@ import userIcon from '../assets/authorizations/mingcute_user-x-fill.svg';
 import leftArrowTriangleIcon from '../assets/authorizations/clinical_review/left-arrow-triangle.svg';
 import caratLeftIcon from '../assets/authorizations/clinical_review/carat-left.svg';
 import caratRightIcon from '../assets/authorizations/clinical_review/carat-right.svg';
+import navNewTabIcon from '../assets/authorizations/clinical_review/nav-new-tab-icon.png';
+import letterNIcon from '../assets/authorizations/clinical_review/letter-n-icon.png';
+import plusIcon from '../assets/authorizations/clinical_review/plus-icon.png';
 
 // Custom checkbox styles
 const checkboxStyles = `
@@ -957,6 +960,22 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                             </div>                            {/* Step 1: Guidelines Search and Selection */}
                             {clinicalReviewStep === 1 && (
                               <div style={{ marginTop: '20px' }}>
+                                {/* Separator - adding vertical spacing */}
+                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB' }}></div>
+
+                                {/* Main Title */}
+                                <h1 style={{
+                                  color: '#212029',
+                                  fontFamily: 'Inter',
+                                  fontSize: '22.2px',
+                                  fontStyle: 'normal',
+                                  fontWeight: '500',
+                                  lineHeight: 'normal',
+                                  marginBottom: '16px'
+                                }}>
+                                  Guidelines Search and Selection
+                                </h1>
+
                                 {/* Guideline Selection Checkboxes */}
                                 <div style={{
                                   display: 'flex',
@@ -1886,81 +1905,137 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </table>
                                 </div>
                               </div>
-                            )}
-
-                            {/* Step 2: Clinical Indications for Admission to Inpatient Care */}
+                            )}                            {/* Step 2: Clinical Indications for Admission to Inpatient Care */}
                             {clinicalReviewStep === 2 && (
-                              <div>
-                                {/* Main Title */}
+                              <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
+                                {/* Separator - adding vertical spacing */}
+                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB' }}></div>                                {/* Main Title */}
                                 <h1 style={{
-                                  color: '#1D2939',
+                                  color: '#212029',
                                   fontFamily: 'Inter',
-                                  fontSize: '28px',
-                                  fontWeight: '700',
+                                  fontSize: '22.2px',
+                                  fontStyle: 'normal',
+                                  fontWeight: '500',
+                                  lineHeight: 'normal',
                                   marginBottom: '8px'
                                 }}>
                                   Clinical Indications for Admission to Inpatient Care
-                                </h1>
-
-                                {/* Subtitle Link */}
-                                <div style={{
-                                  color: '#6366F1',
+                                </h1>                                {/* Subtitle Link */}                                <div style={{
+                                  color: '#7C79A1',
                                   fontFamily: 'Inter',
-                                  fontSize: '14px',
+                                  fontSize: '12.6px',
+                                  fontStyle: 'normal',
                                   fontWeight: '400',
-                                  marginBottom: '32px',
-                                  textDecoration: 'underline',
-                                  cursor: 'pointer'
+                                  lineHeight: 'normal',
+                                  marginBottom: '16px',
+                                  cursor: 'pointer',
+                                  paddingLeft: '5px'
                                 }}>
                                   Return to top of Diabetes - ISC
-                                </div>
-
-                                {/* Note Section */}
+                                </div>                                {/* Note Section */}
                                 <div style={{
-                                  marginBottom: '24px',
-                                  fontSize: '14px',
-                                  lineHeight: '1.5'
+                                  marginBottom: '15px',
+                                  lineHeight: '1.5',
+                                  paddingLeft: '7px'
                                 }}>
-                                  <span style={{ color: '#1D2939', fontWeight: '500' }}>Note: Some patients may be appropriate for </span>
-                                  <span style={{ color: '#6366F1', textDecoration: 'underline', cursor: 'pointer' }}>Observation care.</span>
-                                  <span style={{ color: '#1D2939' }}> For consideration of observation care, see </span>
-                                  <span style={{ color: '#6366F1', textDecoration: 'underline', cursor: 'pointer' }}>
-                                    Diabetes: Observation Care
-                                    <span style={{ fontSize: '12px', marginLeft: '4px' }}>🔗 ISC.</span>
-                                  </span>
-                                </div>
+                                  <span style={{
+                                    color: '#3E3A40',
+                                    fontFamily: 'Inter',
+                                    fontSize: '14.9px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal'
+                                  }}>Note: Some patients may be appropriate for </span>
+                                  <span style={{
+                                    color: '#605F9B', fontFamily: 'Inter',
+                                    fontSize: '14.5px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal',
+                                    cursor: 'pointer'
+                                  }}>Observation care.</span>
+                                  <span style={{
+                                    color: '#3E3A40',
+                                    fontFamily: 'Inter',
+                                    fontSize: '14.3px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal'
+                                  }}> For consideration of observation care, see </span>                                    <span style={{
+                                    color: '#7976A7',
+                                    fontFamily: 'Inter',
+                                    fontSize: '14.5px',
+                                    fontStyle: 'normal', fontWeight: '400',
+                                    lineHeight: 'normal',
+                                    cursor: 'pointer',
+                                    whiteSpace: 'nowrap'
+                                  }}>
+                                    Diabetes: Observation Care                                    <span style={{
+                                      marginLeft: '10px',
+                                      width: '14px',
+                                      height: '14px',
+                                      background: `url(${navNewTabIcon}) no-repeat center`,
+                                      backgroundSize: 'contain',
+                                      display: 'inline-block',
+                                      verticalAlign: 'middle'
+                                    }}></span>
+                                    <span style={{
+                                      color: '#4E536B',
+                                      fontFamily: 'Inter',
+                                      fontSize: '12.9px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '400',
+                                      lineHeight: 'normal',
+                                      marginLeft: '4px'
+                                    }}>ISC.</span>                                  </span></div>                              </div>
+                            )}
 
+                            {/* Expand/Collapse Controls - outside padded container */}
+                            {clinicalReviewStep === 2 && (
+                              <div>
                                 {/* Expand/Collapse Controls */}
                                 <div style={{
-                                  color: '#6B7280',
-                                  fontSize: '12px',
-                                  marginBottom: '16px'
+                                  color: '#474248',
+                                  fontFamily: 'Inter',
+                                  fontSize: '13.1px',
+                                  fontStyle: 'normal',
+                                  fontWeight: '400', lineHeight: 'normal',
+                                  marginBottom: '8px'
                                 }}>
                                   [Expand All / Collapse All]
                                 </div>
 
                                 {/* Admission Criteria */}
                                 <div style={{
-                                  color: '#1D2939',
                                   fontSize: '14px',
-                                  marginBottom: '16px'
+                                  marginBottom: '16px',
+                                  paddingLeft: '15px'
                                 }}>
                                   <span style={{ marginRight: '8px' }}>●</span>
-                                  <span style={{ fontWeight: '500' }}>Admission is indicated for 1 or more of the following</span>
-                                  <span style={{ color: '#6366F1', cursor: 'pointer' }}>(1)(2)(3): </span>
                                   <span style={{
-                                    backgroundColor: '#E0E7FF',
-                                    padding: '2px 6px',
-                                    borderRadius: '4px',
-                                    fontSize: '12px',
-                                    fontWeight: '600'
-                                  }}>
-                                    [I]
-                                  </span>
-                                </div>
-
-                                {/* Clinical Indicators with Animation */}
-                                <div style={{ marginLeft: '24px' }}>
+                                    color: '#5D5356',
+                                    fontFamily: 'Inter',
+                                    fontSize: '13.2px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal'
+                                  }}>Admission is indicated for </span>                                  <span style={{
+                                    color: '#5C565E',
+                                    fontFamily: 'Inter',
+                                    fontSize: '13.1px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal'
+                                  }}>1 or more of the following(1)(2)(3): </span>                                  <span style={{
+                                    width: '13px',
+                                    height: '14px',
+                                    background: `url(${letterNIcon}) no-repeat center`,
+                                    backgroundSize: 'contain',
+                                    display: 'inline-block',
+                                    marginLeft: '10px'
+                                  }}></span>
+                                </div>                                {/* Clinical Indicators with Animation */}
+                                <div style={{ marginLeft: '36px' }}>
                                   {/* First Indicator */}
                                   <div
                                     style={{
@@ -1972,27 +2047,20 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       alignItems: 'flex-start',
                                       gap: '8px'
                                     }}
-                                  >
-                                    <span style={{
-                                      display: 'inline-block',
-                                      width: '16px',
-                                      height: '16px',
-                                      backgroundColor: '#10B981',
-                                      color: 'white',
-                                      fontSize: '12px',
-                                      fontWeight: 'bold',
-                                      textAlign: 'center',
-                                      lineHeight: '16px',
-                                      borderRadius: '2px',
-                                      marginTop: '2px'
-                                    }}>
-                                      +
-                                    </span>
-                                    <span style={{
-                                      color: '#1D2939',
-                                      fontSize: '14px',
-                                      fontWeight: '500'
-                                    }}>
+                                  >                                    <span style={{
+                                    display: 'inline-block',
+                                    width: '16px',
+                                    height: '16px',
+                                    background: `url(${plusIcon}) lightgray 50% / cover no-repeat`,
+                                    marginTop: '2px'
+                                  }}></span>                                    <span style={{
+                                    color: '#5D595F',
+                                    fontFamily: 'Inter',
+                                    fontSize: '13.9px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal'
+                                  }}>
                                       Diabetic ketoacidosis that requires inpatient management, as indicated by
                                     </span>
                                   </div>
@@ -2008,27 +2076,20 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       alignItems: 'flex-start',
                                       gap: '8px'
                                     }}
-                                  >
-                                    <span style={{
-                                      display: 'inline-block',
-                                      width: '16px',
-                                      height: '16px',
-                                      backgroundColor: '#10B981',
-                                      color: 'white',
-                                      fontSize: '12px',
-                                      fontWeight: 'bold',
-                                      textAlign: 'center',
-                                      lineHeight: '16px',
-                                      borderRadius: '2px',
-                                      marginTop: '2px'
-                                    }}>
-                                      +
-                                    </span>
-                                    <span style={{
-                                      color: '#1D2939',
-                                      fontSize: '14px',
-                                      fontWeight: '500'
-                                    }}>
+                                  >                                    <span style={{
+                                    display: 'inline-block',
+                                    width: '16px',
+                                    height: '16px',
+                                    background: `url(${plusIcon}) lightgray 50% / cover no-repeat`,
+                                    marginTop: '2px'
+                                  }}></span>                                    <span style={{
+                                    color: '#5D595F',
+                                    fontFamily: 'Inter',
+                                    fontSize: '13.9px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal'
+                                  }}>
                                       Hyperglycemic hyperosmolar state, as indicated by
                                     </span>
                                   </div>
@@ -2044,35 +2105,30 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       alignItems: 'flex-start',
                                       gap: '8px'
                                     }}
-                                  >
-                                    <span style={{
-                                      display: 'inline-block',
-                                      width: '16px',
-                                      height: '16px',
-                                      backgroundColor: '#10B981',
-                                      color: 'white',
-                                      fontSize: '12px',
-                                      fontWeight: 'bold',
-                                      textAlign: 'center',
-                                      lineHeight: '16px',
-                                      borderRadius: '2px',
-                                      marginTop: '2px'
-                                    }}>
-                                      +
-                                    </span>
-                                    <span style={{
-                                      color: '#1D2939',
-                                      fontSize: '14px',
-                                      fontWeight: '500'
-                                    }}>
+                                  >                                    <span style={{
+                                    display: 'inline-block',
+                                    width: '16px',
+                                    height: '16px',
+                                    background: `url(${plusIcon}) lightgray 50% / cover no-repeat`,
+                                    marginTop: '2px'
+                                  }}></span>                                    <span style={{
+                                    color: '#5D595F',
+                                    fontFamily: 'Inter',
+                                    fontSize: '13.9px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal'
+                                  }}>
                                       Hyperglycemia requiring inpatient care, as indicated by
                                     </span>
                                   </div>
-                                </div>
-                              </div>
-                            )}                            {/* Step 3: Care Planning - Inpatient Admission and Alternatives */}
+                                </div>                              </div>
+                            )}{/* Step 3: Care Planning - Inpatient Admission and Alternatives */}
                             {clinicalReviewStep === 3 && (
                               <div>
+                                {/* Separator - adding vertical spacing */}
+                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB' }}></div>
+
                                 {/* Success Banner */}
                                 <div style={{
                                   backgroundColor: '#10B981',
@@ -2136,10 +2192,12 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
 
                                 {/* Main Title */}
                                 <h1 style={{
-                                  color: '#1D2939',
+                                  color: '#212029',
                                   fontFamily: 'Inter',
-                                  fontSize: '20px',
-                                  fontWeight: '700',
+                                  fontSize: '22.2px',
+                                  fontStyle: 'normal',
+                                  fontWeight: '500',
+                                  lineHeight: 'normal',
                                   marginBottom: '8px'
                                 }}>
                                   Care Planning - Inpatient Admission and Alternatives
@@ -2147,10 +2205,12 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
 
                                 {/* Subtitle */}
                                 <h2 style={{
-                                  color: '#1D2939',
+                                  color: '#212029',
                                   fontFamily: 'Inter',
-                                  fontSize: '16px',
-                                  fontWeight: '600',
+                                  fontSize: '22.2px',
+                                  fontStyle: 'normal',
+                                  fontWeight: '500',
+                                  lineHeight: 'normal',
                                   marginBottom: '16px'
                                 }}>
                                   Clinical Indications for Admission to Inpatient Care
@@ -2368,6 +2428,9 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                             )}                            {/* Step 4: Medical Necessity Guidelines - Goal Length of Stay */}
                             {clinicalReviewStep === 4 && (
                               <div style={{ backgroundColor: '#FFFFFF', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+                                {/* Separator - adding vertical spacing */}
+                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB' }}></div>
+
                                 {/* Header Section */}
                                 <div style={{
                                   padding: '24px 0',
@@ -2382,9 +2445,12 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     {/* Left Side */}
                                     <div>
                                       <h1 style={{
-                                        color: '#333333',
-                                        fontSize: '24px',
-                                        fontWeight: 'bold',
+                                        color: '#212029',
+                                        fontFamily: 'Inter',
+                                        fontSize: '22.2px',
+                                        fontStyle: 'normal',
+                                        fontWeight: '500',
+                                        lineHeight: 'normal',
                                         marginBottom: '8px',
                                         margin: '0 0 8px 0'
                                       }}>
@@ -2422,12 +2488,14 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                 </div>
 
                                 {/* Main Content */}
-                                <div style={{ padding: '0 32px' }}>
-                                  {/* Primary Title */}
+                                <div style={{ padding: '0 32px' }}>                                  {/* Primary Title */}
                                   <h2 style={{
-                                    color: '#333333',
-                                    fontSize: '22px',
-                                    fontWeight: 'bold',
+                                    color: '#212029',
+                                    fontFamily: 'Inter',
+                                    fontSize: '22.2px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '500',
+                                    lineHeight: 'normal',
                                     marginBottom: '32px',
                                     margin: '0 0 32px 0'
                                   }}>
