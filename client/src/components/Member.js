@@ -274,21 +274,21 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                 Member Overview: {memberData.name}
               </h3>
               </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="flex items-center justify-center"
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      backgroundColor: '#F9FAFB',
-                      border: '1px solid #D0D5DD',
-                      borderRadius: '6px',
-                      padding: '0',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <img src={starIcon} alt="Star" />
-                  </button>
+                <div className="flex items-center gap-2">                  <button
+                  className="flex items-center justify-center"
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    backgroundColor: '#F9FAFB',
+                    border: '1px solid #D0D5DD',
+                    borderRadius: '6px',
+                    padding: '0',
+                    cursor: 'pointer',
+                    filter: 'grayscale(100%)'
+                  }}
+                >
+                  <img src={starIcon} alt="Star" />
+                </button>
                   <button
                     className="flex items-center justify-center"
                     style={{
@@ -330,8 +330,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                     }}
                   >
                     <img src={messageIcon} alt="Message" />
-                  </button>
-                  <button
+                  </button>                  <button
                     className="flex items-center justify-center"
                     style={{
                       width: '32px',
@@ -344,7 +343,21 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                     }}
                   >
                     <img src={watchIcon} alt="Watch" />
-                  </button>                  </div>
+                  </button>                  <button
+                    className="flex items-center justify-center"
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      backgroundColor: '#F9FAFB',
+                      border: '1px solid #D0D5DD',
+                      borderRadius: '3.523px',
+                      padding: '0',
+                      cursor: 'pointer',
+                      background: `url(${medicalIcon}) lightgray 50% / cover no-repeat`,
+                      filter: 'grayscale(100%)'
+                    }}
+                  >
+                  </button></div>
               </div>
             </div>
           </div>
@@ -2443,19 +2456,18 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     alignItems: 'flex-start'
                                   }}>
                                     {/* Left Side */}
-                                    <div>
-                                      <h1 style={{
-                                        color: '#212029',
-                                        fontFamily: 'Inter',
-                                        fontSize: '22.2px',
-                                        fontStyle: 'normal',
-                                        fontWeight: '500',
-                                        lineHeight: 'normal',
-                                        marginBottom: '8px',
-                                        margin: '0 0 8px 0'
-                                      }}>
-                                        Medical Necessity Guidelines
-                                      </h1>
+                                    <div>                                      <h1 style={{
+                                      color: '#212029',
+                                      fontFamily: 'Teachers',
+                                      fontSize: '22.2px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '500',
+                                      lineHeight: 'normal',
+                                      marginBottom: '8px',
+                                      margin: '0 0 8px 0'
+                                    }}>
+                                      Medical Necessity Guidelines
+                                    </h1>
                                       <p style={{
                                         color: '#333333',
                                         fontSize: '14px',
