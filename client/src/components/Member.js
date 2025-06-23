@@ -238,15 +238,13 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
   // Handle clinical review step navigation
   const handleClinicalReviewNext = () => {
     if (clinicalReviewStep < 4) {
-      setClinicalReviewStep(clinicalReviewStep + 1);
-
-      // Reset indicators for step 2 animation
+      setClinicalReviewStep(clinicalReviewStep + 1);      // Reset indicators for step 2 animation
       if (clinicalReviewStep === 1) {
         setShowClinicalIndicators([false, false, false]);
-        // Animate indicators one by one
-        setTimeout(() => setShowClinicalIndicators([true, false, false]), 300);
-        setTimeout(() => setShowClinicalIndicators([true, true, false]), 800);
-        setTimeout(() => setShowClinicalIndicators([true, true, true]), 1300);
+        // Animate indicators one by one with slower timing and initial delay
+        setTimeout(() => setShowClinicalIndicators([true, false, false]), 500);
+        setTimeout(() => setShowClinicalIndicators([true, true, false]), 1200);
+        setTimeout(() => setShowClinicalIndicators([true, true, true]), 1900);
       }
     }
   };
@@ -926,47 +924,96 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                               flexDirection: 'column'
                             }}>                              <div style={{
                               display: 'flex',
-                              alignItems: 'center',
-                              gap: '10px'
+                              alignItems: 'end',
+                              gap: '50px',
+                              width: '100%'
                             }}>
-                                <img src={leftArrowTriangleIcon} alt="Left Arrow Triangle Icon" style={{ width: 'auto', height: '73.982px' }} />
                                 <div style={{
                                   display: 'flex',
-                                  flexDirection: 'column',
-                                  gap: '4px'
+                                  alignItems: 'center',
+                                  gap: '10px'
                                 }}>
-                                  <span style={{
-                                    color: '#000',
-                                    fontFamily: 'Teachers',
-                                    fontSize: '18px',
-                                    fontStyle: 'normal',
-                                    fontWeight: 500,
-                                    lineHeight: 'normal',
-                                    margin: 0
+                                  <img src={leftArrowTriangleIcon} alt="Left Arrow Triangle Icon" style={{ width: 'auto', height: '73.982px' }} />
+                                  <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '4px'
                                   }}>
-                                    Medical
-                                  </span>
-                                  <span style={{
-                                    color: '#000',
-                                    fontFamily: 'Teachers',
-                                    fontSize: '18px',
-                                    fontStyle: 'normal',
-                                    fontWeight: 500,
-                                    lineHeight: 'normal',
-                                    margin: 0
+                                    <span style={{
+                                      color: '#000',
+                                      fontFamily: 'Teachers',
+                                      fontSize: '18px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 500,
+                                      lineHeight: 'normal',
+                                      margin: 0
+                                    }}>
+                                      Medical
+                                    </span>
+                                    <span style={{
+                                      color: '#000',
+                                      fontFamily: 'Teachers',
+                                      fontSize: '18px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 500,
+                                      lineHeight: 'normal',
+                                      margin: 0
+                                    }}>
+                                      Necessity
+                                    </span>
+                                    <span style={{
+                                      color: '#000',
+                                      fontFamily: 'Teachers',
+                                      fontSize: '18px',
+                                      fontStyle: 'normal',
+                                      fontWeight: 500,
+                                      lineHeight: 'normal',
+                                      margin: 0
+                                    }}>
+                                      Guidelines                                    </span>                                  </div>                                </div>
+
+                                {/* Stage 4 Navigation - Only visible in step 4, positioned on the right side of the same row */}
+                                {clinicalReviewStep === 4 && (
+                                  <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'flex-start',
+                                    gap: '8px'
                                   }}>
-                                    Necessity
-                                  </span>
-                                  <span style={{
-                                    color: '#000',
-                                    fontFamily: 'Teachers',
-                                    fontSize: '18px',
-                                    fontStyle: 'normal',
-                                    fontWeight: 500,
-                                    lineHeight: 'normal',
-                                    margin: 0
-                                  }}>
-                                    Guidelines                                  </span>                                </div>
+                                    <div style={{
+                                      color: '#8E9295',
+                                      fontSize: '12.2px',
+                                      fontFamily: 'Inter',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      Informed Care Strategies
+                                    </div>
+
+                                    <div style={{
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      gap: '10px',
+                                      fontSize: '14.8px',
+                                      color: '#5D609A',
+                                      fontFamily: 'Inter',
+                                      fontStyle: 'normal',
+                                      fontWeight: 400,
+                                      lineHeight: 'normal'
+                                    }}>
+                                      <span style={{ cursor: 'pointer' }}>LOG OUT</span>
+                                      <span style={{ color: '#11273D' }}>|</span>
+                                      <span style={{ cursor: 'pointer' }}>SEARCH</span>
+                                      <span style={{ color: '#11273D' }}>|</span>
+                                      <span style={{ cursor: 'pointer' }}>MY PRODUCTS</span>
+                                      <span style={{ color: '#11273D' }}>|</span>
+                                      <span style={{ cursor: 'pointer' }}>CONTACT US</span>
+                                      <span style={{ color: '#11273D' }}>|</span>
+                                      <span style={{ cursor: 'pointer' }}>USER GUIDE</span>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <div style={{ height: '2px', background: '#CACACA', width: '95%', marginTop: '15px' }} />
                             </div>                            {/* Step 1: Guidelines Search and Selection */}
@@ -2031,19 +2078,18 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     marginLeft: '10px'
                                   }}></span>
                                 </div>                                {/* Clinical Indicators with Animation */}
-                                <div style={{ marginLeft: '36px' }}>
-                                  {/* First Indicator */}
-                                  <div
+                                <div style={{ marginLeft: '36px', marginBottom: '40px' }}>
+                                  {/* First Indicator */}                                  <div
                                     style={{
                                       opacity: showClinicalIndicators[0] ? 1 : 0,
                                       transform: showClinicalIndicators[0] ? 'translateY(0)' : 'translateY(-10px)',
-                                      transition: 'all 0.5s ease-in-out',
+                                      transition: 'all 0.8s ease-in-out',
                                       marginBottom: '12px',
                                       display: 'flex',
                                       alignItems: 'flex-start',
                                       gap: '8px'
                                     }}
-                                  >                                    <span style={{
+                                  ><span style={{
                                     display: 'inline-block',
                                     width: '16px',
                                     height: '16px',
@@ -2061,18 +2107,17 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     </span>
                                   </div>
 
-                                  {/* Second Indicator */}
-                                  <div
+                                  {/* Second Indicator */}                                  <div
                                     style={{
                                       opacity: showClinicalIndicators[1] ? 1 : 0,
                                       transform: showClinicalIndicators[1] ? 'translateY(0)' : 'translateY(-10px)',
-                                      transition: 'all 0.5s ease-in-out',
+                                      transition: 'all 0.8s ease-in-out',
                                       marginBottom: '12px',
                                       display: 'flex',
                                       alignItems: 'flex-start',
                                       gap: '8px'
                                     }}
-                                  >                                    <span style={{
+                                  ><span style={{
                                     display: 'inline-block',
                                     width: '16px',
                                     height: '16px',
@@ -2090,18 +2135,17 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     </span>
                                   </div>
 
-                                  {/* Third Indicator */}
-                                  <div
+                                  {/* Third Indicator */}                                  <div
                                     style={{
                                       opacity: showClinicalIndicators[2] ? 1 : 0,
                                       transform: showClinicalIndicators[2] ? 'translateY(0)' : 'translateY(-10px)',
-                                      transition: 'all 0.5s ease-in-out',
+                                      transition: 'all 0.8s ease-in-out',
                                       marginBottom: '12px',
                                       display: 'flex',
                                       alignItems: 'flex-start',
                                       gap: '8px'
                                     }}
-                                  >                                    <span style={{
+                                  ><span style={{
                                     display: 'inline-block',
                                     width: '16px',
                                     height: '16px',
@@ -2446,263 +2490,191 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                 </div>
                               </div>
                             )}                            {/* Step 4: Medical Necessity Guidelines - Goal Length of Stay */}                            {clinicalReviewStep === 4 && (
-                              <div style={{ backgroundColor: '#FFFFFF', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+                              <div style={{
+                                backgroundColor: '#FFFFFF',
+                                fontFamily: 'Arial, Helvetica, sans-serif',
+                                padding: '0',
+                                margin: '0'
+                              }}>
                                 {/* Separator - adding vertical spacing */}
                                 <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB', width: '95%' }}></div>
 
-                                {/* Header Section */}
-                                <div style={{
-                                  padding: '24px 0',
-                                  borderBottom: '1px solid #E5E7EB',
-                                  marginBottom: '32px'
-                                }}>
-                                  <div style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'flex-start'
-                                  }}>
-                                    {/* Left Side */}
-                                    <div>                                      <h1 style={{
-                                      color: '#212029',
-                                      fontFamily: 'Teachers',
-                                      fontSize: '22.2px',
-                                      fontStyle: 'normal',
-                                      fontWeight: '500',
-                                      lineHeight: 'normal',
-                                      marginBottom: '8px',
-                                      margin: '0 0 8px 0'
-                                    }}>
-                                      Medical Necessity Guidelines
-                                    </h1>
-                                      <p style={{
-                                        color: '#333333',
-                                        fontSize: '14px',
-                                        margin: '0'
-                                      }}>
-                                        Informed Care Strategies
-                                      </p>
-                                    </div>
-
-                                    {/* Right Side Navigation */}
-                                    <div style={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      gap: '8px',
-                                      fontSize: '12px',
-                                      textTransform: 'uppercase',
-                                      color: '#333333'
-                                    }}>
-                                      <span style={{ cursor: 'pointer' }}>LOG OUT</span>
-                                      <span>|</span>
-                                      <span style={{ cursor: 'pointer' }}>SEARCH</span>
-                                      <span>|</span>
-                                      <span style={{ cursor: 'pointer' }}>MY PRODUCTS</span>
-                                      <span>|</span>
-                                      <span style={{ cursor: 'pointer' }}>CONTACT US</span>
-                                      <span>|</span>
-                                      <span style={{ cursor: 'pointer' }}>USER GUIDE</span>
-                                    </div>
-                                  </div>
-                                </div>
-
                                 {/* Main Content */}
-                                <div style={{ padding: '0 32px' }}>                                  {/* Primary Title */}
-                                  <h2 style={{
-                                    color: '#212029',
+                                <div style={{ padding: '7px 42px' }}>                                  {/* Title */}
+                                  <h1 style={{
+                                    color: '#000',
                                     fontFamily: 'Inter',
-                                    fontSize: '22.2px',
+                                    fontSize: '20px',
                                     fontStyle: 'normal',
-                                    fontWeight: '500',
+                                    fontWeight: '700',
                                     lineHeight: 'normal',
-                                    marginBottom: '32px',
-                                    margin: '0 0 32px 0'
+                                    marginBottom: '19px',
+                                    margin: '0 0 19px 0'
                                   }}>
-                                    Goal Length of Stay : 2 Days
+                                    Goal Length of Stay: 2 Days
+                                  </h1>
+
+                                  {/* Brief Stay Section */}
+                                  <div style={{ marginBottom: '25px' }}>                                    <h2 style={{
+                                    color: '#000',
+                                    fontFamily: 'Inter',
+                                    fontSize: '16px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '700',
+                                    lineHeight: '150%',
+                                    marginBottom: '12px',
+                                    margin: '0 0 5px 0'
+                                  }}>                                      Brief Stay (1 to 3 Days) – Target LOS: 2 Days
                                   </h2>
 
-                                  {/* Section 1: Brief Stay */}
-                                  <div style={{ marginBottom: '40px' }}>
-                                    <h3 style={{
-                                      color: '#333333',
-                                      fontSize: '18px',
-                                      fontWeight: 'bold',
-                                      marginBottom: '16px',
-                                      margin: '0 0 16px 0'
-                                    }}>
-                                      Brief Stay (1 to 3 Days) – Target LOS: 2 Days
-                                    </h3>
-
                                     <ul style={{
-                                      fontSize: '16px',
-                                      color: '#333333',
-                                      lineHeight: '1.5',
-                                      marginBottom: '16px',
-                                      paddingLeft: '20px'
+                                      margin: '0 0 5px 0',
+                                      paddingLeft: '20px',
+                                      fontSize: '13px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '400',
+                                      lineHeight: '150%',
+                                      color: '#000',
+                                      fontFamily: 'Inter',
+                                      listStyleType: 'disc'
                                     }}>
-                                      <li style={{ marginBottom: '8px' }}>Initial stabilization within first 12-24 hours</li>
-                                      <li style={{ marginBottom: '8px' }}>Transition from IV insulin to subcutaneous insulin regimen on Day 2</li>
-                                      <li style={{ marginBottom: '8px' }}>
+                                      <li style={{ marginBottom: '6px' }}>Initial stabilization within first 12–24 hours</li>
+                                      <li style={{ marginBottom: '6px' }}>Transition from IV insulin to subcutaneous insulin regimen on Day 2</li>                                      <li style={{ marginBottom: '6px' }}>
                                         Correction of:
-                                        <ul style={{ marginTop: '4px', marginLeft: '20px' }}>
+                                        <ul style={{
+                                          marginTop: '3px',
+                                          marginLeft: '15px',
+                                          marginBottom: '3px',
+                                          listStyleType: 'disc'
+                                        }}>
                                           <li>Acidosis</li>
-                                          <li>Ketosis</li>
+                                          <li>Keto sis</li>
                                           <li>Electrolyte imbalances</li>
                                         </ul>
                                       </li>
-                                      <li style={{ marginBottom: '8px' }}>Nutritional intake established with adequate PO hydration</li>
-                                      <li style={{ marginBottom: '8px' }}>Ongoing monitoring of labs and vitals for stability</li>
-                                      <li style={{ marginBottom: '8px' }}>
+                                      <li style={{ marginBottom: '6px' }}>Nutritional intake established with adequate PO hydration</li>
+                                      <li style={{ marginBottom: '6px' }}>Ongoing monitoring of labs and vitals for stability</li>                                      <li style={{ marginBottom: '6px' }}>
                                         Diabetes education and discharge planning initiated:
-                                        <ul style={{ marginTop: '4px', marginLeft: '20px' }}>
+                                        <ul style={{
+                                          marginTop: '3px',
+                                          marginLeft: '15px',
+                                          marginBottom: '3px',
+                                          listStyleType: 'disc'
+                                        }}>
                                           <li>Insulin use, glucose monitoring</li>
                                           <li>Sick-day management</li>
-                                          <li>Social work consult as needed (e.g., cost of insulin, access to care)</li>
                                         </ul>
                                       </li>
-                                      <li style={{ marginBottom: '8px' }}>Outpatient endocrinology follow-up arranged</li>
-                                      <li style={{ marginBottom: '8px' }}>Documented improvement in mental status and vitals</li>
+                                      <li style={{ marginBottom: '6px' }}>Social work consult as needed (e.g., cost of insulin, access to care)</li>
+                                      <li style={{ marginBottom: '6px' }}>Outpatient endocrinology follow-up arranged</li>                                      <li style={{ marginBottom: '6px' }}>Documented improvement in mental status and vitals</li>
                                     </ul>
 
                                     <p style={{
-                                      fontSize: '14px',
-                                      color: '#333333',
-                                      fontStyle: 'italic',
-                                      marginTop: '16px',
-                                      margin: '16px 0 0 0'
+                                      fontSize: '13px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '400',
+                                      lineHeight: '150%',
+                                      color: '#000',
+                                      fontFamily: 'Inter'
                                     }}>
                                       Represents a well-executed, protocol-based DKA management plan with effective interdisciplinary care coordination
                                     </p>
                                   </div>
 
-                                  {/* Section 2: Moderate Stay */}
-                                  <div style={{ marginBottom: '40px' }}>
-                                    <h3 style={{
-                                      color: '#333333',
-                                      fontSize: '18px',
-                                      fontWeight: 'bold',
-                                      marginBottom: '16px',
-                                      margin: '0 0 16px 0'
-                                    }}>
-                                      Moderate Stay (4 to 7 Days)
-                                    </h3>
+                                  {/* Moderate Stay Section */}
+                                  <div style={{ marginBottom: '25px' }}>                                    <h2 style={{
+                                    color: '#000',
+                                    fontFamily: 'Inter',
+                                    fontSize: '16px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '700',
+                                    lineHeight: '150%',
+                                    marginBottom: '12px',
+                                    margin: '0 0 5px 0'
+                                  }}>                                      Moderate Stay (4 to 7 Days)
+                                  </h2>
 
                                     <ul style={{
-                                      fontSize: '16px',
-                                      color: '#333333',
-                                      lineHeight: '1.5',
-                                      marginBottom: '16px',
-                                      paddingLeft: '20px'
+                                      margin: '0 0 5px 0',
+                                      paddingLeft: '20px',
+                                      fontSize: '13px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '400',
+                                      lineHeight: '150%',
+                                      color: '#000',
+                                      fontFamily: 'Inter',
+                                      listStyleType: 'disc'
                                     }}>
-                                      <li style={{ marginBottom: '8px' }}>Delayed response to treatment (e.g., persistent acidosis or ketosis)</li>
-                                      <li style={{ marginBottom: '8px' }}>
+                                      <li style={{ marginBottom: '6px' }}>Delayed response to treatment (e.g., persistent acidosis or ketosis)</li>                                      <li style={{ marginBottom: '6px' }}>
                                         Complicating factors, such as:
-                                        <ul style={{ marginTop: '4px', marginLeft: '20px' }}>
+                                        <ul style={{
+                                          marginTop: '3px',
+                                          marginLeft: '15px',
+                                          marginBottom: '3px',
+                                          listStyleType: 'disc'
+                                        }}>
                                           <li>Infection requiring IV antibiotics</li>
                                           <li>Renal insufficiency delaying fluid or insulin management</li>
-                                          <li>Nutrition or GI issues (e.g., nausea, gastroparesis) prolonging PO tolerance</li>
                                         </ul>
                                       </li>
-                                      <li style={{ marginBottom: '8px' }}>Slow weaning off insulin drip due to rebound hyperglycemia</li>
-                                      <li style={{ marginBottom: '8px' }}>Psychosocial or discharge barriers (e.g., homelessness, no caregiver)</li>
-                                      <li style={{ marginBottom: '8px' }}>Diabetes education prolonged or not yet completed</li>
+                                      <li style={{ marginBottom: '6px' }}>Nutrition or GI issues (e.g., nausea, gastroparesis) prolonging PO tolerance</li>
+                                      <li style={{ marginBottom: '6px' }}>Slow weaning off insulin drip due to rebound hyperglycemia</li>
+                                      <li style={{ marginBottom: '6px' }}>Psychosocial or discharge barriers (e.g., homelessness, no caregiver)</li>                                      <li style={{ marginBottom: '6px' }}>Diabetes education prolonged or not yet completed</li>
                                     </ul>
 
                                     <p style={{
-                                      fontSize: '14px',
-                                      color: '#333333',
-                                      fontStyle: 'italic',
-                                      marginTop: '16px',
-                                      margin: '16px 0 0 0'
+                                      fontSize: '13px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '400',
+                                      lineHeight: '150%',
+                                      color: '#000',
+                                      fontFamily: 'Inter'
                                     }}>
                                       Indicates medical or social complexity requiring extended monitoring or coordination
                                     </p>
                                   </div>
 
-                                  {/* Section 3: Prolonged Stay */}
-                                  <div style={{ marginBottom: '40px' }}>
-                                    <h3 style={{
-                                      color: '#333333',
-                                      fontSize: '18px',
-                                      fontWeight: 'bold',
-                                      marginBottom: '16px',
-                                      margin: '0 0 16px 0'
-                                    }}>
-                                      Prolonged Stay (&gt; 7 Days)
-                                    </h3>
+                                  {/* Prolonged Stay Section */}
+                                  <div style={{ marginBottom: '25px' }}>                                    <h2 style={{
+                                    color: '#000',
+                                    fontFamily: 'Inter',
+                                    fontSize: '16px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '700',
+                                    lineHeight: '150%',
+                                    marginBottom: '12px',
+                                    margin: '0 0 5px 0'
+                                  }}>                                      Prolonged Stay (&gt;7 Days)
+                                  </h2>
 
                                     <ul style={{
-                                      fontSize: '16px',
-                                      color: '#333333',
-                                      lineHeight: '1.5',
-                                      marginBottom: '16px',
-                                      paddingLeft: '20px'
+                                      margin: '0 0 5px 0',
+                                      paddingLeft: '20px',
+                                      fontSize: '13px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '400',
+                                      lineHeight: '150%',
+                                      color: '#000',
+                                      fontFamily: 'Inter',
+                                      listStyleType: 'disc'
                                     }}>
-                                      <li style={{ marginBottom: '8px' }}>Severe or refractory DKA (e.g., pH &lt; 7.0 not improving)</li>
-                                      <li style={{ marginBottom: '8px' }}>Major comorbidities (e.g., MI, stroke, sepsis, pancreatitis)</li>
-                                      <li style={{ marginBottom: '8px' }}>ICU-level complications (e.g., cerebral edema, ARDS)</li>
-                                      <li style={{ marginBottom: '8px' }}>Psychiatric decompensation or suicide risk requiring inpatient psych</li>
-                                      <li style={{ marginBottom: '8px' }}>Lack of safe discharge plan or need for long-term placement</li>
-                                      <li style={{ marginBottom: '8px' }}>Multidisciplinary involvement (e.g., case management, psychiatry, rehab)</li>
+                                      <li style={{ marginBottom: '6px' }}>Severe or refractory DKA (e.g., pH &lt;7.0 not improving)</li>
+                                      <li style={{ marginBottom: '6px' }}>Major comorbidities (e.g., MI, stroke, sepsis, pancreatitis)</li>
+                                      <li style={{ marginBottom: '6px' }}>ICU-level complications (e.g., cerebral edema, ARDS)</li>
+                                      <li style={{ marginBottom: '6px' }}>Psychiatric decompensation or suicide risk requiring inpatient psych</li>
+                                      <li style={{ marginBottom: '6px' }}>Lack of safe discharge plan or need for long-term placement</li>                                      <li style={{ marginBottom: '6px' }}>Multidisciplinary involvement (e.g., case management, psychiatry, rehab)</li>
                                     </ul>
 
                                     <p style={{
-                                      fontSize: '14px',
-                                      color: '#333333',
-                                      fontStyle: 'italic',
-                                      marginTop: '16px',
-                                      margin: '16px 0 0 0'
+                                      fontSize: '13px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '400',
+                                      lineHeight: '150%',
+                                      color: '#000',
+                                      fontFamily: 'Inter'
                                     }}>
                                       Represents a highly complex patient requiring extended inpatient resources beyond standard DKA care
                                     </p>
-                                  </div>
-                                </div>
-
-                                {/* Footer / Action Buttons */}
-                                <div style={{
-                                  padding: '0 32px 32px 32px'
-                                }}>
-                                  <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '12px'
-                                  }}>                                    <button
-                                    onClick={handleClinicalReviewPrev}
-                                    style={{
-                                      width: '50px',
-                                      height: '20px',
-                                      padding: '2.443px 17.443px 2.898px 17.898px',
-                                      justifyContent: 'center',
-                                      alignItems: 'center',
-                                      borderRadius: '2.443px',
-                                      border: '1px solid #BDBDBD',
-                                      background: '#DEDEDE',
-                                      cursor: 'pointer',
-                                      display: 'flex'
-                                    }}
-                                  >
-                                      <img
-                                        src={caratLeftIcon}
-                                        alt="Back"
-                                        style={{
-                                          width: 'auto',
-                                          height: '12px'
-                                        }}
-                                      />
-                                    </button>
-
-                                    <button
-                                      style={{
-                                        backgroundColor: '#F0F0F0',
-                                        border: '1px solid #CCCCCC',
-                                        borderRadius: '4px',
-                                        padding: '8px 12px',
-                                        fontSize: '14px',
-                                        color: '#333333',
-                                        cursor: 'pointer'
-                                      }}
-                                    >
-                                      Close
-                                    </button>
                                   </div>
                                 </div>
                               </div>
@@ -2711,35 +2683,13 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                               display: 'flex',
                               justifyContent: 'flex-start',
                               alignItems: 'center',
-                              marginTop: '40px',
+                              marginTop: '20px',
+                              marginLeft: clinicalReviewStep === 4 ? '42px' : '0px',
                               gap: '25px'
-                            }}>                              <button
-                              onClick={handleClinicalReviewPrev}
-                              disabled={clinicalReviewStep === 1}
-                              style={{
-                                width: '50px',
-                                height: '20px',
-                                padding: '1px 15px',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: '2.443px',
-                                border: '1px solid #BDBDBD',
-                                background: '#DEDEDE',
-                                cursor: clinicalReviewStep === 1 ? 'not-allowed' : 'pointer',
-                                display: 'flex'
-                              }}
-                            >
-                                <img
-                                  src={caratLeftIcon}
-                                  alt="Previous"
-                                  style={{
-                                    width: 'auto',
-                                    height: '20px'
-                                  }}
-                                />
-                              </button>                              <button
-                                onClick={handleClinicalReviewNext}
-                                disabled={clinicalReviewStep === 4}
+                            }}>
+                              <button
+                                onClick={handleClinicalReviewPrev}
+                                disabled={clinicalReviewStep === 1}
                                 style={{
                                   width: '50px',
                                   height: '20px',
@@ -2749,18 +2699,48 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   borderRadius: '2.443px',
                                   border: '1px solid #BDBDBD',
                                   background: '#DEDEDE',
-                                  cursor: clinicalReviewStep === 4 ? 'not-allowed' : 'pointer',
+                                  cursor: clinicalReviewStep === 1 ? 'not-allowed' : 'pointer',
                                   display: 'flex'
                                 }}
                               >
                                 <img
-                                  src={caratRightIcon}
-                                  alt="Next"
+                                  src={caratLeftIcon}
+                                  alt="Previous"
                                   style={{
                                     width: 'auto',
                                     height: '20px'
                                   }}
                                 />
+                              </button>                              <button
+                                onClick={clinicalReviewStep === 4 ? () => setActiveAuthTab('Closed') : handleClinicalReviewNext}
+                                disabled={false}
+                                style={{
+                                  width: clinicalReviewStep === 4 ? 'auto' : '50px',
+                                  height: '20px',
+                                  padding: clinicalReviewStep === 4 ? '6px 12px' : '1px 15px',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  borderRadius: '2.443px',
+                                  border: '1px solid #BDBDBD',
+                                  background: '#DEDEDE',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  fontSize: clinicalReviewStep === 4 ? '12px' : 'inherit',
+                                  fontFamily: clinicalReviewStep === 4 ? 'Arial' : 'inherit',
+                                  color: clinicalReviewStep === 4 ? '#000' : 'inherit'
+                                }}
+                              >
+                                {clinicalReviewStep === 4 ? (
+                                  'Close'
+                                ) : (
+                                  <img
+                                    src={caratRightIcon}
+                                    alt="Next"
+                                    style={{
+                                      width: 'auto',
+                                      height: '20px'
+                                    }}
+                                  />)}
                               </button>
                             </div>
                           </div>
