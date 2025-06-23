@@ -780,25 +780,25 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                 </div>
                                 <div>
                                   <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Status</div>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    <select
-                                      className="border border-gray-300 rounded bg-white"
-                                      style={{
-                                        width: '115px',
-                                        padding: '5px 10px',
-                                        alignItems: 'center',
-                                        color: '#787878',
-                                        fontFamily: 'Inter',
-                                        fontSize: '11px',
-                                        fontStyle: 'normal',
-                                        fontWeight: '700',
-                                        lineHeight: 'normal'
-                                      }}
-                                    >
-                                      <option>Pending</option>
-                                      <option>Approved</option>
-                                      <option>Denied</option>
-                                    </select>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>                                    <select
+                                    className="border border-gray-300 rounded bg-white"
+                                    style={{
+                                      width: '115px',
+                                      padding: '5px 10px',
+                                      alignItems: 'center',
+                                      color: '#787878',
+                                      fontFamily: 'Inter',
+                                      fontSize: '11px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '700',
+                                      lineHeight: 'normal'
+                                    }}
+                                  >
+                                    <option>Pending</option>
+                                    <option>Approve</option>
+                                    <option>Send to Review</option>
+                                    <option>Deny</option>
+                                  </select>
                                     <button
                                       className="bg-gray-500 rounded hover:bg-gray-600"
                                       style={{
@@ -2746,8 +2746,155 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                           </div>
                         )}
 
-                        {/* Other Auth Tab Contents */}
-                        {activeRequestTab === '20250P000367' && activeAuthTab !== 'Request Submitted' && activeAuthTab !== 'Clinical Review' && (
+                        {/* Other Auth Tab Contents */}                        {/* Closed Tab Content - Duplicate of Request Submitted with modifications */}
+                        {activeRequestTab === '20250P000367' && activeAuthTab === 'Closed' && (
+                          <div className="authorization-content" style={{ padding: '24px 0', width: '75%' }}>
+                            {/* Header */}
+                            <h2 style={{ fontSize: '14px', fontWeight: '600', color: '#7D8181', marginBottom: '24px' }}>Authorization Request Summary</h2>
+                            {/* Content Area */}
+                            <div>
+                              {/* First Row - 4 data points + Status */}
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(150px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Authorization #</div>
+                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>2025OP000367</div>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Received Date</div>
+                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>04/28/2025 03:47:01 AM</div>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Admission Date</div>
+                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>04/28/2025 02:58:09 AM</div>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Request Type</div>
+                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>Standard</div>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Status</div>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>                                    <select
+                                    className="border border-gray-300 rounded bg-white"
+                                    style={{
+                                      width: '115px',
+                                      padding: '5px 10px',
+                                      alignItems: 'center',
+                                      color: '#F80',
+                                      fontFamily: 'Inter',
+                                      fontSize: '11px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '700',
+                                      lineHeight: 'normal'
+                                    }}
+                                  >
+                                    <option style={{ color: '#F80' }}>Pending</option>
+                                    <option style={{ color: '#787878' }}>Approve</option>
+                                    <option style={{ color: '#787878' }}>Send to Review</option>
+                                    <option style={{ color: '#787878' }}>Deny</option>
+                                  </select>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Second Row - 4 data points + Updated */}
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(150px, 1fr))', gap: '20px' }}>
+                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Place of Service</div>
+                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>Inpatient Hospital</div>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Diagnosis</div>
+                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>DKA</div>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Code Type</div>
+                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>ICD 10</div>
+                                </div>
+                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Code Number</div>
+                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>A41</div>
+                                </div>                                <div>
+                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Updated</div>
+                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>Concurrent Review</div>
+                                </div>
+                              </div>
+                            </div>
+                            {/* Notes Section */}
+                            <div className="mb-6" style={{ marginTop: '48px' }}>
+                              <h3 style={{
+                                color: '#7D8181',
+                                fontFamily: 'Inter',
+                                fontSize: '14px',
+                                fontStyle: 'normal',
+                                fontWeight: '500',
+                                lineHeight: 'normal',
+                                marginBottom: '12px'
+                              }}>Notes</h3>
+                              <div style={{ width: '659px' }}>
+                                <p style={{
+                                  color: '#343E49',
+                                  fontFamily: 'Inter',
+                                  fontSize: '11px',
+                                  fontStyle: 'normal',
+                                  fontWeight: '400',
+                                  lineHeight: 'normal',
+                                  marginBottom: '2px'
+                                }}>
+                                  Additional pertinent patient information from the BCBS AI Assistant:
+                                </p>
+                                <p style={{
+                                  color: '#343E49',
+                                  fontFamily: 'Inter',
+                                  fontSize: '11px',
+                                  fontStyle: 'normal',
+                                  fontWeight: '400',
+                                  lineHeight: 'normal',
+                                  marginBottom: '4px'
+                                }}>Other current patient diagnoses:</p>
+                                <ul style={{
+                                  color: '#343E49',
+                                  fontFamily: 'Inter',
+                                  fontSize: '11px',
+                                  fontStyle: 'normal',
+                                  fontWeight: '400',
+                                  lineHeight: 'normal',
+                                  marginLeft: '16px'
+                                }}>
+                                  <li>• CHF (ICD10: I50.9): 4/28/2025</li>
+                                  <li>• DKA (DKA: E11.10): 4/28/2025</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Attachments Section for Closed Tab */}
+                        {activeRequestTab === '20250P000367' && activeAuthTab === 'Closed' && (
+                          <div>
+                            <h3 style={{
+                              color: '#7D8181',
+                              fontFamily: 'Inter',
+                              fontSize: '14px',
+                              fontStyle: 'normal',
+                              fontWeight: '500',
+                              lineHeight: 'normal',
+                              marginBottom: '20px'
+                            }}>
+                              Attachments
+                            </h3>
+                            <div style={{
+                              display: 'grid',
+                              gridTemplateColumns: 'repeat(4, 1fr)',
+                              gap: '10px'
+                            }}>
+                              {attachments.map((attachment) => (
+                                <AttachmentItem key={attachment.id} attachment={attachment} />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {activeRequestTab === '20250P000367' && activeAuthTab !== 'Request Submitted' && activeAuthTab !== 'Clinical Review' && activeAuthTab !== 'Closed' && (
                           <div className="authorization-content">
                             <h2 className="text-lg font-semibold text-gray-800 mb-4">{activeAuthTab}</h2>
                             <div className="bg-gray-50 border border-gray-200 rounded p-6 text-center">
