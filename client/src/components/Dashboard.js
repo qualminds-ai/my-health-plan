@@ -313,15 +313,17 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
             </button>
           ))}
           </div>
-        </div>
-
-        <div style={{
+        </div>        <div style={{
           color: '#11273D', fontFamily: 'Inter',
           fontSize: '18px',
           fontStyle: 'normal',
           fontWeight: 700,
           lineHeight: 'normal'
-        }}>{'Friday, June 20'}</div>        </div>
+        }}>{new Date().toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric'
+        })}</div></div>
 
       {/* Main Content Container */}
       <div style={{
