@@ -415,7 +415,7 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
             <div style={{
               position: 'absolute',
               left: '-18px',
-              top: '87px',
+              top: '77px',
               zIndex: 1000,
               width: '20px',
               height: '20px'
