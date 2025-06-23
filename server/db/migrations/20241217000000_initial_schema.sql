@@ -15,45 +15,20 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 -- Create index for performance
 CREATE INDEX IF NOT EXISTS idx_schema_migrations_version ON schema_migrations(version);
 
--- Set up database configuration (compatible with PostgreSQL 12+)
+-- Set up basic database configuration (compatible with all PostgreSQL versions)
 DO $$
 BEGIN
     -- Only set configuration if we're actually creating tables
     IF NOT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'users' AND table_schema = 'public') THEN
-        -- Set safe timeouts that work across PostgreSQL versions
-        PERFORM set_config('statement_timeout', '0', false);
-        PERFORM set_config('lock_timeout', '0', false);
-        
-        -- Only set idle_in_transaction_session_timeout if supported (PostgreSQL 9.6+)
-        BEGIN
-            PERFORM set_config('idle_in_transaction_session_timeout', '0', false);
-        EXCEPTION WHEN invalid_parameter_name THEN
-            RAISE NOTICE 'idle_in_transaction_session_timeout not supported in this PostgreSQL version';
-        END;
-        
-        -- Set other safe configuration parameters
+        -- Set essential configuration parameters that are universally supported
         PERFORM set_config('client_encoding', 'UTF8', false);
         PERFORM set_config('standard_conforming_strings', 'on', false);
         PERFORM set_config('check_function_bodies', 'false', false);
         PERFORM set_config('client_min_messages', 'warning', false);
         
-        -- Only set xmloption if supported (PostgreSQL 10+)
-        BEGIN
-            PERFORM set_config('xmloption', 'content', false);
-        EXCEPTION WHEN invalid_parameter_name THEN
-            RAISE NOTICE 'xmloption not supported in this PostgreSQL version';
-        END;
-        
-        -- Only set row_security if supported (PostgreSQL 9.5+)
-        BEGIN
-            PERFORM set_config('row_security', 'off', false);
-        EXCEPTION WHEN invalid_parameter_name THEN
-            RAISE NOTICE 'row_security not supported in this PostgreSQL version';
-        END;
-        
-        RAISE NOTICE 'Setting up database configuration for initial schema creation';
+        RAISE NOTICE '🚀 Setting up database configuration for initial schema creation';
     ELSE
-        RAISE NOTICE 'Tables already exist, skipping configuration setup';
+        RAISE NOTICE '✅ Tables already exist, skipping configuration setup';
     END IF;
 END $$;
 
@@ -372,12 +347,11 @@ BEGIN
                        'priority_levels', 'review_types', 'status_types', 'authorizations',
                        'authorization_documents', 'authorization_history', 'authorization_notes',
                        'dashboard_stats');
-    
-    IF tables_existing > 0 THEN
-        RAISE NOTICE 'Initial schema migration completed. Found % existing tables, ensured all objects exist.', tables_existing;
+      IF tables_existing > 0 THEN
+        RAISE NOTICE '✅ Initial schema migration completed. Found % existing tables, ensured all objects exist.', tables_existing;
     ELSE
-        RAISE NOTICE 'Initial schema migration completed. Created all tables and objects from scratch.';
+        RAISE NOTICE '🎉 Initial schema migration completed. Created all tables and objects from scratch.';
     END IF;
     
-    RAISE NOTICE 'Database: %, Migration completed at: %', current_database(), CURRENT_TIMESTAMP;
+    RAISE NOTICE '📊 Database: %, Migration completed at: %', current_database(), CURRENT_TIMESTAMP;
 END $$;
