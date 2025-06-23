@@ -920,7 +920,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                           </div>
                         )}                        {/* Clinical Review Content */}
                         {activeRequestTab === '20250P000367' && activeAuthTab === 'Clinical Review' && (
-                          <div className="clinical-review-content" >                            {/* Medical Necessity Guidelines Section */}
+                          <div className="clinical-review-content" style={{ padding: '10px 0px 10px 20px' }}>                            {/* Medical Necessity Guidelines Section */}
                             <div style={{
                               display: 'flex',
                               flexDirection: 'column'
@@ -966,35 +966,19 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     lineHeight: 'normal',
                                     margin: 0
                                   }}>
-                                    Guidelines
-                                  </span>                                </div>
+                                    Guidelines                                  </span>                                </div>
                               </div>
-                              <div style={{ height: '2px', background: '#CACACA', width: '100%', marginTop: '15px' }} />
+                              <div style={{ height: '2px', background: '#CACACA', width: '95%', marginTop: '15px' }} />
                             </div>                            {/* Step 1: Guidelines Search and Selection */}
                             {clinicalReviewStep === 1 && (
                               <div style={{ marginTop: '20px' }}>
-                                {/* Separator - adding vertical spacing */}
-                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB' }}></div>
-
-                                {/* Main Title */}
-                                <h1 style={{
-                                  color: '#212029',
-                                  fontFamily: 'Inter',
-                                  fontSize: '22.2px',
-                                  fontStyle: 'normal',
-                                  fontWeight: '500',
-                                  lineHeight: 'normal',
-                                  marginBottom: '16px'
-                                }}>
-                                  Guidelines Search and Selection
-                                </h1>
 
                                 {/* Guideline Selection Checkboxes */}
                                 <div style={{
                                   display: 'flex',
                                   alignItems: 'center',
                                   gap: '8px',
-                                  marginBottom: '16px'
+                                  marginBottom: '5px'
                                 }}>
                                   <span style={{
                                     color: '#9C9D9C',
@@ -1242,7 +1226,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   display: 'flex',
                                   alignItems: 'center',
                                   gap: '12px',
-                                  marginBottom: '20px'
+                                  marginBottom: '5px'
                                 }}>
                                   <span style={{
                                     color: '#33333A',
@@ -1296,7 +1280,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   fontStyle: 'normal',
                                   fontWeight: 400,
                                   lineHeight: 'normal',
-                                  marginBottom: '16px'
+                                  marginBottom: '5px'
                                 }}>
                                   6 results for DKA
                                   <span style={{
@@ -1918,11 +1902,10 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </table>
                                 </div>
                               </div>
-                            )}                            {/* Step 2: Clinical Indications for Admission to Inpatient Care */}
-                            {clinicalReviewStep === 2 && (
+                            )}                            {/* Step 2: Clinical Indications for Admission to Inpatient Care */}                            {clinicalReviewStep === 2 && (
                               <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
                                 {/* Separator - adding vertical spacing */}
-                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB' }}></div>                                {/* Main Title */}
+                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB', width: '95%' }}></div>                                {/* Main Title */}
                                 <h1 style={{
                                   color: '#212029',
                                   fontFamily: 'Inter',
@@ -2136,313 +2119,336 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     </span>
                                   </div>
                                 </div>                              </div>
-                            )}{/* Step 3: Care Planning - Inpatient Admission and Alternatives */}
-                            {clinicalReviewStep === 3 && (
+                            )}{/* Step 3: Care Planning - Inpatient Admission and Alternatives */}                            {clinicalReviewStep === 3 && (
                               <div>
                                 {/* Separator - adding vertical spacing */}
-                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB' }}></div>
-
-                                {/* Success Banner */}
+                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB', width: '95%' }}></div>                                {/* Success Banner */}
                                 <div style={{
-                                  backgroundColor: '#10B981',
-                                  color: 'white',
-                                  padding: '12px 24px',
-                                  borderRadius: '8px',
+                                  height: '56px',
+                                  background: '#4ED55E',
                                   marginBottom: '24px',
                                   display: 'flex',
                                   alignItems: 'center',
-                                  justifyContent: 'space-between'
+                                  padding: '0 24px'
                                 }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <div style={{
-                                      width: '20px',
-                                      height: '20px',
+                                      width: '21px',
+                                      height: '21px',
                                       borderRadius: '50%',
-                                      border: '2px solid white',
+                                      border: '1.5px solid black',
                                       display: 'flex',
                                       alignItems: 'center',
                                       justifyContent: 'center',
-                                      fontSize: '12px',
-                                      fontWeight: 'bold'
+                                      fontSize: '14px',
+                                      fontWeight: 'bold',
+                                      color: 'black'
                                     }}>
                                       ✓
                                     </div>
                                     <span style={{
+                                      color: '#000',
                                       fontFamily: 'Inter',
                                       fontSize: '14px',
-                                      fontWeight: '600'
+                                      fontStyle: 'normal',
+                                      fontWeight: '500',
+                                      lineHeight: 'normal'
                                     }}>
                                       Selections Made, Criteria Met
                                     </span>
                                   </div>
-                                  <div style={{ display: 'flex', gap: '12px' }}>
+                                  <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '25px',
+                                    marginLeft: '50px'
+                                  }}>
                                     <button style={{
-                                      backgroundColor: 'white',
-                                      color: '#10B981',
+                                      width: '82px',
+                                      height: '32px',
+                                      background: '#D9D9D9',
+                                      color: '#000',
+                                      fontFamily: 'Inter',
+                                      fontSize: '13.2px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '500',
+                                      lineHeight: 'normal',
                                       border: 'none',
-                                      borderRadius: '6px',
-                                      padding: '8px 16px',
-                                      fontSize: '12px',
-                                      fontWeight: '600',
                                       cursor: 'pointer'
                                     }}>
                                       Save
                                     </button>
                                     <button style={{
-                                      backgroundColor: 'transparent',
-                                      color: 'white',
-                                      border: '1px solid white',
-                                      borderRadius: '6px',
-                                      padding: '8px 16px',
-                                      fontSize: '12px',
-                                      fontWeight: '600',
+                                      background: 'transparent',
+                                      color: '#000',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '500',
+                                      lineHeight: 'normal',
+                                      textDecorationLine: 'underline',
+                                      textDecorationStyle: 'solid',
+                                      textDecorationSkipInk: 'auto',
+                                      textDecorationThickness: 'auto',
+                                      textUnderlineOffset: 'auto',
+                                      textUnderlinePosition: 'from-font',
+                                      border: 'none',
                                       cursor: 'pointer'
                                     }}>
                                       Cancel
                                     </button>
-                                  </div>
-                                </div>
+                                  </div>                                </div>
 
-                                {/* Main Title */}
-                                <h1 style={{
-                                  color: '#212029',
-                                  fontFamily: 'Inter',
-                                  fontSize: '22.2px',
-                                  fontStyle: 'normal',
-                                  fontWeight: '500',
-                                  lineHeight: 'normal',
-                                  marginBottom: '8px'
-                                }}>
-                                  Care Planning - Inpatient Admission and Alternatives
-                                </h1>
-
-                                {/* Subtitle */}
-                                <h2 style={{
-                                  color: '#212029',
-                                  fontFamily: 'Inter',
-                                  fontSize: '22.2px',
-                                  fontStyle: 'normal',
-                                  fontWeight: '500',
-                                  lineHeight: 'normal',
-                                  marginBottom: '16px'
-                                }}>
-                                  Clinical Indications for Admission to Inpatient Care
-                                </h2>
-
-                                {/* Note Section */}
-                                <div style={{
-                                  marginBottom: '24px',
-                                  fontSize: '13px',
-                                  lineHeight: '1.5',
-                                  color: '#374151'
-                                }}>
-                                  <div style={{ marginBottom: '8px' }}>
-                                    <strong>Note:</strong>
-                                  </div>
-                                  <div style={{ marginBottom: '4px' }}>
-                                    Some patients may be appropriate for Observation care.
-                                  </div>
-                                  <div>
-                                    For consideration of observation care, see <span style={{ color: '#6366F1', textDecoration: 'underline', cursor: 'pointer' }}>Diabetes: Observation Care.</span>
-                                  </div>
-                                </div>
-
-                                {/* Clinical Indications Section */}
-                                <div style={{
-                                  fontSize: '13px',
-                                  lineHeight: '1.4',
-                                  color: '#374151'
-                                }}>
-                                  <div style={{ marginBottom: '16px', fontWeight: '600' }}>
-                                    Clinical Indications for Inpatient Admission - Diabetic Ketoacidosis (DKA)
-                                  </div>
-
-                                  <div style={{ marginBottom: '16px' }}>
-                                    <strong>Confirmed diagnosis of DKA, typically with:</strong>
-                                  </div>
-
-                                  {/* DKA Criteria List */}                                  <ul style={{
-                                    marginLeft: '20px',
-                                    marginBottom: '20px',
-                                    listStyleType: 'disc'
+                                {/* Content Container with custom padding */}
+                                <div style={{ padding: '5px 30px' }}>                                  {/* Main Title */}
+                                  <h1 style={{
+                                    color: '#000',
+                                    fontFamily: 'Inter',
+                                    fontSize: '20px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '700',
+                                    lineHeight: 'normal',
+                                    marginBottom: '19px'
                                   }}>
-                                    <li style={{ marginBottom: '4px' }}>Blood glucose &gt;250 mg/dL</li>
-                                    <li style={{ marginBottom: '4px' }}>Arterial pH &lt;7.30</li>
-                                    <li style={{ marginBottom: '4px' }}>Serum bicarbonate &lt;18 mEq/L</li>
-                                    <li style={{ marginBottom: '4px' }}>Presence of ketones and moderate/severe ketosis</li>
-                                    <li style={{ marginBottom: '4px' }}>Elevated anion gap metabolic acidosis</li>
-                                  </ul>
-
-                                  {/* Physiologic Instability Section */}
-                                  <div style={{ marginBottom: '16px' }}>
-                                    <strong>Physiologic Instability / Severity Indicators</strong>
-                                  </div>
-                                  <ul style={{
-                                    marginLeft: '20px',
-                                    marginBottom: '20px',
-                                    listStyleType: 'disc'
+                                    Care Planning - Inpatient Admission and Alternatives
+                                  </h1>                                  {/* Subtitle */}
+                                  <h2 style={{
+                                    color: '#000',
+                                    fontFamily: 'Inter',
+                                    fontSize: '16px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '700',
+                                    lineHeight: 'normal',
+                                    marginBottom: '19px'
                                   }}>
-                                    <li style={{ marginBottom: '4px' }}>Altered mental status (e.g., confusion, stupor, coma)</li>
-                                    <li style={{ marginBottom: '4px' }}>Hemodynamic instability (e.g., hypotension, tachycardia unresponsive to fluid resuscitation)</li>
-                                    <li style={{ marginBottom: '4px' }}>Severe dehydration with poor oral intake or need for IV fluids</li>
-                                    <li style={{ marginBottom: '4px' }}>Significant electrolyte disturbances, such as:</li>
-                                    <ul style={{ marginLeft: '20px', listStyleType: 'circle' }}>
-                                      <li style={{ marginBottom: '2px' }}>Severe hyponatremia</li>
-                                      <li style={{ marginBottom: '2px' }}>Hyperkalemia with ECG changes</li>
-                                      <li style={{ marginBottom: '2px' }}>Severe hypokalemia</li>
-                                      <li style={{ marginBottom: '2px' }}>Severe hypophosphatemia</li>
+                                    Clinical Indications for Admission to Inpatient Care
+                                  </h2>                                  {/* Note Section */}
+                                  <div style={{
+                                    color: '#000',
+                                    fontFamily: 'Inter',
+                                    fontSize: '16px',
+                                    fontStyle: 'italic',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal',
+                                    marginBottom: '19px'
+                                  }}>
+                                    <div style={{ marginBottom: '8px' }}>
+                                      Note:
+                                    </div>
+                                    <div style={{ marginBottom: '4px' }}>
+                                      Some patients may be appropriate for Observation care.
+                                    </div>
+                                    <div>
+                                      For consideration of observation care, see Diabetes: Observation Care.
+                                    </div>
+                                  </div>                                  {/* Clinical Indications Section */}
+                                  <div style={{
+                                    color: '#000',
+                                    fontFamily: 'Inter',
+                                    fontSize: '13px',
+                                    fontStyle: 'normal',
+                                    fontWeight: '400',
+                                    lineHeight: 'normal'
+                                  }}>
+                                    <div>Clinical Indications for Inpatient Admission - Diabetic Ketoacidosis (DKA)</div>
+                                    <ul style={{
+                                      marginLeft: '20px',
+                                      listStyleType: 'disc'
+                                    }}>                                      <li>Confirmed diagnosis of DKA, typically with:
+                                        <ul style={{ marginLeft: '20px', listStyleType: 'disc' }}>
+                                          <li>Blood glucose &gt;250 mg/dL</li>
+                                          <li>Arterial pH &lt;7.30</li>
+                                          <li>Serum bicarbonate &lt;18 mEq/L</li>
+                                          <li>Presence of ketones and moderate/severe ketosis</li>
+                                          <li>Elevated anion gap metabolic acidosis</li>
+                                        </ul>
+                                      </li>
                                     </ul>
-                                    <li style={{ marginBottom: '4px' }}>Severe hyperglycemia (typically &gt;400 mg/dL despite initial treatment)</li>
-                                    <li style={{ marginBottom: '4px' }}>Inability to tolerate oral intake due to nausea, vomiting, or ileus</li>
-                                    <li style={{ marginBottom: '4px' }}>Respiratory distress or Kussmaul breathing</li>
-                                  </ul>
 
-                                  {/* Comorbidities Section */}
-                                  <div style={{ marginBottom: '16px' }}>
-                                    <strong>Comorbidities / Complicating Factors</strong>
+                                    <div>Physiologic Instability / Severity Indicators</div>
+                                    <ul style={{
+                                      marginLeft: '20px',
+                                      listStyleType: 'disc'
+                                    }}>
+                                      <li>Altered mental status (e.g., confusion, stupor, coma)</li>
+                                      <li>Hemodynamic instability (e.g., hypotension, tachycardia unresponsive to fluid resuscitation)</li>
+                                      <li>Severe dehydration with poor oral intake or need for IV fluids</li>                                      <li>Significant electrolyte disturbances, such as:
+                                        <ul style={{ marginLeft: '20px', listStyleType: 'disc' }}>
+                                          <li>Severe hyponatremia</li>
+                                          <li>Hyperkalemia with ECG changes</li>
+                                          <li>Severe hypokalemia</li>
+                                          <li>Severe hypophosphatemia</li>
+                                        </ul>
+                                      </li>
+                                      <li>Severe hyperglycemia (typically &gt;400 mg/dL despite initial treatment)</li>
+                                      <li>Inability to tolerate oral intake due to nausea, vomiting, or ileus</li>
+                                      <li>Respiratory distress or Kussmaul breathing</li>
+                                    </ul>
+
+                                    <div>Comorbidities / Complicating Factors</div>
+                                    <ul style={{
+                                      marginLeft: '20px',
+                                      listStyleType: 'disc'
+                                    }}>
+                                      <li>Renal insufficiency / acute kidney injury (AKI)</li>
+                                      <li>Congestive heart failure</li>
+                                      <li>History of recent stroke or cardiac event</li>
+                                      <li>Sepsis or suspected infection</li>
+                                      <li>Concurrent medical conditions requiring observation (e.g., pancreatitis, MI)</li>
+                                    </ul>
+
+                                    <div>Inadequate Outpatient Support or Risk Factors:</div>
+                                    <ul style={{
+                                      marginLeft: '20px',
+                                      listStyleType: 'disc'
+                                    }}>
+                                      <li>Inability to safely manage at home due to social or environmental factors</li>
+                                      <li>History of noncompliance or poor follow-up</li>
+                                      <li>No access to insulin or inability to administer insulin safely</li>
+                                      <li>Lack of adequate support system</li>
+                                      <li>Recent psychiatric illness or suicidal ideation</li>
+                                    </ul>
+
+                                    <div>Pediatric Considerations (if applicable)</div>
+                                    <ul style={{
+                                      marginLeft: '20px',
+                                      listStyleType: 'disc'
+                                    }}>
+                                      <li>Age &lt;2 years</li>
+                                      <li>Risk of cerebral edema, especially in pediatric patients</li>
+                                      <li>Parental inability to manage condition at home</li>
+                                    </ul>
                                   </div>
-                                  <ul style={{
-                                    marginLeft: '20px',
-                                    marginBottom: '20px',
-                                    listStyleType: 'disc'
-                                  }}>
-                                    <li style={{ marginBottom: '4px' }}>Renal insufficiency / acute kidney injury (AKI)</li>
-                                    <li style={{ marginBottom: '4px' }}>Congestive heart failure</li>
-                                    <li style={{ marginBottom: '4px' }}>History of recent stroke or cardiac event</li>
-                                    <li style={{ marginBottom: '4px' }}>Sepsis or suspected infection</li>
-                                    <li style={{ marginBottom: '4px' }}>Concurrent medical conditions requiring observation (e.g., pancreatitis, MI)</li>
-                                  </ul>
-
-                                  {/* Inadequate Outpatient Support Section */}
-                                  <div style={{ marginBottom: '16px' }}>
-                                    <strong>Inadequate Outpatient Support or Risk Factors:</strong>
-                                  </div>
-                                  <ul style={{
-                                    marginLeft: '20px',
-                                    marginBottom: '20px',
-                                    listStyleType: 'disc'
-                                  }}>
-                                    <li style={{ marginBottom: '4px' }}>Inability to safely manage at home due to social or environmental factors</li>
-                                    <li style={{ marginBottom: '4px' }}>History of noncompliance or poor follow-up</li>
-                                    <li style={{ marginBottom: '4px' }}>No access to insulin or inability to administer insulin safely</li>
-                                    <li style={{ marginBottom: '4px' }}>Lack of adequate support system</li>
-                                    <li style={{ marginBottom: '4px' }}>Recent psychiatric illness or suicidal ideation</li>
-                                  </ul>
-
-                                  {/* Pediatric Considerations Section */}
-                                  <div style={{ marginBottom: '16px' }}>
-                                    <strong>Pediatric Considerations (if applicable)</strong>
-                                  </div>
-                                  <ul style={{
-                                    marginLeft: '20px',
-                                    marginBottom: '20px',
-                                    listStyleType: 'disc'
-                                  }}>
-                                    <li style={{ marginBottom: '4px' }}>Age &lt;2 years</li>
-                                    <li style={{ marginBottom: '4px' }}>Risk of cerebral edema, especially in pediatric patients</li>
-                                    <li style={{ marginBottom: '4px' }}>Parental inability to manage condition at home</li>
-                                  </ul>
-                                </div>
-
-                                {/* Bottom Success Banner */}
+                                </div>{/* Bottom Success Banner */}
                                 <div style={{
-                                  backgroundColor: '#10B981',
-                                  color: 'white',
-                                  padding: '12px 24px',
-                                  borderRadius: '8px',
+                                  height: '56px',
+                                  background: '#4ED55E',
                                   marginTop: '32px',
-                                  marginBottom: '24px',
+                                  marginBottom: '15px',
                                   display: 'flex',
                                   alignItems: 'center',
-                                  justifyContent: 'space-between'
+                                  padding: '0 24px'
                                 }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <div style={{
-                                      width: '20px',
-                                      height: '20px',
+                                      width: '21px',
+                                      height: '21px',
                                       borderRadius: '50%',
-                                      border: '2px solid white',
+                                      border: '1.5px solid black',
                                       display: 'flex',
                                       alignItems: 'center',
                                       justifyContent: 'center',
-                                      fontSize: '12px',
-                                      fontWeight: 'bold'
+                                      fontSize: '14px',
+                                      fontWeight: 'bold',
+                                      color: 'black'
                                     }}>
                                       ✓
                                     </div>
                                     <span style={{
+                                      color: '#000',
                                       fontFamily: 'Inter',
                                       fontSize: '14px',
-                                      fontWeight: '600'
+                                      fontStyle: 'normal',
+                                      fontWeight: '500',
+                                      lineHeight: 'normal'
                                     }}>
                                       Selections Made, Criteria Met
                                     </span>
                                   </div>
-                                  <div style={{ display: 'flex', gap: '12px' }}>
+                                  <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '25px',
+                                    marginLeft: '50px'
+                                  }}>
                                     <button style={{
-                                      backgroundColor: 'white',
-                                      color: '#10B981',
+                                      width: '82px',
+                                      height: '32px',
+                                      background: '#D9D9D9',
+                                      color: '#000',
+                                      fontFamily: 'Inter',
+                                      fontSize: '13.2px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '500',
+                                      lineHeight: 'normal',
                                       border: 'none',
-                                      borderRadius: '6px',
-                                      padding: '8px 16px',
-                                      fontSize: '12px',
-                                      fontWeight: '600',
                                       cursor: 'pointer'
                                     }}>
                                       Save
                                     </button>
                                     <button style={{
-                                      backgroundColor: 'transparent',
-                                      color: 'white',
-                                      border: '1px solid white',
-                                      borderRadius: '6px',
-                                      padding: '8px 16px',
-                                      fontSize: '12px',
-                                      fontWeight: '600',
+                                      background: 'transparent',
+                                      color: '#000',
+                                      fontFamily: 'Inter',
+                                      fontSize: '14px',
+                                      fontStyle: 'normal',
+                                      fontWeight: '500',
+                                      lineHeight: 'normal',
+                                      textDecorationLine: 'underline',
+                                      textDecorationStyle: 'solid',
+                                      textDecorationSkipInk: 'auto',
+                                      textDecorationThickness: 'auto',
+                                      textUnderlineOffset: 'auto',
+                                      textUnderlinePosition: 'from-font',
+                                      border: 'none',
                                       cursor: 'pointer'
                                     }}>
                                       Cancel
                                     </button>
                                   </div>
-                                </div>
-
-                                {/* Action Buttons */}
+                                </div>                                {/* Action Buttons */}
                                 <div style={{
                                   display: 'flex',
-                                  gap: '12px',
+                                  flexDirection: 'column',
+                                  gap: '15px',
                                   marginBottom: '24px'
                                 }}>
                                   <button style={{
-                                    backgroundColor: '#F3F4F6',
-                                    color: '#374151',
-                                    border: '1px solid #D1D5DB',
-                                    borderRadius: '6px',
-                                    padding: '8px 16px',
-                                    fontSize: '12px',
+                                    display: 'flex',
+                                    width: '146px',
+                                    height: '26px',
+                                    padding: '8px 25px',
+                                    gap: '10px',
+                                    background: '#D9D9D9',
+                                    color: '#000',
+                                    fontFamily: 'Inter',
+                                    fontSize: '11px',
+                                    fontStyle: 'normal',
                                     fontWeight: '500',
-                                    cursor: 'pointer'
+                                    lineHeight: 'normal',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
                                   }}>
                                     View Note History
                                   </button>
                                   <button style={{
-                                    backgroundColor: '#F3F4F6',
-                                    color: '#374151',
-                                    border: '1px solid #D1D5DB',
-                                    borderRadius: '6px',
-                                    padding: '8px 16px',
-                                    fontSize: '12px',
+                                    display: 'flex',
+                                    width: '114px',
+                                    height: '26px',
+                                    padding: '8px 25px',
+                                    gap: '10px',
+                                    background: '#D9D9D9',
+                                    color: '#000',
+                                    fontFamily: 'Inter',
+                                    fontSize: '11px',
+                                    fontStyle: 'normal',
                                     fontWeight: '500',
-                                    cursor: 'pointer'
+                                    lineHeight: 'normal',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
                                   }}>
                                     Edit Note
                                   </button>
                                 </div>
                               </div>
-                            )}                            {/* Step 4: Medical Necessity Guidelines - Goal Length of Stay */}
-                            {clinicalReviewStep === 4 && (
+                            )}                            {/* Step 4: Medical Necessity Guidelines - Goal Length of Stay */}                            {clinicalReviewStep === 4 && (
                               <div style={{ backgroundColor: '#FFFFFF', fontFamily: 'Arial, Helvetica, sans-serif' }}>
                                 {/* Separator - adding vertical spacing */}
-                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB' }}></div>
+                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB', width: '95%' }}></div>
 
                                 {/* Header Section */}
                                 <div style={{
