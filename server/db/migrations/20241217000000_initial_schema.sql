@@ -15,21 +15,42 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 -- Create index for performance
 CREATE INDEX IF NOT EXISTS idx_schema_migrations_version ON schema_migrations(version);
 
--- Set up database configuration (only if needed)
+-- Set up database configuration (compatible with PostgreSQL 12+)
 DO $$
 BEGIN
     -- Only set configuration if we're actually creating tables
     IF NOT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'users' AND table_schema = 'public') THEN
-        SET statement_timeout = 0;
-        SET lock_timeout = 0;
-        SET idle_in_transaction_session_timeout = 0;
-        SET transaction_timeout = 0;
-        SET client_encoding = 'UTF8';
-        SET standard_conforming_strings = on;
-        SET check_function_bodies = false;
-        SET xmloption = content;
-        SET client_min_messages = warning;
-        SET row_security = off;
+        -- Set safe timeouts that work across PostgreSQL versions
+        PERFORM set_config('statement_timeout', '0', false);
+        PERFORM set_config('lock_timeout', '0', false);
+        
+        -- Only set idle_in_transaction_session_timeout if supported (PostgreSQL 9.6+)
+        BEGIN
+            PERFORM set_config('idle_in_transaction_session_timeout', '0', false);
+        EXCEPTION WHEN invalid_parameter_name THEN
+            RAISE NOTICE 'idle_in_transaction_session_timeout not supported in this PostgreSQL version';
+        END;
+        
+        -- Set other safe configuration parameters
+        PERFORM set_config('client_encoding', 'UTF8', false);
+        PERFORM set_config('standard_conforming_strings', 'on', false);
+        PERFORM set_config('check_function_bodies', 'false', false);
+        PERFORM set_config('client_min_messages', 'warning', false);
+        
+        -- Only set xmloption if supported (PostgreSQL 10+)
+        BEGIN
+            PERFORM set_config('xmloption', 'content', false);
+        EXCEPTION WHEN invalid_parameter_name THEN
+            RAISE NOTICE 'xmloption not supported in this PostgreSQL version';
+        END;
+        
+        -- Only set row_security if supported (PostgreSQL 9.5+)
+        BEGIN
+            PERFORM set_config('row_security', 'off', false);
+        EXCEPTION WHEN invalid_parameter_name THEN
+            RAISE NOTICE 'row_security not supported in this PostgreSQL version';
+        END;
+        
         RAISE NOTICE 'Setting up database configuration for initial schema creation';
     ELSE
         RAISE NOTICE 'Tables already exist, skipping configuration setup';
@@ -56,9 +77,9 @@ BEGIN
         CURRENT_DATE,
         COUNT(*) FILTER (WHERE next_review_date::date = CURRENT_DATE),
         COUNT(*) FILTER (WHERE priority = 'High'),
-        COUNT(*) FILTER (WHERE next_review_date::date = CURRENT_DATE),
-        COUNT(*) FILTER (WHERE admission_date >= date_trunc('week', CURRENT_DATE) 
-                          AND admission_date < date_trunc('week', CURRENT_DATE) + INTERVAL '1 week'),        COUNT(*) FILTER (WHERE status = 'Pending'),
+        COUNT(*) FILTER (WHERE next_review_date::date = CURRENT_DATE),        COUNT(*) FILTER (WHERE admission_date >= date_trunc('week', CURRENT_DATE) 
+                          AND admission_date < date_trunc('week', CURRENT_DATE) + INTERVAL '1 week'),
+        COUNT(*) FILTER (WHERE status = 'Pending'),
         COUNT(*) FILTER (WHERE status = 'In Review'),
         COUNT(*) FILTER (WHERE status = 'Approved'),
         COUNT(*) FILTER (WHERE status = 'Denied')
