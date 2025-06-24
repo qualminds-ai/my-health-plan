@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import Header from './Header';
 
 // Import authorization assets
@@ -48,17 +49,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
   const topRef = useRef(null); const authContentRef = useRef(null); const [activeTab, setActiveTab] = useState('Authorizations');
   const [activeAuthTab, setActiveAuthTab] = useState('Request Submitted');
   const [activeRequestTab, setActiveRequestTab] = useState('20250P000367'); const [clinicalReviewStep, setClinicalReviewStep] = useState(1);
-  const [showClinicalIndicators, setShowClinicalIndicators] = useState([false, false, false]); const [selectedCriteria, setSelectedCriteria] = useState({
-    dka: false,
-    physInstability: false,
-    hemodynamicInstability: false,
-    severeDehydration: false,
-    severeDKA: false,
-    severeHypoglycemia: false,
-    complicatingFactors: false,
-    inadequateSupport: false,
-    pediatricConsiderations: false
-  });
+  const [showClinicalIndicators, setShowClinicalIndicators] = useState([false, false, false]);
   const [selectedGuidelineRows, setSelectedGuidelineRows] = useState(new Set());
 
   // Use prop data if available, otherwise use static demo data
@@ -193,6 +184,17 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
       </div>
     );
   };
+
+  AttachmentItem.propTypes = {
+    attachment: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      type: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+      size: PropTypes.string.isRequired
+    }).isRequired
+  };
+
   const getStatusBadgeClass = (status) => {
     switch (status?.toLowerCase()) {
       case 'approved': return 'bg-green-500';
@@ -272,7 +274,8 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                 Member Overview: {memberData.name}
               </h3>
               </div>
-                <div className="flex items-center gap-2">                  <button
+                <div id="member-actions" className="flex items-center gap-2">                  <button
+                  id="member-star-button"
                   className="flex items-center justify-center"
                   style={{
                     width: '32px',
@@ -288,6 +291,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                   <img src={starIcon} alt="Star" />
                 </button>
                   <button
+                    id="member-call-button"
                     className="flex items-center justify-center"
                     style={{
                       width: '32px',
@@ -302,6 +306,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                     <img src={callIcon} alt="Call" />
                   </button>
                   <button
+                    id="member-chat-button"
                     className="flex items-center justify-center"
                     style={{
                       width: '32px',
@@ -316,6 +321,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                     <img src={textChatIcon} alt="Chat" />
                   </button>
                   <button
+                    id="member-message-button"
                     className="flex items-center justify-center"
                     style={{
                       width: '32px',
@@ -329,6 +335,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                   >
                     <img src={messageIcon} alt="Message" />
                   </button>                  <button
+                    id="member-watch-button"
                     className="flex items-center justify-center"
                     style={{
                       width: '32px',
@@ -342,6 +349,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                   >
                     <img src={watchIcon} alt="Watch" />
                   </button>                  <button
+                    id="member-medical-button"
                     className="flex items-center justify-center"
                     style={{
                       width: '32px',
@@ -528,11 +536,12 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
             </div>
           </div>
         </div>        {/* Tab Navigation */}
-        <div className="member-tabs" style={{ backgroundColor: '#FEFEFE' }}>
+        <div id="member-tabs-section" className="member-tabs" style={{ backgroundColor: '#FEFEFE' }}>
           <div style={{ width: '100%' }} >
-            <ul className="flex border-0" style={{ marginBottom: '0', gap: '30px', borderBottom: '4px solid #EDEDED' }}>
+            <ul id="member-tabs-list" className="flex border-0" style={{ marginBottom: '0', gap: '30px', borderBottom: '4px solid #EDEDED' }}>
               {tabs.map((tab, index) => (
                 <li className="nav-item" key={index}>                  <button
+                  id={`member-tab-${tab.toLowerCase().replace(/\s+/g, '-')}`}
                   className="px-4 py-2 transition-colors relative"
                   style={{
                     color: activeTab === tab ? '#000' : '#727272',
@@ -623,8 +632,9 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                   {/* Top Navigation Tabs */}
 
                   <div className="py-4">                      {/* Request Navigation */}
-                    <div className="flex items-center mb-4" >
+                    <div id="request-navigation" className="flex items-center mb-4" >
                       <div className="flex" style={{ backgroundColor: '#FEFEFE', borderBottom: '4px solid #EDEDED', gap: '30px' }}>                          <button
+                        id="request-history-tab"
                         className="px-4 py-2 transition-colors relative"
                         style={{
                           color: activeRequestTab === 'Request History' ? '#000' : '#727272',
@@ -644,6 +654,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                         Request History
                       </button>
                         <button
+                          id="request-detail-tab-20250P000367"
                           className="px-4 py-2 transition-colors relative"
                           style={{
                             color: activeRequestTab === '20250P000367' ? '#000' : '#727272',
@@ -691,25 +702,26 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                             </thead>
                             <tbody>
                               {recentAuthorizations.map((auth) => (
-                                <tr key={auth.id} className="hover:bg-gray-50">
-                                  <td className="p-3 font-semibold text-blue-600 cursor-pointer"
+                                <tr key={auth.id} id={`auth-row-${auth.id}`} className="hover:bg-gray-50">
+                                  <td id={`auth-number-${auth.id}`} className="p-3 font-semibold text-blue-600 cursor-pointer"
                                     onClick={() => setActiveRequestTab('20250P000367')}>
                                     {auth.authNumber}
                                   </td>
-                                  <td className="p-3">{auth.service}</td>
-                                  <td className="p-3">{auth.provider}</td>
-                                  <td className="p-3">{auth.requestDate}</td>                                    <td className="p-3">
+                                  <td id={`auth-service-${auth.id}`} className="p-3">{auth.service}</td>
+                                  <td id={`auth-provider-${auth.id}`} className="p-3">{auth.provider}</td>
+                                  <td id={`auth-date-${auth.id}`} className="p-3">{auth.requestDate}</td>                                    <td id={`auth-status-${auth.id}`} className="p-3">
                                     <span className={`px-2 py-1 rounded text-xs text-white ${getStatusBadgeClass(auth.status)}`}>
                                       {auth.status}
                                     </span>
                                   </td>
-                                  <td className="p-3">
+                                  <td id={`auth-priority-${auth.id}`} className="p-3">
                                     <span className={`px-2 py-1 rounded text-xs text-white ${getPriorityBadgeClass(auth.priority)}`}>
                                       {auth.priority}
                                     </span>
                                   </td>
-                                  <td className="p-3">
+                                  <td id={`auth-actions-${auth.id}`} className="p-3">
                                     <button
+                                      id={`auth-view-details-${auth.id}`}
                                       className="px-3 py-1 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition-colors"
                                       onClick={() => setActiveRequestTab('20250P000367')}
                                     >
@@ -725,12 +737,13 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                     )}                      {activeRequestTab === '20250P000367' && (
                       <div className="request-detail-content">                          {/* Authorization Workflow Progress */}
                         {activeRequestTab === '20250P000367' && (
-                          <div className="authorization-workflow mb-6">
+                          <div id="authorization-workflow" className="authorization-workflow mb-6">
                             <div className="flex items-center mb-4">
                               <div className="flex" style={{ backgroundColor: '#FEFEFE', borderBottom: '1px solid #A8A8A8', width: '99%' }}>
                                 {authTabs.map((authTab, index) => (
                                   <button
                                     key={authTab.id}
+                                    id={`auth-tab-${authTab.id.toLowerCase().replace(/\s+/g, '-')}`}
                                     className="transition-colors relative"
                                     style={{
                                       color: activeAuthTab === authTab.id ? '#FFF' : '#727272',
@@ -781,6 +794,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                 <div>
                                   <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Status</div>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>                                    <select
+                                    id="auth-status-select"
                                     className="border border-gray-300 rounded bg-white"
                                     style={{
                                       width: '115px',
@@ -800,6 +814,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     <option>Deny</option>
                                   </select>
                                     <button
+                                      id="auth-update-button"
                                       className="bg-gray-500 rounded hover:bg-gray-600"
                                       style={{
                                         display: 'flex',
@@ -1002,15 +1017,15 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       fontWeight: 400,
                                       lineHeight: 'normal'
                                     }}>
-                                      <span style={{ cursor: 'pointer' }}>LOG OUT</span>
+                                      <span id="medical-necessity-link-logout" style={{ cursor: 'pointer' }}>LOG OUT</span>
                                       <span style={{ color: '#11273D' }}>|</span>
-                                      <span style={{ cursor: 'pointer' }}>SEARCH</span>
+                                      <span id="medical-necessity-link-search" style={{ cursor: 'pointer' }}>SEARCH</span>
                                       <span style={{ color: '#11273D' }}>|</span>
-                                      <span style={{ cursor: 'pointer' }}>MY PRODUCTS</span>
+                                      <span id="medical-necessity-link-my-products" style={{ cursor: 'pointer' }}>MY PRODUCTS</span>
                                       <span style={{ color: '#11273D' }}>|</span>
-                                      <span style={{ cursor: 'pointer' }}>CONTACT US</span>
+                                      <span id="medical-necessity-link-contact-us" style={{ cursor: 'pointer' }}>CONTACT US</span>
                                       <span style={{ color: '#11273D' }}>|</span>
-                                      <span style={{ cursor: 'pointer' }}>USER GUIDE</span>
+                                      <span id="medical-necessity-link-user-guide" style={{ cursor: 'pointer' }}>USER GUIDE</span>
                                     </div>
                                   </div>
                                 )}
@@ -1018,10 +1033,10 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                               <div style={{ height: '2px', background: '#CACACA', width: '95%', marginTop: '15px' }} />
                             </div>                            {/* Step 1: Guidelines Search and Selection */}
                             {clinicalReviewStep === 1 && (
-                              <div style={{ marginTop: '20px' }}>
+                              <div id="clinical-review-step-1" style={{ marginTop: '20px' }}>
 
                                 {/* Guideline Selection Checkboxes */}
-                                <div style={{
+                                <div id="guideline-checkboxes" style={{
                                   display: 'flex',
                                   alignItems: 'center',
                                   gap: '8px',
@@ -1039,6 +1054,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </span>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                     <input
+                                      id="guideline-checkbox-aco"
                                       type="checkbox" className="custom-checkbox"
                                       style={{
                                         width: '13.164px',
@@ -1060,6 +1076,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                     <input
+                                      id="guideline-checkbox-isc"
                                       type="checkbox" className="custom-checkbox"
                                       style={{
                                         width: '13.164px',
@@ -1081,6 +1098,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                     <input
+                                      id="guideline-checkbox-grc"
                                       type="checkbox" className="custom-checkbox"
                                       style={{
                                         width: '13.164px',
@@ -1102,6 +1120,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                     <input
+                                      id="guideline-checkbox-mcm"
                                       type="checkbox" className="custom-checkbox"
                                       style={{
                                         width: '13.164px',
@@ -1123,6 +1142,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                     <input
+                                      id="guideline-checkbox-rfc"
                                       type="checkbox" className="custom-checkbox"
                                       style={{
                                         width: '13.164px',
@@ -1144,6 +1164,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </label>
                                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                     <input
+                                      id="guideline-checkbox-hhc"
                                       type="checkbox" className="custom-checkbox"
                                       style={{
                                         width: '13.164px',
@@ -1269,7 +1290,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     </span>
                                   </label>
                                 </div>                                {/* Quick Search */}
-                                <div style={{
+                                <div id="quick-search-section" style={{
                                   display: 'flex',
                                   alignItems: 'center',
                                   gap: '12px',
@@ -1285,6 +1306,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   }}>
                                     Quick Search
                                   </span>                                  <input
+                                    id="quick-search-input"
                                     type="text"
                                     defaultValue="DKA"
                                     style={{
@@ -1302,6 +1324,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     }}
                                   />
                                   <button
+                                    id="quick-search-button"
                                     style={{
                                       width: '59.236px',
                                       height: '20px',
@@ -1320,7 +1343,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     Search
                                   </button>
                                 </div>                                {/* Results Summary */}
-                                <div style={{
+                                <div id="clinical-step3-results-summary" style={{
                                   color: '#474952',
                                   fontFamily: 'Inter',
                                   fontSize: '12.752px',
@@ -1330,7 +1353,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   marginBottom: '5px'
                                 }}>
                                   6 results for DKA
-                                  <span style={{
+                                  <span id="clinical-step3-results-pagination" style={{
                                     float: 'right',
                                     color: '#3F4045',
                                     fontFamily: 'Inter',
@@ -1340,13 +1363,13 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     lineHeight: 'normal'
                                   }}>(Results 1 - 6 of 6)</span>
                                 </div>                                {/* Guidelines Table */}
-                                <div style={{
+                                <div id="clinical-step3-guidelines-table-container" style={{
                                   marginBottom: '24px'
                                 }}>
-                                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                                    <thead>
-                                      <tr>
-                                        <th style={{
+                                  <table id="clinical-step3-guidelines-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                    <thead id="clinical-step3-guidelines-thead">
+                                      <tr id="clinical-step3-guidelines-header-row">
+                                        <th id="clinical-step3-header-guideline-code" style={{
                                           padding: '4px 8px',
                                           textAlign: 'left',
                                           color: '#000',
@@ -1382,7 +1405,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                         }}>
                                           Product
                                         </th>
-                                        <th style={{
+                                        <th id="clinical-step3-header-type" style={{
                                           padding: '4px 8px',
                                           textAlign: 'left',
                                           color: '#000',
@@ -1400,7 +1423,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                         }}>
                                           Type
                                         </th>
-                                        <th style={{
+                                        <th id="clinical-step3-header-title" style={{
                                           padding: '4px 8px',
                                           textAlign: 'left',
                                           color: '#000',
@@ -1418,7 +1441,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                         }}>
                                           Title
                                         </th>
-                                        <th style={{
+                                        <th id="clinical-step3-header-glos" style={{
                                           padding: '4px 8px',
                                           textAlign: 'left',
                                           color: '#000',
@@ -1436,7 +1459,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                         }}>
                                           GLOS/MBLOS
                                         </th>
-                                        <th style={{
+                                        <th id="clinical-step3-header-codes" style={{
                                           padding: '4px 8px',
                                           textAlign: 'left',
                                           color: '#000',
@@ -1456,7 +1479,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                         </th>
                                       </tr>
                                     </thead>
-                                    <tbody>                                      <tr>                                      <td style={{
+                                    <tbody>                                      <tr id="guideline-row-M-130">                                      <td id="guideline-code-M-130" style={{
                                       padding: '4px 8px',
                                       color: '#6B5722',
                                       fontFamily: 'Inter',
@@ -1490,7 +1513,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     >
                                       M-130
                                     </td>
-                                      <td style={{
+                                      <td id="guideline-product-M-130" style={{
                                         padding: '4px 8px',
                                         color: '#424149',
                                         fontFamily: 'Inter',
@@ -1499,7 +1522,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                         fontWeight: 300,
                                         lineHeight: 'normal'
                                       }}>ISC</td>
-                                      <td style={{
+                                      <td id="guideline-type-M-130" style={{
                                         padding: '4px 8px',
                                         color: '#424149',
                                         fontFamily: 'Inter',
@@ -1508,7 +1531,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                         fontWeight: 300,
                                         lineHeight: 'normal'
                                       }}>ORG</td>
-                                      <td style={{
+                                      <td id="guideline-title-M-130" style={{
                                         padding: '4px 8px',
                                         color: '#484C56',
                                         fontFamily: 'Inter',
@@ -1517,7 +1540,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                         fontWeight: 400,
                                         lineHeight: 'normal'
                                       }}>Diabetes</td>
-                                      <td style={{
+                                      <td id="guideline-glos-M-130" style={{
                                         padding: '4px 8px',
                                         color: '#B2B4BB',
                                         fontFamily: 'Inter',
@@ -1526,7 +1549,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                         fontWeight: 600,
                                         lineHeight: 'normal'
                                       }}>(DS)</td>
-                                      <td style={{
+                                      <td id="guideline-codes-M-130" style={{
                                         padding: '4px 8px',
                                         color: '#4E4DA2',
                                         fontFamily: 'Inter',
@@ -1537,7 +1560,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       }}>
                                         View Codes
                                       </td>
-                                    </tr>                                      <tr>                                        <td style={{
+                                    </tr>                                      <tr id="guideline-row-P-140">                                        <td id="guideline-code-P-140" style={{
                                       padding: '4px 8px',
                                       color: '#4444A2',
                                       fontFamily: 'Inter',
@@ -1619,7 +1642,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                           View Codes
                                         </td>
                                       </tr>
-                                      <tr>                                      <td style={{
+                                      <tr id="guideline-row-M-130-RRG">                                      <td id="guideline-code-M-130-RRG" style={{
                                         padding: '4px 8px',
                                         color: '#675786',
                                         fontFamily: 'Inter',
@@ -1700,7 +1723,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                           View Codes
                                         </td>
                                       </tr>
-                                      <tr>                                        <td style={{
+                                      <tr id="guideline-row-P-140-RRG">                                        <td id="guideline-code-P-140-RRG" style={{
                                         padding: '4px 8px',
                                         color: '#4444A2',
                                         fontFamily: 'Inter',
@@ -1950,7 +1973,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                 </div>
                               </div>
                             )}                            {/* Step 2: Clinical Indications for Admission to Inpatient Care */}                            {clinicalReviewStep === 2 && (
-                              <div style={{ paddingLeft: '15px', paddingRight: '15px' }}>
+                              <div id="clinical-review-step-2" style={{ paddingLeft: '15px', paddingRight: '15px' }}>
                                 {/* Separator - adding vertical spacing */}
                                 <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB', width: '95%' }}></div>                                {/* Main Title */}
                                 <h1 style={{
@@ -1963,7 +1986,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   marginBottom: '8px'
                                 }}>
                                   Clinical Indications for Admission to Inpatient Care
-                                </h1>                                {/* Subtitle Link */}                                <div style={{
+                                </h1>                                {/* Subtitle Link */}                                <div id="clinical-step2-return-link" style={{
                                   color: '#7C79A1',
                                   fontFamily: 'Inter',
                                   fontSize: '12.6px',
@@ -1989,7 +2012,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     fontWeight: '400',
                                     lineHeight: 'normal'
                                   }}>Note: Some patients may be appropriate for </span>
-                                  <span style={{
+                                  <span id="clinical-step2-observation-link" style={{
                                     color: '#605F9B', fontFamily: 'Inter',
                                     fontSize: '14.5px',
                                     fontStyle: 'normal',
@@ -2004,7 +2027,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     fontStyle: 'normal',
                                     fontWeight: '400',
                                     lineHeight: 'normal'
-                                  }}> For consideration of observation care, see </span>                                    <span style={{
+                                  }}> For consideration of observation care, see </span>                                    <span id="clinical-step2-diabetes-link" style={{
                                     color: '#7976A7',
                                     fontFamily: 'Inter',
                                     fontSize: '14.5px',
@@ -2037,13 +2060,14 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                             {clinicalReviewStep === 2 && (
                               <div>
                                 {/* Expand/Collapse Controls */}
-                                <div style={{
+                                <div id="clinical-step2-expand-controls" style={{
                                   color: '#474248',
                                   fontFamily: 'Inter',
                                   fontSize: '13.1px',
                                   fontStyle: 'normal',
                                   fontWeight: '400', lineHeight: 'normal',
-                                  marginBottom: '8px'
+                                  marginBottom: '8px',
+                                  cursor: 'pointer'
                                 }}>
                                   [Expand All / Collapse All]
                                 </div>
@@ -2163,11 +2187,11 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     </span>
                                   </div>
                                 </div>                              </div>
-                            )}{/* Step 3: Care Planning - Inpatient Admission and Alternatives */}                            {clinicalReviewStep === 3 && (
-                              <div>
+                            )}                            {/* Step 3: Care Planning - Inpatient Admission and Alternatives */}                            {clinicalReviewStep === 3 && (
+                              <div id="clinical-review-step-3">
                                 {/* Separator - adding vertical spacing */}
                                 <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB', width: '95%' }}></div>                                {/* Success Banner */}
-                                <div style={{
+                                <div id="clinical-step3-success-banner" style={{
                                   height: '56px',
                                   background: '#4ED55E',
                                   marginBottom: '24px',
@@ -2207,7 +2231,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     gap: '25px',
                                     marginLeft: '50px'
                                   }}>
-                                    <button style={{
+                                    <button id="clinical-step3-save-button" style={{
                                       width: '82px',
                                       height: '32px',
                                       background: '#D9D9D9',
@@ -2222,7 +2246,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     }}>
                                       Save
                                     </button>
-                                    <button style={{
+                                    <button id="clinical-step3-cancel-button" style={{
                                       background: 'transparent',
                                       color: '#000',
                                       fontFamily: 'Inter',
@@ -2405,7 +2429,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     gap: '25px',
                                     marginLeft: '50px'
                                   }}>
-                                    <button style={{
+                                    <button id="clinical-step3-alternative-save-button" style={{
                                       width: '82px',
                                       height: '32px',
                                       background: '#D9D9D9',
@@ -2420,7 +2444,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     }}>
                                       Save
                                     </button>
-                                    <button style={{
+                                    <button id="clinical-step3-alternative-cancel-button" style={{
                                       background: 'transparent',
                                       color: '#000',
                                       fontFamily: 'Inter',
@@ -2447,7 +2471,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   gap: '15px',
                                   marginBottom: '24px'
                                 }}>
-                                  <button style={{
+                                  <button id="clinical-step3-view-note-history-button" style={{
                                     display: 'flex',
                                     width: '146px',
                                     height: '26px',
@@ -2467,7 +2491,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   }}>
                                     View Note History
                                   </button>
-                                  <button style={{
+                                  <button id="clinical-step3-edit-note-button" style={{
                                     display: 'flex',
                                     width: '114px',
                                     height: '26px',
@@ -2490,18 +2514,18 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                 </div>
                               </div>
                             )}                            {/* Step 4: Medical Necessity Guidelines - Goal Length of Stay */}                            {clinicalReviewStep === 4 && (
-                              <div style={{
+                              <div id="clinical-review-step-4" style={{
                                 backgroundColor: '#FFFFFF',
                                 fontFamily: 'Arial, Helvetica, sans-serif',
                                 padding: '0',
                                 margin: '0'
                               }}>
                                 {/* Separator - adding vertical spacing */}
-                                <div style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB', width: '95%' }}></div>
+                                <div id="clinical-step4-separator" style={{ marginBottom: '24px', borderTop: '1px solid #E5E7EB', width: '95%' }}></div>
 
                                 {/* Main Content */}
-                                <div style={{ padding: '7px 42px' }}>                                  {/* Title */}
-                                  <h1 style={{
+                                <div id="clinical-step4-main-content" style={{ padding: '7px 42px' }}>                                  {/* Title */}
+                                  <h1 id="clinical-step4-title" style={{
                                     color: '#000',
                                     fontFamily: 'Inter',
                                     fontSize: '20px',
@@ -2515,7 +2539,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </h1>
 
                                   {/* Brief Stay Section */}
-                                  <div style={{ marginBottom: '25px' }}>                                    <h2 style={{
+                                  <div id="clinical-step4-brief-stay-section" style={{ marginBottom: '25px' }}>                                    <h2 id="clinical-step4-brief-stay-title" style={{
                                     color: '#000',
                                     fontFamily: 'Inter',
                                     fontSize: '16px',
@@ -2527,7 +2551,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   }}>                                      Brief Stay (1 to 3 Days) – Target LOS: 2 Days
                                   </h2>
 
-                                    <ul style={{
+                                    <ul id="clinical-step4-brief-stay-criteria-list" style={{
                                       margin: '0 0 5px 0',
                                       paddingLeft: '20px',
                                       fontSize: '13px',
@@ -2582,7 +2606,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </div>
 
                                   {/* Moderate Stay Section */}
-                                  <div style={{ marginBottom: '25px' }}>                                    <h2 style={{
+                                  <div id="clinical-step4-moderate-stay-section" style={{ marginBottom: '25px' }}>                                    <h2 id="clinical-step4-moderate-stay-title" style={{
                                     color: '#000',
                                     fontFamily: 'Inter',
                                     fontSize: '16px',
@@ -2594,7 +2618,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   }}>                                      Moderate Stay (4 to 7 Days)
                                   </h2>
 
-                                    <ul style={{
+                                    <ul id="clinical-step4-moderate-stay-criteria-list" style={{
                                       margin: '0 0 5px 0',
                                       paddingLeft: '20px',
                                       fontSize: '13px',
@@ -2635,7 +2659,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   </div>
 
                                   {/* Prolonged Stay Section */}
-                                  <div style={{ marginBottom: '25px' }}>                                    <h2 style={{
+                                  <div id="clinical-step4-prolonged-stay-section" style={{ marginBottom: '25px' }}>                                    <h2 id="clinical-step4-prolonged-stay-title" style={{
                                     color: '#000',
                                     fontFamily: 'Inter',
                                     fontSize: '16px',
@@ -2647,7 +2671,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   }}>                                      Prolonged Stay (&gt;7 Days)
                                   </h2>
 
-                                    <ul style={{
+                                    <ul id="clinical-step4-prolonged-stay-criteria-list" style={{
                                       margin: '0 0 5px 0',
                                       paddingLeft: '20px',
                                       fontSize: '13px',
@@ -2679,7 +2703,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                 </div>
                               </div>
                             )}                            {/* Navigation Controls */}
-                            <div style={{
+                            <div id="clinical-review-navigation" style={{
                               display: 'flex',
                               justifyContent: 'flex-start',
                               alignItems: 'center',
@@ -2688,6 +2712,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                               gap: '25px'
                             }}>
                               <button
+                                id="clinical-review-prev-button"
                                 onClick={handleClinicalReviewPrev}
                                 disabled={clinicalReviewStep === 1}
                                 style={{
@@ -2712,6 +2737,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   }}
                                 />
                               </button>                              <button
+                                id="clinical-review-next-button"
                                 onClick={clinicalReviewStep === 4 ? () => setActiveAuthTab('Closed') : handleClinicalReviewNext}
                                 disabled={false}
                                 style={{
@@ -2774,6 +2800,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                 <div>
                                   <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Status</div>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>                                    <select
+                                    id="auth-closed-status-select"
                                     className="border border-gray-300 rounded bg-white"
                                     style={{
                                       width: '115px',
@@ -2933,26 +2960,27 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                 </thead>
                                 <tbody>
                                   {recentAuthorizations.map((auth) => (
-                                    <tr key={auth.id} className="hover:bg-gray-50">
-                                      <td className="p-3 font-semibold text-blue-600 cursor-pointer"
+                                    <tr key={auth.id} id={`closed-auth-row-${auth.id}`} className="hover:bg-gray-50">
+                                      <td id={`closed-auth-number-${auth.id}`} className="p-3 font-semibold text-blue-600 cursor-pointer"
                                         onClick={() => setActiveRequestTab('20250P000367')}>
                                         {auth.authNumber}
                                       </td>
-                                      <td className="p-3">{auth.service}</td>
-                                      <td className="p-3">{auth.provider}</td>
-                                      <td className="p-3">{auth.requestDate}</td>
-                                      <td className="p-3">
+                                      <td id={`closed-auth-service-${auth.id}`} className="p-3">{auth.service}</td>
+                                      <td id={`closed-auth-provider-${auth.id}`} className="p-3">{auth.provider}</td>
+                                      <td id={`closed-auth-date-${auth.id}`} className="p-3">{auth.requestDate}</td>
+                                      <td id={`closed-auth-status-${auth.id}`} className="p-3">
                                         <span className={`px-2 py-1 rounded text-xs text-white ${getStatusBadgeClass(auth.status)}`}>
                                           {auth.status}
                                         </span>
                                       </td>
-                                      <td className="p-3">
+                                      <td id={`closed-auth-priority-${auth.id}`} className="p-3">
                                         <span className={`px-2 py-1 rounded text-xs text-white ${getPriorityBadgeClass(auth.priority)}`}>
                                           {auth.priority}
                                         </span>
                                       </td>
-                                      <td className="p-3">
+                                      <td id={`closed-auth-actions-${auth.id}`} className="p-3">
                                         <button
+                                          id={`closed-auth-view-details-${auth.id}`}
                                           className="px-3 py-1 text-sm border border-blue-600 text-blue-600 rounded hover:bg-blue-600 hover:text-white transition-colors"
                                           onClick={() => setActiveRequestTab('20250P000367')}
                                         >
@@ -2992,6 +3020,21 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
       </div>
     </div>
   );
+};
+
+Member.propTypes = {
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    fullName: PropTypes.string
+  }),
+  memberData: PropTypes.shape({
+    name: PropTypes.string
+  }),
+  onLogout: PropTypes.func.isRequired,
+  onBack: PropTypes.func,
+  onNavigate: PropTypes.func
 };
 
 export default Member;
