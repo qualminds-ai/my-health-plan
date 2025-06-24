@@ -540,7 +540,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
           <div style={{ width: '100%' }} >
             <ul id="member-tabs-list" className="flex border-0" style={{ marginBottom: '0', gap: '30px', borderBottom: '4px solid #EDEDED' }}>
               {tabs.map((tab, index) => (
-                <li className="nav-item" key={index}>                  <button
+                <li key={index}>                  <button
                   id={`member-tab-${tab.toLowerCase().replace(/\s+/g, '-')}`}
                   className="px-4 py-2 transition-colors relative"
                   style={{

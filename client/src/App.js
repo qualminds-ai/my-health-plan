@@ -50,24 +50,24 @@ const MemberPage = ({ user, onLogout, onNavigate }) => {
 
   if (loading) {
     return (
-      <div className="loading-center">
-        <div className="spinner-border text-primary" aria-label="Loading"></div>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" aria-label="Loading"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mt-5">
-        <div className="alert alert-danger">{error}</div>
+      <div className="max-w-4xl mx-auto mt-20 px-4">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">{error}</div>
       </div>
     );
   }
 
   if (!memberData) {
     return (
-      <div className="container mt-5">
-        <div className="alert alert-warning">Member data not available.</div>
+      <div className="max-w-4xl mx-auto mt-20 px-4">
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">Member data not available.</div>
       </div>
     );
   }
@@ -156,9 +156,9 @@ function App() {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="spinner-border text-primary" aria-label="Loading">
-          <span className="visually-hidden">Loading...</span>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" aria-label="Loading">
+          <span className="sr-only">Loading...</span>
         </div>
       </div>
     );
