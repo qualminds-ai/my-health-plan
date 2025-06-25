@@ -1,0 +1,901 @@
+/* Member Component Styles */
+
+/* Main Layout */
+.mainContent {
+    width: 97%;
+    margin: 0px auto;
+    padding: 0px 20px;
+    background: white;
+}
+
+.tabContent {
+    width: 100%;
+}
+
+/* Authorization Request Navigation */
+.requestNavContainer {
+    background-color: #FEFEFE;
+    border-bottom: 4px solid #EDEDED;
+    gap: 30px;
+}
+
+.requestTabButton {
+    font-family: 'Inter', sans-serif;
+    font-size: 11.455px;
+    font-style: normal;
+    line-height: normal;
+    border: none;
+    margin-bottom: -4px;
+    transition: all 0.2s ease;
+}
+
+.requestTabButtonActive {
+    color: #000;
+    font-weight: 700;
+    background-color: #EDEDED;
+    border-radius: 6.545px 6.545px 0px 0px;
+    border-bottom: 4px solid #EDEDED;
+}
+
+.requestTabButtonInactive {
+    color: #727272;
+    font-weight: 400;
+    background-color: transparent;
+    border-radius: 0;
+    border-bottom: none;
+}
+
+/* Authorization Sub-Navigation */
+.authSubNavContainer {
+    background-color: #FEFEFE;
+    border-bottom: 1px solid #A8A8A8;
+    width: 99%;
+}
+
+.authSubTabButton {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    border: none;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.authSubTabButtonActive {
+    color: #FFF;
+    font-weight: 700;
+    flex: 1;
+    border-radius: 10px 10px 0px 0px;
+    border: 1px solid #A2A2A2;
+    background: #9B9B9B;
+    padding: 12px 16px;
+    margin-bottom: -1px;
+}
+
+.authSubTabButtonInactive {
+    color: #727272;
+    font-weight: 400;
+    flex: 1;
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    padding: 12px 16px;
+    margin-bottom: -1px;
+}
+
+/* Authorization Content */
+.authorizationContent {
+    padding: 24px 0;
+    width: 75%;
+}
+
+.authorizationHeader {
+    font-size: 14px;
+    font-weight: 600;
+    color: #7D8181;
+    margin-bottom: 24px;
+}
+
+.authGridLayout {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.authGridLayout2Col {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.authGridItem {
+    font-family: 'Inter', sans-serif;
+}
+
+.authGridLabel {
+    font-size: 11px;
+    font-weight: 500;
+    color: #787878;
+    margin-bottom: 4px;
+}
+
+.authGridValue {
+    font-size: 11px;
+    font-weight: 600;
+    color: #787878;
+}
+
+.flexCenter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flexCenterGap4 {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Button and Link Styles */
+.linkButton {
+    width: 115px;
+    padding: 5px 10px;
+    align-items: center;
+    color: #787878;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.actionButton {
+    display: flex;
+    width: 96px;
+    height: 23px;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #FFF;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 10.235px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Form Container Styles */
+.formContainer {
+    margin-top: 48px;
+}
+
+.formTitle {
+    font-size: 14px;
+    font-weight: 500;
+    color: #7D8181;
+    margin-bottom: 12px;
+    line-height: normal;
+}
+
+.attachmentsTitle {
+    font-size: 14px;
+    font-weight: 500;
+    color: #7D8181;
+    margin-bottom: 20px;
+    line-height: normal;
+}
+
+.formDescription {
+    width: 659px;
+}
+
+.formText {
+    color: #333;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+}
+
+.formTextBold {
+    color: #333;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 700 !important;
+    line-height: 16px;
+    margin-bottom: 16px;
+}
+
+.formList {
+    color: #333;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    padding-left: 16px;
+    margin-bottom: 16px;
+}
+
+/* CheckBox Styles */
+.checkboxContainer {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.checkboxInput {
+    width: 13.164px;
+    height: 12.341px;
+    border: 1px solid lightgray;
+    border-radius: 50%;
+}
+
+.checkboxLabel {
+    color: #787878;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.checkboxLabelFlex {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.customCheckbox {
+    accent-color: #3276f6;
+    width: 16px;
+    height: 16px;
+    position: relative;
+}
+
+.customCheckbox:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 0px;
+    left: 2px;
+    color: white;
+    font-size: 9px;
+    font-weight: 100;
+    line-height: 14px;
+    font-family: 'Arial', sans-serif;
+    pointer-events: none;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Status Badge Styles */
+.statusBadge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+}
+
+.statusApproved {
+    background-color: #10b981;
+}
+
+.statusPending {
+    background-color: #f59e0b;
+}
+
+.statusInReview {
+    background-color: #3b82f6;
+}
+
+.statusDenied {
+    background-color: #ef4444;
+}
+
+/* Priority Badge Styles */
+.priorityBadge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+}
+
+.priorityHigh {
+    background-color: #ef4444;
+}
+
+.priorityMedium {
+    background-color: #f59e0b;
+}
+
+.priorityLow {
+    background-color: #10b981;
+}
+
+/* Clinical Review Styles */
+.clinicalReviewContent {
+    padding: 10px 0px 10px 20px;
+}
+
+/* Medical Guidelines Header */
+.medicalGuidelinesTextContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.medicalGuidelinesText {
+    color: #000;
+    font-family: 'Teachers', sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0;
+}
+
+/* Stage 4 Navigation */
+.stage4Navigation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.navigationHeader {
+    color: #8E9295;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.2px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.navigationLinks {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14.8px;
+    color: #5D609A;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.navigationLinksClickable {
+    color: #11273D;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.navigationSeparator {
+    color: #11273D;
+}
+
+.navigationDivider {
+    height: 2px;
+    background: #CACACA;
+    width: 95%;
+    margin-top: 15px;
+}
+
+.navigationSection {
+    margin-top: 20px;
+}
+
+/* Guidelines Section Styles */
+.guidelinesSelectionContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.guidelinesEditionLabel {
+    color: #9C9D9C;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.069px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.guidelinesCheckboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.guidelinesCheckboxText {
+    color: #646389;
+    font-family: 'Inter', sans-serif;
+    font-size: 14.809px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.guidelinesCheckboxInput {
+    width: 13.164px;
+    height: 12.341px;
+    border: 1px solid lightgray;
+    border-radius: 50%;
+}
+
+/* Status Select Dropdown */
+.authStatusSelect {
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    background-color: white;
+    width: 115px;
+    padding: 5px 10px;
+    color: #787878;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+}
+
+.authStatusSelect option {
+    font-weight: 400;
+}
+
+.authStatusSelect option:first-child {
+    color: #787878;
+}
+
+.authStatusSelect option:not(:first-child) {
+    color: #787878;
+}
+
+/* Status Select Dropdown for Closed Tab */
+.authStatusSelectClosed {
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    background-color: white;
+    width: 115px;
+    padding: 5px 10px;
+    color: #F80;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+}
+
+.authStatusSelectClosed option {
+    font-weight: 400;
+}
+
+.authStatusSelectClosed option:first-child {
+    color: #F80;
+}
+
+.authStatusSelectClosed option:not(:first-child) {
+    color: #787878;
+}
+
+/* Attachments Container */
+.attachmentsContainer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+/* Individual Attachment Item Styles */
+.attachmentItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.attachmentItem:hover {
+    background-color: #e9ecef;
+}
+
+.attachmentIcon {
+    width: 25px;
+    height: 33px;
+    flex-shrink: 0;
+    aspect-ratio: 25 / 33;
+    margin-right: 12px;
+}
+
+.attachmentContent {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.attachmentTitle {
+    color: #787878;
+    font-family: 'Inter', sans-serif;
+    font-size: 11.219px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 2px;
+    word-wrap: break-word;
+}
+
+.attachmentTitleActive {
+    font-weight: 700;
+    color: #000;
+}
+
+.attachmentTitleInactive {
+    color: #787878;
+}
+
+.attachmentMeta {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: normal;
+    color: #a0aec0;
+}
+
+.attachmentMetaActive {
+    color: #000;
+    font-weight: 700;
+}
+
+.attachmentMetaInactive {
+    color: #aeacab;
+}
+
+/* Search and form styles */
+.quickSearchContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 5px;
+}
+
+.quickSearchLabel {
+    color: #33333A;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.081px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.quickSearchInput {
+    width: 344px;
+    height: 22px;
+    border: 1px solid lightgray;
+    background: #FFFEFF;
+    padding: 6px;
+    color: #444753;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.328px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.quickSearchButton {
+    width: 59.236px;
+    height: 20px;
+    border-radius: 0.823px 0.617px 0px 0.617px;
+    border: 0.823px solid #696669;
+    background: #EFEFED;
+    color: #4C4C51;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.176px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.quickSearchButton:hover {
+    background: #e0e0e0;
+}
+
+/* Results summary styles */
+.resultsContainer {
+    color: #474952;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.752px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 5px;
+}
+
+.resultsFloatRight {
+    float: right;
+    color: #3F4045;
+    font-family: 'Inter', sans-serif;
+    font-size: 9.873px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+/* Utility Classes */
+.fullWidth {
+    width: 100%;
+}
+
+.flex {
+    display: flex;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.flexCenterGap10 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flexBetween {
+    display: flex;
+    justify-content: space-between;
+}
+
+.marginTop48 {
+    margin-top: 48px;
+}
+
+.marginTop20 {
+    margin-top: 20px;
+}
+
+.marginBottom4 {
+    margin-bottom: 16px;
+}
+
+.marginBottom6 {
+    margin-bottom: 24px;
+}
+
+.marginBottom15 {
+    margin-bottom: 15px;
+}
+
+.marginBottom16 {
+    margin-bottom: 16px;
+}
+
+.padding4 {
+    padding: 16px;
+}
+
+.padding15 {
+    padding: 15px;
+}
+
+.borderGray {
+    border: 1px solid #dee2e6;
+}
+
+.backgroundWhite {
+    background-color: white;
+}
+
+.backgroundGray {
+    background-color: #f8f9fa;
+}
+
+.borderRadius8 {
+    border-radius: 8px;
+}
+
+.borderRadius6 {
+    border-radius: 6px;
+}
+
+.textInter {
+    font-family: 'Inter', sans-serif;
+}
+
+.textSmall {
+    font-size: 11px;
+}
+
+.textMedium {
+    font-size: 11.455px;
+}
+
+.fontWeight400 {
+    font-weight: 400;
+}
+
+.fontWeight500 {
+    font-weight: 500;
+}
+
+.fontWeight600 {
+    font-weight: 600;
+}
+
+.fontWeight700 {
+    font-weight: 700;
+}
+
+/* Medical Guidelines Container */
+.medicalGuidelinesContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.guidelinesHeader {
+    display: flex;
+    align-items: end;
+    gap: 50px;
+    width: 100%;
+}
+
+.guidelinesIconContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.guidelineIcon {
+    width: auto;
+    height: 73.982px;
+}
+
+/* Table styles for clinical review */
+.clinicalTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.clinicalTableHeader {
+    background-color: #f8f9fa;
+    padding: 8px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+}
+
+.clinicalTableCell {
+    padding: 8px;
+    border: 1px solid #dee2e6;
+    vertical-align: top;
+}
+
+.clinicalTableRow {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.clinicalTableRow:hover {
+    background-color: #f8f9fa;
+}
+
+/* Clinical review section containers */
+.clinicalReviewContainer {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.clinicalReviewTitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 15px;
+}
+
+.clinicalReviewSection {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+.clinicalSectionTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 10px;
+}
+
+/* Step specific containers */
+.stepContainer {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.stepTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 15px;
+}
+
+.stepContent {
+    color: #495057;
+    line-height: 1.5;
+}
+
+/* Guidelines table styles */
+.guidelinesTableContainer {
+    margin-bottom: 24px;
+}
+
+.guidelinesTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.guidelinesTableHeaderCell {
+    padding: 4px 8px;
+    text-align: left;
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.164px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: auto;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: under;
+    cursor: pointer;
+}
+
+.guidelinesTableHeaderCell:hover {
+    color: #0066cc;
+}
+
+.guidelinesTableDataCell {
+    padding: 4px 8px;
+    vertical-align: top;
+    color: #333;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.guidelinesTableRow {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.guidelinesTableRow:hover {
+    background-color: #f9f9f9;
+}

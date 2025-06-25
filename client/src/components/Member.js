@@ -1,48 +1,21 @@
-import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef } from 'react';
 import Header from './Header';
+import MemberHeader from './member/MemberHeader';
+import MemberInfoBar from './member/MemberInfoBar';
+import MemberTabs from './member/MemberTabs';
+import MemberOverview from './member/MemberOverview';
+import styles from './Member.module.css';
 
 // Import authorization assets
 import faxDocIcon from '../assets/authorizations/fax-doc-icon.png';
-import medicalIcon from '../assets/authorizations/medical-icon.png';
 import pdfDocIcon from '../assets/authorizations/pdf-doc-icon.png';
 import textDocIcon from '../assets/authorizations/text-doc-icon.png';
-import starIcon from '../assets/authorizations/star-icon.png';
-import callIcon from '../assets/authorizations/call-icon.png';
-import textChatIcon from '../assets/authorizations/text-chat-icon.png';
-import messageIcon from '../assets/authorizations/message-icon.png';
-import watchIcon from '../assets/authorizations/watch-icon.png';
-import userIcon from '../assets/authorizations/mingcute_user-x-fill.svg';
 import leftArrowTriangleIcon from '../assets/authorizations/clinical_review/left-arrow-triangle.svg';
 import caratLeftIcon from '../assets/authorizations/clinical_review/carat-left.svg';
 import caratRightIcon from '../assets/authorizations/clinical_review/carat-right.svg';
 import navNewTabIcon from '../assets/authorizations/clinical_review/nav-new-tab-icon.png';
 import letterNIcon from '../assets/authorizations/clinical_review/letter-n-icon.png';
 import plusIcon from '../assets/authorizations/clinical_review/plus-icon.png';
-
-// Custom checkbox styles
-const checkboxStyles = `
-  .custom-checkbox {
-    accent-color: #3276f6;
-    width: 16px;
-    height: 16px;
-    position: relative;
-  }
-  
-  /* Overlay a thinner tick mark */
-  .custom-checkbox:checked::after {
-    content: '✓';
-    position: absolute;
-    top: 0px;
-    left: 2px;
-    color: white;
-    font-size: 9px;
-    font-weight: 100;
-    line-height: 14px;
-    font-family: 'Arial', sans-serif;
-    pointer-events: none;
-    text-shadow: 0 0 1px rgba(0,0,0,0.3);
-  }
-`;
 
 const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate }) => {
   const topRef = useRef(null); const authContentRef = useRef(null); const [activeTab, setActiveTab] = useState('Authorizations');
@@ -152,41 +125,20 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
     const isActive = attachment.id === 1; // First item (Summary) is active
 
     return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '16px'
-      }}>
+      <div className={styles.attachmentItem}>
         <div
+          className={styles.attachmentIcon}
           style={{
-            width: '25px',
-            height: '33px',
-            flexShrink: 0,
-            aspectRatio: '25/33',
-            background: `url(${getAttachmentIcon(attachment.type, attachment.title)}) lightgray 50% / cover no-repeat`,
-            marginRight: '12px'
+            background: `url(${getAttachmentIcon(attachment.type, attachment.title)}) lightgray 50% / cover no-repeat`
           }}
         />
-        <div style={{ flex: 1 }}>
-          <div style={{
-            color: isActive ? '#000' : '#787878',
-            fontFamily: 'Inter',
-            fontSize: '11.219px',
-            fontStyle: 'normal',
-            fontWeight: isActive ? '700' : '500',
-            lineHeight: 'normal',
-            marginBottom: '2px'
-          }}>
+        <div className={styles.attachmentContent}>
+          <div className={`${styles.attachmentTitle} ${isActive ? styles.attachmentTitleActive : styles.attachmentTitleInactive
+            }`}>
             {attachment.title}
           </div>
-          <div style={{
-            color: isActive ? '#000' : '#AEACAB',
-            fontFamily: 'Inter',
-            fontSize: '11px',
-            fontStyle: 'normal',
-            fontWeight: isActive ? '700' : '400',
-            lineHeight: 'normal'
-          }}>
+          <div className={`${styles.attachmentMeta} ${isActive ? styles.attachmentMetaActive : styles.attachmentMetaInactive
+            }`}>
             {attachment.date} · {attachment.size}.{attachment.type === 'fax' ? 'pdf' : attachment.type}
           </div>
         </div>
@@ -194,21 +146,23 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
     );
   };
   const getStatusBadgeClass = (status) => {
+    const baseClass = styles.statusBadge;
     switch (status?.toLowerCase()) {
-      case 'approved': return 'bg-green-500';
-      case 'pending': return 'bg-yellow-500';
-      case 'in review': return 'bg-blue-500';
-      case 'denied': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'approved': return `${baseClass} ${styles.statusApproved}`;
+      case 'pending': return `${baseClass} ${styles.statusPending}`;
+      case 'in review': return `${baseClass} ${styles.statusInReview}`;
+      case 'denied': return `${baseClass} ${styles.statusDenied}`;
+      default: return `${baseClass} bg-gray-500`;
     }
   };
 
   const getPriorityBadgeClass = (priority) => {
+    const baseClass = styles.priorityBadge;
     switch (priority?.toLowerCase()) {
-      case 'high': return 'bg-red-500';
-      case 'medium': return 'bg-yellow-500';
-      case 'low': return 'bg-green-500';
-      default: return 'bg-gray-500';
+      case 'high': return `${baseClass} ${styles.priorityHigh}`;
+      case 'medium': return `${baseClass} ${styles.priorityMedium}`;
+      case 'low': return `${baseClass} ${styles.priorityLow}`;
+      default: return `${baseClass} bg-gray-500`;
     }
   };
   // Define the tabs
@@ -253,370 +207,74 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
     if (clinicalReviewStep > 1) {
       setClinicalReviewStep(clinicalReviewStep - 1);
     }
-  }; return (
+  };
+
+  // Action button handlers
+  const handleStarClick = () => {
+    console.log('ðŸŒŸ Star button clicked');
+  };
+
+  const handleCallClick = () => {
+    console.log('ðŸ“ž Call button clicked');
+  };
+
+  const handleTextChatClick = () => {
+    console.log('ðŸ’¬ Text chat button clicked');
+  };
+
+  const handleMessageClick = () => {
+    console.log('ðŸ“§ Message button clicked');
+  };
+
+  const handleWatchClick = () => {
+    console.log('ðŸ‘ï¸ Watch button clicked');
+  };
+
+  const handleMedicalClick = () => {
+    console.log('ðŸ¥ Medical button clicked');
+  };
+
+  return (
     <div className="min-h-screen">
-      <style>{checkboxStyles}</style>
       <div ref={topRef} id="top"></div><Header user={user} onLogout={onLogout} onNavigate={onNavigate} activeTab="Members" />      {/* Main Content */}
-      <div className="main-content" style={{ width: '97%', margin: '0px auto', padding: '0px 20px', background: 'white' }}>        {/* Member Header Content */}
-        <div style={{ width: '100%' }}>
-          <div className="flex items-center py-3">
-            <div className="flex-1">
-              <div className="flex items-center justify-between">                <div className="flex flex-col">                  <h3 style={{
-                fontFamily: 'Inter',
-                fontSize: '20px',
-                fontWeight: '590',
-                lineHeight: '28px',
-                color: '#1D2939',
-                margin: '0'
-              }}>
-                Member Overview: {memberData.name}
-              </h3>
-              </div>
-                <div className="flex items-center gap-2">                  <button
-                  className="flex items-center justify-center"
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: '#F9FAFB',
-                    border: '1px solid #D0D5DD',
-                    borderRadius: '6px',
-                    padding: '0',
-                    cursor: 'pointer',
-                    filter: 'grayscale(100%)'
-                  }}
-                >
-                  <img src={starIcon} alt="Star" />
-                </button>
-                  <button
-                    className="flex items-center justify-center"
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      backgroundColor: '#F9FAFB',
-                      border: '1px solid #D0D5DD',
-                      borderRadius: '6px',
-                      padding: '0',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <img src={callIcon} alt="Call" />
-                  </button>
-                  <button
-                    className="flex items-center justify-center"
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      backgroundColor: '#F9FAFB',
-                      border: '1px solid #D0D5DD',
-                      borderRadius: '6px',
-                      padding: '0',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <img src={textChatIcon} alt="Chat" />
-                  </button>
-                  <button
-                    className="flex items-center justify-center"
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      backgroundColor: '#F9FAFB',
-                      border: '1px solid #D0D5DD',
-                      borderRadius: '6px',
-                      padding: '0',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <img src={messageIcon} alt="Message" />
-                  </button>                  <button
-                    className="flex items-center justify-center"
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      backgroundColor: '#F9FAFB',
-                      border: '1px solid #D0D5DD',
-                      borderRadius: '6px',
-                      padding: '0',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <img src={watchIcon} alt="Watch" />
-                  </button>                  <button
-                    className="flex items-center justify-center"
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      backgroundColor: '#F9FAFB',
-                      border: '1px solid #D0D5DD',
-                      borderRadius: '3.523px',
-                      padding: '0',
-                      cursor: 'pointer',
-                      background: `url(${medicalIcon}) lightgray 50% / cover no-repeat`,
-                      filter: 'grayscale(100%)'
-                    }}
-                  >
-                  </button></div>
-              </div>
-            </div>
-          </div>
-        </div>        {/* Member Info Bar */}
-        <div style={{
-          backgroundColor: '#F7F7F7',
-          borderRadius: '13.091px',
-          height: '72px',
-          marginBottom: '20px'
-        }}>
-          <div style={{ width: '100%' }} className="px-4">
-            <div className="flex py-3 items-center" style={{ height: '72px' }}>
-              {/* Icon Column (Far Left) */}
-              <div className="flex items-center justify-center mr-4">
-                <img src={userIcon} alt="User" style={{ width: '24px', height: '24px' }} />
-              </div>              {/* Member Details Column */}
-              <div className="mr-6 flex flex-col" style={{ gap: '5px' }}>
-                <div style={{
-                  fontFamily: 'Inter',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: '#1D2939',
-                  lineHeight: 'normal'
-                }}>
-                  Robert Abbott
-                </div>
-                <div style={{
-                  fontFamily: 'Inter',
-                  fontSize: '11px',
-                  fontWeight: '400',
-                  color: '#667085',
-                  lineHeight: 'normal'
-                }}>
-                  01/01/1974, 51 Years, Male
-                </div>
-              </div>{/* Data Columns */}
-              <div className="flex-1 flex justify-between">
-                {/* Eligibility Column */}
-                <div className="flex flex-col" style={{ gap: '5px' }}>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '9px',
-                    fontWeight: '400',
-                    color: '#667085',
-                    lineHeight: 'normal'
-                  }}>
-                    Eligibility
-                  </div>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '11px',
-                    fontWeight: '500',
-                    color: '#1D2939',
-                    lineHeight: 'normal'
-                  }}>
-                    10/01/2024-12/31/2025
-                  </div>
-                </div>
+      <div className={styles.mainContent}>
+        {/* Member Header Content */}
+        <MemberHeader
+          memberName={memberData.name}
+          onStarClick={handleStarClick}
+          onCallClick={handleCallClick}
+          onTextChatClick={handleTextChatClick}
+          onMessageClick={handleMessageClick}
+          onWatchClick={handleWatchClick}
+          onMedicalClick={handleMedicalClick}
+        />
 
-                {/* MRIN Column */}
-                <div className="flex flex-col" style={{ gap: '5px' }}>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '9px',
-                    fontWeight: '400',
-                    color: '#667085',
-                    lineHeight: 'normal'
-                  }}>
-                    MRIN
-                  </div>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '11px',
-                    fontWeight: '500',
-                    color: '#1D2939',
-                    lineHeight: 'normal'
-                  }}>
-                    {memberData.memberNumber}
-                  </div>
-                </div>
+        {/* Member Info Bar */}
+        <MemberInfoBar
+          memberName="Robert Abbott"
+          memberNumber={memberData.memberNumber}
+          dateOfBirth="01/01/1974"
+          age={51}
+          gender="Male"
+          eligibilityPeriod="10/01/2024-12/31/2025"
+          language="English"
+          programs="Care Coordination: ERM PH"
+          bhpType="Large Group"
+          optOut="No"
+        />
 
-                {/* Language Column */}
-                <div className="flex flex-col" style={{ gap: '5px' }}>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '9px',
-                    fontWeight: '400',
-                    color: '#667085',
-                    lineHeight: 'normal'
-                  }}>
-                    Language (1st)
-                  </div>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '11px',
-                    fontWeight: '500',
-                    color: '#1D2939',
-                    lineHeight: 'normal'
-                  }}>
-                    English
-                  </div>
-                </div>
+        {/* Tab Navigation */}
+        <MemberTabs
+          tabs={tabs}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
 
-                {/* Programs Column */}
-                <div className="flex flex-col" style={{ gap: '5px' }}>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '9px',
-                    fontWeight: '400',
-                    color: '#667085',
-                    lineHeight: 'normal'
-                  }}>
-                    Programs
-                  </div>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '11px',
-                    fontWeight: '500',
-                    color: '#1D2939',
-                    lineHeight: 'normal'
-                  }}>
-                    Care Coordination: ERM PH
-                  </div>
-                </div>
-
-                {/* BHP Column */}
-                <div className="flex flex-col" style={{ gap: '5px' }}>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '9px',
-                    fontWeight: '400',
-                    color: '#667085',
-                    lineHeight: 'normal'
-                  }}>
-                    BHP
-                  </div>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '11px',
-                    fontWeight: '500',
-                    color: '#1D2939',
-                    lineHeight: 'normal'
-                  }}>
-                    Large Group
-                  </div>
-                </div>
-
-                {/* Opt Out Column */}
-                <div className="flex flex-col" style={{ gap: '5px' }}>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '9px',
-                    fontWeight: '400',
-                    color: '#667085',
-                    lineHeight: 'normal'
-                  }}>
-                    Opt out
-                  </div>
-                  <div style={{
-                    fontFamily: 'Inter',
-                    fontSize: '11px',
-                    fontWeight: '500',
-                    color: '#1D2939',
-                    lineHeight: 'normal'
-                  }}>
-                    No
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>        {/* Tab Navigation */}
-        <div className="member-tabs" style={{ backgroundColor: '#FEFEFE' }}>
-          <div style={{ width: '100%' }} >
-            <ul className="flex border-0" style={{ marginBottom: '0', gap: '30px', borderBottom: '4px solid #EDEDED' }}>
-              {tabs.map((tab, index) => (
-                <li className="nav-item" key={index}>                  <button
-                  className="px-4 py-2 transition-colors relative"
-                  style={{
-                    color: activeTab === tab ? '#000' : '#727272',
-                    fontFamily: 'Inter',
-                    fontSize: '11.455px',
-                    fontStyle: 'normal',
-                    fontWeight: activeTab === tab ? '700' : '400',
-                    lineHeight: 'normal',
-                    backgroundColor: activeTab === tab ? '#EDEDED' : 'transparent',
-                    borderRadius: activeTab === tab ? '6.545px 6.545px 0px 0px' : '0',
-                    border: 'none',
-                    borderBottom: activeTab === tab ? '4px solid #EDEDED' : 'none',
-                    marginBottom: '-4px'
-                  }}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab}
-                </button>
-                </li>
-              ))}
-            </ul>
-          </div>        </div>{/* Tab Content */}
+        {/* Tab Content */}
         <div className="tab-content bg-white">
-          <div style={{ width: '100%' }} className="py-4">
+          <div className={`${styles.tabContent} py-4`}>
             {activeTab === 'Overview' && (
-              <div className="w-full">
-                <div className="w-full">
-                  <div className="p-6">
-                    <h5 className="text-lg font-semibold mb-4">Member Overview</h5>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <h6 className="text-gray-600 mb-3 font-semibold">Personal Information</h6>
-                        <table className="w-full text-sm">
-                          <tbody>
-                            <tr>
-                              <td className="font-bold py-2">Full Name:</td>
-                              <td className="py-2">Robert Abbott</td>
-                            </tr>
-                            <tr>
-                              <td className="font-bold py-2">Date of Birth:</td>
-                              <td className="py-2">01/01/1974 (51 Years)</td>
-                            </tr>
-                            <tr>
-                              <td className="font-bold py-2">Gender:</td>
-                              <td className="py-2">Male</td>
-                            </tr>
-                            <tr>
-                              <td className="font-bold py-2">MRN:</td>
-                              <td className="py-2">M1000020000</td>
-                            </tr>
-                            <tr>
-                              <td className="font-bold py-2">Primary Language:</td>
-                              <td className="py-2">English</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h6 className="text-gray-600 mb-3 font-semibold">Coverage Information</h6>
-                        <table className="w-full text-sm">
-                          <tbody>
-                            <tr>
-                              <td className="font-bold py-2">Eligibility Period:</td>
-                              <td className="py-2">10/01/2024 - 12/31/2025</td>
-                            </tr>
-                            <tr>
-                              <td className="font-bold py-2">Plan Type:</td>
-                              <td className="py-2">Large Group</td>
-                            </tr>
-                            <tr>
-                              <td className="font-bold py-2">Programs:</td>
-                              <td className="py-2">Care Coordination: ERM PH</td>
-                            </tr>
-                            <tr>
-                              <td className="font-bold py-2">Opt Out Status:</td>
-                              <td className="py-2"><span className="bg-green-500 text-white px-2 py-1 rounded text-xs">No</span></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <MemberOverview memberData={propMemberData} />
             )}            {activeTab === 'Authorizations' && (
               <div className="w-full">
                 <div className="w-full">
@@ -624,40 +282,16 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
 
                   <div className="py-4">                      {/* Request Navigation */}
                     <div className="flex items-center mb-4" >
-                      <div className="flex" style={{ backgroundColor: '#FEFEFE', borderBottom: '4px solid #EDEDED', gap: '30px' }}>                          <button
-                        className="px-4 py-2 transition-colors relative"
-                        style={{
-                          color: activeRequestTab === 'Request History' ? '#000' : '#727272',
-                          fontFamily: 'Inter',
-                          fontSize: '11.455px',
-                          fontStyle: 'normal',
-                          fontWeight: activeRequestTab === 'Request History' ? '700' : '400',
-                          lineHeight: 'normal',
-                          backgroundColor: activeRequestTab === 'Request History' ? '#EDEDED' : 'transparent',
-                          borderRadius: activeRequestTab === 'Request History' ? '6.545px 6.545px 0px 0px' : '0',
-                          border: 'none',
-                          borderBottom: activeRequestTab === 'Request History' ? '4px solid #EDEDED' : 'none',
-                          marginBottom: '-4px'
-                        }}
+                      <div className={`flex ${styles.requestNavContainer}`}>                          <button
+                        className={`px-4 py-2 transition-colors relative ${styles.requestTabButton} ${activeRequestTab === 'Request History' ? styles.requestTabButtonActive : styles.requestTabButtonInactive
+                          }`}
                         onClick={() => setActiveRequestTab('Request History')}
                       >
                         Request History
                       </button>
                         <button
-                          className="px-4 py-2 transition-colors relative"
-                          style={{
-                            color: activeRequestTab === '20250P000367' ? '#000' : '#727272',
-                            fontFamily: 'Inter',
-                            fontSize: '11.455px',
-                            fontStyle: 'normal',
-                            fontWeight: activeRequestTab === '20250P000367' ? '700' : '400',
-                            lineHeight: 'normal',
-                            backgroundColor: activeRequestTab === '20250P000367' ? '#EDEDED' : 'transparent',
-                            borderRadius: activeRequestTab === '20250P000367' ? '6.545px 6.545px 0px 0px' : '0',
-                            border: 'none',
-                            borderBottom: activeRequestTab === '20250P000367' ? '4px solid #EDEDED' : 'none',
-                            marginBottom: '-4px'
-                          }}
+                          className={`px-4 py-2 transition-colors relative ${styles.requestTabButton} ${activeRequestTab === '20250P000367' ? styles.requestTabButtonActive : styles.requestTabButtonInactive
+                            }`}
                           onClick={() => setActiveRequestTab('20250P000367')}
                         >
                           20250P000367
@@ -727,26 +361,12 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                         {activeRequestTab === '20250P000367' && (
                           <div className="authorization-workflow mb-6">
                             <div className="flex items-center mb-4">
-                              <div className="flex" style={{ backgroundColor: '#FEFEFE', borderBottom: '1px solid #A8A8A8', width: '99%' }}>
+                              <div className={`flex ${styles.authSubNavContainer}`}>
                                 {authTabs.map((authTab, index) => (
                                   <button
                                     key={authTab.id}
-                                    className="transition-colors relative"
-                                    style={{
-                                      color: activeAuthTab === authTab.id ? '#FFF' : '#727272',
-                                      textAlign: 'center',
-                                      fontFamily: 'Inter',
-                                      fontSize: '11px',
-                                      fontStyle: 'normal',
-                                      fontWeight: activeAuthTab === authTab.id ? '700' : '400',
-                                      lineHeight: 'normal',
-                                      flex: '1',
-                                      borderRadius: activeAuthTab === authTab.id ? '10px 10px 0px 0px' : '0',
-                                      border: activeAuthTab === authTab.id ? '1px solid #A2A2A2' : 'none',
-                                      background: activeAuthTab === authTab.id ? '#9B9B9B' : 'transparent',
-                                      padding: '12px 16px',
-                                      marginBottom: '-1px'
-                                    }}
+                                    className={`transition-colors relative ${styles.authSubTabButton} ${activeAuthTab === authTab.id ? styles.authSubTabButtonActive : styles.authSubTabButtonInactive
+                                      }`}
                                     onClick={() => handleAuthTabClick(authTab.id)}
                                   >
                                     {authTab.label}
@@ -756,67 +376,38 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                             </div>
                           </div>
                         )}                          {/* Authorization Request Summary */}                          {activeRequestTab === '20250P000367' && activeAuthTab === 'Request Submitted' && (
-                          <div className="authorization-content" style={{ padding: '24px 0', width: '75%' }}>
+                          <div className={styles.authorizationContent}>
                             {/* Header */}
-                            <h2 style={{ fontSize: '14px', fontWeight: '600', color: '#7D8181', marginBottom: '24px' }}>Authorization Request Summary</h2>{/* Content Area */}
+                            <h2 className={styles.authorizationHeader}>Authorization Request Summary</h2>{/* Content Area */}
                             <div>
                               {/* First Row - 4 data points + Status */}
-                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(150px, 1fr))', gap: '20px', marginBottom: '24px' }}>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Authorization #</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>2025OP000367</div>
+                              <div className={styles.authGridLayout}>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Authorization #</div>
+                                  <div className={styles.authGridValue}>2025OP000367</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Received Date</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>04/28/2025 03:47:01 AM</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Received Date</div>
+                                  <div className={styles.authGridValue}>04/28/2025 03:47:01 AM</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Admission Date</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>04/28/2025 02:58:09 AM</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Admission Date</div>
+                                  <div className={styles.authGridValue}>04/28/2025 02:58:09 AM</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Request Type</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>Standard</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Request Type</div>
+                                  <div className={styles.authGridValue}>Standard</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Status</div>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>                                    <select
-                                    className="border border-gray-300 rounded bg-white"
-                                    style={{
-                                      width: '115px',
-                                      padding: '5px 10px',
-                                      alignItems: 'center',
-                                      color: '#787878',
-                                      fontFamily: 'Inter',
-                                      fontSize: '11px',
-                                      fontStyle: 'normal',
-                                      fontWeight: '700',
-                                      lineHeight: 'normal'
-                                    }}
-                                  >
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Status</div>
+                                  <div className={styles.flexCenterGap10}>                                    <select className={styles.authStatusSelect}>
                                     <option>Pending</option>
                                     <option>Approve</option>
                                     <option>Send to Review</option>
                                     <option>Deny</option>
                                   </select>
                                     <button
-                                      className="bg-gray-500 rounded hover:bg-gray-600"
-                                      style={{
-                                        display: 'flex',
-                                        width: '96px',
-                                        height: '23px',
-                                        flexDirection: 'column',
-                                        justifyContent: 'center',
-                                        flexShrink: '0',
-                                        color: '#FFF',
-                                        textAlign: 'center',
-                                        fontFamily: 'Inter',
-                                        fontSize: '10.235px',
-                                        fontStyle: 'normal',
-                                        fontWeight: '500',
-                                        lineHeight: 'normal',
-                                        border: 'none'
-                                      }}
+                                      className={`bg-gray-500 rounded hover:bg-gray-600 ${styles.actionButton}`}
                                     >
                                       Check Guidelines
                                     </button>
@@ -825,68 +416,37 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                               </div>
 
                               {/* Second Row - 4 data points + Updated */}
-                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(150px, 1fr))', gap: '20px' }}>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Place of Service</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>Inpatient Hospital</div>
+                              <div className={styles.authGridLayout}>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Place of Service</div>
+                                  <div className={styles.authGridValue}>Inpatient Hospital</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Diagnosis</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>DKA</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Diagnosis</div>
+                                  <div className={styles.authGridValue}>DKA</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Code Type</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>ICD 10</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Code Type</div>
+                                  <div className={styles.authGridValue}>ICD 10</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Code Number</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>A41</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Code Number</div>
+                                  <div className={styles.authGridValue}>A41</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Updated</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>Initial Review</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Updated</div>
+                                  <div className={styles.authGridValue}>Initial Review</div>
                                 </div>
                               </div>
                             </div>                              {/* Notes Section */}
-                            <div className="mb-6" style={{ marginTop: '48px' }}>
-                              <h3 style={{
-                                color: '#7D8181',
-                                fontFamily: 'Inter',
-                                fontSize: '14px',
-                                fontStyle: 'normal',
-                                fontWeight: '500',
-                                lineHeight: 'normal',
-                                marginBottom: '12px'
-                              }}>Notes</h3>
-                              <div style={{ width: '659px' }}>                                  <p style={{
-                                color: '#343E49',
-                                fontFamily: 'Inter',
-                                fontSize: '11px',
-                                fontStyle: 'normal',
-                                fontWeight: '400',
-                                lineHeight: 'normal',
-                                marginBottom: '2px'
-                              }}>
-                                Additional pertinent patient information from the BCBS AI Assistant:
-                              </p>
-                                <p style={{
-                                  color: '#343E49',
-                                  fontFamily: 'Inter',
-                                  fontSize: '11px',
-                                  fontStyle: 'normal',
-                                  fontWeight: '400',
-                                  lineHeight: 'normal',
-                                  marginBottom: '4px'
-                                }}>Other current patient diagnoses:</p>
-                                <ul style={{
-                                  color: '#343E49',
-                                  fontFamily: 'Inter',
-                                  fontSize: '11px',
-                                  fontStyle: 'normal',
-                                  fontWeight: '400',
-                                  lineHeight: 'normal',
-                                  marginLeft: '16px'
-                                }}>
+                            <div className={`${styles.formContainer} mb-6`}>
+                              <h3 className={styles.formTitle}>Notes</h3>
+                              <div className={styles.formDescription}>
+                                <p className={styles.formText}>
+                                  Additional pertinent patient information from the BCBS AI Assistant:
+                                </p>
+                                <p className={styles.formText}>Other current patient diagnoses:</p>
+                                <ul className={styles.formList}>
                                   <li>• CHF (ICD10: I50.9): 4/28/2025</li>
                                   <li>• DKA (DKA: E11.10): 4/28/2025</li>
                                 </ul>
@@ -896,21 +456,9 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                         )}                          {/* Attachments Section - Outside Container */}
                         {activeRequestTab === '20250P000367' && activeAuthTab === 'Request Submitted' && (
                           <div>
-                            <h3 style={{
-                              color: '#7D8181',
-                              fontFamily: 'Inter',
-                              fontSize: '14px',
-                              fontStyle: 'normal',
-                              fontWeight: '500',
-                              lineHeight: 'normal',
-                              marginBottom: '20px'
-                            }}>
+                            <h3 className={styles.attachmentsTitle}>
                               Attachments
-                            </h3>                              <div style={{
-                              display: 'grid',
-                              gridTemplateColumns: 'repeat(4, 1fr)',
-                              gap: '10px'
-                            }}>
+                            </h3>                              <div className={styles.attachmentsContainer}>
                               {attachments.map((attachment) => (
                                 <AttachmentItem key={attachment.id} attachment={attachment} />
                               ))}
@@ -918,450 +466,173 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                           </div>
                         )}                        {/* Clinical Review Content */}
                         {activeRequestTab === '20250P000367' && activeAuthTab === 'Clinical Review' && (
-                          <div className="clinical-review-content" style={{ padding: '10px 0px 10px 20px' }}>                            {/* Medical Necessity Guidelines Section */}
-                            <div style={{
-                              display: 'flex',
-                              flexDirection: 'column'
-                            }}>                              <div style={{
-                              display: 'flex',
-                              alignItems: 'end',
-                              gap: '50px',
-                              width: '100%'
-                            }}>
-                                <div style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '10px'
-                                }}>
-                                  <img src={leftArrowTriangleIcon} alt="Left Arrow Triangle Icon" style={{ width: 'auto', height: '73.982px' }} />
-                                  <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '4px'
-                                  }}>
-                                    <span style={{
-                                      color: '#000',
-                                      fontFamily: 'Teachers',
-                                      fontSize: '18px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 500,
-                                      lineHeight: 'normal',
-                                      margin: 0
-                                    }}>
-                                      Medical
-                                    </span>
-                                    <span style={{
-                                      color: '#000',
-                                      fontFamily: 'Teachers',
-                                      fontSize: '18px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 500,
-                                      lineHeight: 'normal',
-                                      margin: 0
-                                    }}>
-                                      Necessity
-                                    </span>
-                                    <span style={{
-                                      color: '#000',
-                                      fontFamily: 'Teachers',
-                                      fontSize: '18px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 500,
-                                      lineHeight: 'normal',
-                                      margin: 0
-                                    }}>
-                                      Guidelines                                    </span>                                  </div>                                </div>
+                          <div className={styles.clinicalReviewContent}>                            {/* Medical Necessity Guidelines Section */}
+                            <div className={styles.medicalGuidelinesContainer}>                              <div className={styles.guidelinesHeader}>
+                              <div className={styles.guidelinesIconContainer}>
+                                <img src={leftArrowTriangleIcon} alt="Left Arrow Triangle Icon" className={styles.guidelineIcon} />
+                                <div className={styles.medicalGuidelinesTextContainer}>
+                                  <span className={styles.medicalGuidelinesText}>
+                                    Medical
+                                  </span>
+                                  <span className={styles.medicalGuidelinesText}>
+                                    Necessity
+                                  </span>
+                                  <span className={styles.medicalGuidelinesText}>
+                                    Guidelines                                    </span>                                  </div>                                </div>
 
-                                {/* Stage 4 Navigation - Only visible in step 4, positioned on the right side of the same row */}
-                                {clinicalReviewStep === 4 && (
-                                  <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'flex-start',
-                                    gap: '8px'
-                                  }}>
-                                    <div style={{
-                                      color: '#8E9295',
-                                      fontSize: '12.2px',
-                                      fontFamily: 'Inter',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
-                                      Informed Care Strategies
-                                    </div>
-
-                                    <div style={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      gap: '10px',
-                                      fontSize: '14.8px',
-                                      color: '#5D609A',
-                                      fontFamily: 'Inter',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
-                                      <span style={{ cursor: 'pointer' }}>LOG OUT</span>
-                                      <span style={{ color: '#11273D' }}>|</span>
-                                      <span style={{ cursor: 'pointer' }}>SEARCH</span>
-                                      <span style={{ color: '#11273D' }}>|</span>
-                                      <span style={{ cursor: 'pointer' }}>MY PRODUCTS</span>
-                                      <span style={{ color: '#11273D' }}>|</span>
-                                      <span style={{ cursor: 'pointer' }}>CONTACT US</span>
-                                      <span style={{ color: '#11273D' }}>|</span>
-                                      <span style={{ cursor: 'pointer' }}>USER GUIDE</span>
-                                    </div>
+                              {/* Stage 4 Navigation - Only visible in step 4, positioned on the right side of the same row */}
+                              {clinicalReviewStep === 4 && (
+                                <div className={styles.stage4Navigation}>
+                                  <div className={styles.navigationHeader}>
+                                    Informed Care Strategies
                                   </div>
-                                )}
-                              </div>
-                              <div style={{ height: '2px', background: '#CACACA', width: '95%', marginTop: '15px' }} />
+
+                                  <div className={styles.navigationLinks}>
+                                    <span className={styles.navigationLinksClickable}>LOG OUT</span>
+                                    <span className={styles.navigationSeparator}>|</span>
+                                    <span className={styles.navigationLinksClickable}>SEARCH</span>
+                                    <span className={styles.navigationSeparator}>|</span>
+                                    <span className={styles.navigationLinksClickable}>MY PRODUCTS</span>
+                                    <span className={styles.navigationSeparator}>|</span>
+                                    <span className={styles.navigationLinksClickable}>CONTACT US</span>
+                                    <span className={styles.navigationSeparator}>|</span>
+                                    <span className={styles.navigationLinksClickable}>USER GUIDE</span>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                              <div className={styles.navigationDivider} />
                             </div>                            {/* Step 1: Guidelines Search and Selection */}
                             {clinicalReviewStep === 1 && (
-                              <div style={{ marginTop: '20px' }}>
+                              <div className={styles.navigationSection}>
 
                                 {/* Guideline Selection Checkboxes */}
-                                <div style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '8px',
-                                  marginBottom: '5px'
-                                }}>
-                                  <span style={{
-                                    color: '#9C9D9C',
-                                    fontFamily: 'Inter',
-                                    fontSize: '14.069px',
-                                    fontStyle: 'normal',
-                                    fontWeight: 600,
-                                    lineHeight: 'normal'
-                                  }}>
+                                <div className={styles.guidelinesSelectionContainer}>
+                                  <span className={styles.guidelinesEditionLabel}>
                                     1st Edition
                                   </span>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.guidelinesCheckboxLabel}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.guidelinesCheckboxText}>
                                       ACO
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.checkboxContainer}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox" className={`${styles.customCheckbox} ${styles.checkboxInput}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.checkboxLabel}>
                                       ISC
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.guidelinesCheckboxLabel}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.guidelinesCheckboxText}>
                                       GRC
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.guidelinesCheckboxLabel}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.guidelinesCheckboxText}>
                                       MCM
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.checkboxLabelFlex}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.customCheckboxRound}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.checkboxTextSmall}>
                                       RFC
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.checkboxLabelFlex}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.customCheckboxRound}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.checkboxTextSmall}>
                                       HHC
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.checkboxLabelFlex}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.customCheckboxRound}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.checkboxTextSmall}>
                                       CCG
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.checkboxLabelFlex}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.customCheckboxRound}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.checkboxTextSmall}>
                                       TC
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.checkboxLabelFlex}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.customCheckboxRound}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.checkboxTextSmall}>
                                       DBHC
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.checkboxLabelFlex}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.customCheckboxRound}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.checkboxTextSmall}>
                                       PIP
                                     </span>
                                   </label>
-                                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <label className={styles.checkboxLabelFlex}>
                                     <input
-                                      type="checkbox" className="custom-checkbox"
-                                      style={{
-                                        width: '13.164px',
-                                        height: '12.341px',
-                                        border: '1px solid lightgray',
-                                        borderRadius: '50%'
-                                      }}
+                                      type="checkbox"
+                                      className={`${styles.customCheckbox} ${styles.customCheckboxRound}`}
                                     />
-                                    <span style={{
-                                      color: '#646389',
-                                      fontFamily: 'Inter',
-                                      fontSize: '14.809px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}>
+                                    <span className={styles.checkboxTextSmall}>
                                       MCR
                                     </span>
                                   </label>
                                 </div>                                {/* Quick Search */}
-                                <div style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '12px',
-                                  marginBottom: '5px'
-                                }}>
-                                  <span style={{
-                                    color: '#33333A',
-                                    fontFamily: 'Inter',
-                                    fontSize: '13.081px',
-                                    fontStyle: 'normal',
-                                    fontWeight: 500,
-                                    lineHeight: 'normal'
-                                  }}>
+                                <div className={styles.quickSearchContainer}>
+                                  <span className={styles.quickSearchLabel}>
                                     Quick Search
                                   </span>                                  <input
                                     type="text"
                                     defaultValue="DKA"
-                                    style={{
-                                      width: '344px',
-                                      height: '22px',
-                                      border: '1px solid lightgray',
-                                      background: '#FFFEFF',
-                                      padding: '6px',
-                                      color: '#444753',
-                                      fontFamily: 'Inter',
-                                      fontSize: '13.328px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal'
-                                    }}
+                                    className={styles.quickSearchInput}
                                   />
-                                  <button
-                                    style={{
-                                      width: '59.236px',
-                                      height: '20px',
-                                      borderRadius: '0.823px 0.617px 0px 0.617px',
-                                      border: '0.823px solid #696669',
-                                      background: '#EFEFED',
-                                      color: '#4C4C51',
-                                      fontFamily: 'Inter',
-                                      fontSize: '12.176px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal',
-                                      cursor: 'pointer'
-                                    }}
-                                  >
+                                  <button className={styles.quickSearchButton}>
                                     Search
                                   </button>
                                 </div>                                {/* Results Summary */}
-                                <div style={{
-                                  color: '#474952',
-                                  fontFamily: 'Inter',
-                                  fontSize: '12.752px',
-                                  fontStyle: 'normal',
-                                  fontWeight: 400,
-                                  lineHeight: 'normal',
-                                  marginBottom: '5px'
-                                }}>
+                                <div className={styles.resultsContainer}>
                                   6 results for DKA
-                                  <span style={{
-                                    float: 'right',
-                                    color: '#3F4045',
-                                    fontFamily: 'Inter',
-                                    fontSize: '9.873px',
-                                    fontStyle: 'normal',
-                                    fontWeight: 400,
-                                    lineHeight: 'normal'
-                                  }}>(Results 1 - 6 of 6)</span>
+                                  <span className={styles.resultsFloatRight}>
+                                    (Results 1 - 6 of 6)
+                                  </span>
                                 </div>                                {/* Guidelines Table */}
-                                <div style={{
-                                  marginBottom: '24px'
-                                }}>
-                                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                <div className={styles.guidelinesTableContainer}>
+                                  <table className={styles.guidelinesTable}>
                                     <thead>
                                       <tr>
-                                        <th style={{
-                                          padding: '4px 8px',
-                                          textAlign: 'left',
-                                          color: '#000',
-                                          fontFamily: 'Inter',
-                                          fontSize: '13.164px',
-                                          fontStyle: 'normal',
-                                          fontWeight: 400,
-                                          lineHeight: 'normal',
-                                          textDecoration: 'underline',
-                                          textDecorationStyle: 'solid',
-                                          textDecorationSkipInk: 'auto',
-                                          textDecorationThickness: 'auto',
-                                          textUnderlineOffset: 'auto',
-                                          textUnderlinePosition: 'from-font'
-                                        }}>
+                                        <th className={styles.guidelinesTableHeaderCell}>
                                           Guideline Code
                                         </th>
                                         <th style={{
@@ -2054,7 +1325,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                   marginBottom: '16px',
                                   paddingLeft: '15px'
                                 }}>
-                                  <span style={{ marginRight: '8px' }}>●</span>
+                                  <span style={{ marginRight: '8px' }}>—</span>
                                   <span style={{
                                     color: '#5D5356',
                                     fontFamily: 'Inter',
@@ -2188,7 +1459,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       fontWeight: 'bold',
                                       color: 'black'
                                     }}>
-                                      ✓
+                                      œ“
                                     </div>
                                     <span style={{
                                       color: '#000',
@@ -2386,7 +1657,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       fontWeight: 'bold',
                                       color: 'black'
                                     }}>
-                                      ✓
+                                      œ“
                                     </div>
                                     <span style={{
                                       color: '#000',
@@ -2524,7 +1795,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                     lineHeight: '150%',
                                     marginBottom: '12px',
                                     margin: '0 0 5px 0'
-                                  }}>                                      Brief Stay (1 to 3 Days) – Target LOS: 2 Days
+                                  }}>                                      Brief Stay (1 to 3 Days) €“ Target LOS: 2 Days
                                   </h2>
 
                                     <ul style={{
@@ -2538,7 +1809,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       fontFamily: 'Inter',
                                       listStyleType: 'disc'
                                     }}>
-                                      <li style={{ marginBottom: '6px' }}>Initial stabilization within first 12–24 hours</li>
+                                      <li style={{ marginBottom: '6px' }}>Initial stabilization within first 12€“24 hours</li>
                                       <li style={{ marginBottom: '6px' }}>Transition from IV insulin to subcutaneous insulin regimen on Day 2</li>                                      <li style={{ marginBottom: '6px' }}>
                                         Correction of:
                                         <ul style={{
@@ -2748,49 +2019,36 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
 
                         {/* Other Auth Tab Contents */}                        {/* Closed Tab Content - Duplicate of Request Submitted with modifications */}
                         {activeRequestTab === '20250P000367' && activeAuthTab === 'Closed' && (
-                          <div className="authorization-content" style={{ padding: '24px 0', width: '75%' }}>
+                          <div className={styles.authorizationContent}>
                             {/* Header */}
-                            <h2 style={{ fontSize: '14px', fontWeight: '600', color: '#7D8181', marginBottom: '24px' }}>Authorization Request Summary</h2>
+                            <h2 className={styles.authorizationHeader}>Authorization Request Summary</h2>
                             {/* Content Area */}
                             <div>
                               {/* First Row - 4 data points + Status */}
-                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(150px, 1fr))', gap: '20px', marginBottom: '24px' }}>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Authorization #</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>2025OP000367</div>
+                              <div className={styles.authGridLayout}>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Authorization #</div>
+                                  <div className={styles.authGridValue}>2025OP000367</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Received Date</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>04/28/2025 03:47:01 AM</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Received Date</div>
+                                  <div className={styles.authGridValue}>04/28/2025 03:47:01 AM</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Admission Date</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>04/28/2025 02:58:09 AM</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Admission Date</div>
+                                  <div className={styles.authGridValue}>04/28/2025 02:58:09 AM</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Request Type</div>
-                                  <div style={{ fontSize: '11px', fontWeight: '600', color: '#787878' }}>Standard</div>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Request Type</div>
+                                  <div className={styles.authGridValue}>Standard</div>
                                 </div>
-                                <div>
-                                  <div style={{ fontSize: '11px', fontWeight: '500', color: '#787878', marginBottom: '4px' }}>Status</div>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>                                    <select
-                                    className="border border-gray-300 rounded bg-white"
-                                    style={{
-                                      width: '115px',
-                                      padding: '5px 10px',
-                                      alignItems: 'center',
-                                      color: '#F80',
-                                      fontFamily: 'Inter',
-                                      fontSize: '11px',
-                                      fontStyle: 'normal',
-                                      fontWeight: '700',
-                                      lineHeight: 'normal'
-                                    }}
-                                  >
-                                    <option style={{ color: '#F80' }}>Pending</option>
-                                    <option style={{ color: '#787878' }}>Approve</option>
-                                    <option style={{ color: '#787878' }}>Send to Review</option>
-                                    <option style={{ color: '#787878' }}>Deny</option>
+                                <div className={styles.authGridItem}>
+                                  <div className={styles.authGridLabel}>Status</div>
+                                  <div className={styles.flexCenterGap10}>                                    <select className={styles.authStatusSelectClosed}>
+                                    <option>Pending</option>
+                                    <option>Approve</option>
+                                    <option>Send to Review</option>
+                                    <option>Deny</option>
                                   </select>
                                   </div>
                                 </div>
@@ -2871,22 +2129,10 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                         {/* Attachments Section for Closed Tab */}
                         {activeRequestTab === '20250P000367' && activeAuthTab === 'Closed' && (
                           <div>
-                            <h3 style={{
-                              color: '#7D8181',
-                              fontFamily: 'Inter',
-                              fontSize: '14px',
-                              fontStyle: 'normal',
-                              fontWeight: '500',
-                              lineHeight: 'normal',
-                              marginBottom: '20px'
-                            }}>
+                            <h3 className={styles.attachmentsTitle}>
                               Attachments
                             </h3>
-                            <div style={{
-                              display: 'grid',
-                              gridTemplateColumns: 'repeat(4, 1fr)',
-                              gap: '10px'
-                            }}>
+                            <div className={styles.attachmentsContainer}>
                               {attachments.map((attachment) => (
                                 <AttachmentItem key={attachment.id} attachment={attachment} />
                               ))}
@@ -2990,11 +2236,12 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
 export default Member;
+
 
 
 
