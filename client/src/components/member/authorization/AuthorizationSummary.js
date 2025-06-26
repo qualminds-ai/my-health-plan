@@ -60,14 +60,14 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
                 </div>
             </div>
         </div>
-        <div className={`${styles.formContainer} mb-6`}>
-            <h3 className={styles.formTitle}>Notes</h3>
-            <div className={styles.formDescription}>
-                <p className={styles.formText}>
+        <div className={`mb-6 ${styles.closedTabNotesSection}`}>
+            <h3 className={styles.closedTabNotesTitle}>Notes</h3>
+            <div className={styles.closedTabNotesContent}>
+                <p className={styles.closedTabNotesP}>
                     Additional pertinent patient information from the BCBS AI Assistant:
                 </p>
-                <p className={styles.formText}>Other current patient diagnoses:</p>
-                <ul className={styles.formList}>
+                <p className={styles.closedTabNotesP2}>Other current patient diagnoses:</p>
+                <ul className={styles.closedTabNotesList}>
                     <li>• CHF (ICD10: I50.9): 4/28/2025</li>
                     <li>• DKA (DKA: E11.10): 4/28/2025</li>
                 </ul>

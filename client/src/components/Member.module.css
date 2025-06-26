@@ -239,45 +239,6 @@
     background-position: center;
 }
 
-.guidelineTableCell {
-    padding: 4px 8px;
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    line-height: normal;
-}
-
-.guidelineTableCellCode {
-    font-size: 13.904px;
-    font-weight: 400;
-    cursor: pointer;
-    border-radius: 0.617px 2.468px 0px 0px;
-    color: #6B5722;
-}
-
-.guidelineTableCellType {
-    color: #424149;
-    font-size: 12.176px;
-    font-weight: 300;
-}
-
-.guidelineTableCellTitle {
-    color: #484C56;
-    font-size: 13.74px;
-    font-weight: 400;
-}
-
-.guidelineTableCellDs {
-    color: #B2B4BB;
-    font-size: 14.974px;
-    font-weight: 600;
-}
-
-.guidelineTableCellLink {
-    color: #4E4DA2;
-    font-size: 13.575px;
-    font-weight: 400;
-}
-
 .attachmentIconDynamicBg {
     background-position: 50%;
     background-repeat: no-repeat;
@@ -577,7 +538,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: 150%;
-    margin-bottom: 12px;
+    margin-bottom: 5px;
 }
 
 .staySectionList {
@@ -756,6 +717,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    margin-bottom: 32px;
 }
 
 .carePlanningList {
@@ -937,18 +899,6 @@
 }
 
 /* Form Container Styles */
-.formContainer {
-    margin-top: 48px;
-}
-
-.formTitle {
-    font-size: 14px;
-    font-weight: 500;
-    color: #7D8181;
-    margin-bottom: 12px;
-    line-height: normal;
-}
-
 .attachmentsTitle {
     font-size: 14px;
     font-weight: 500;
@@ -957,64 +907,8 @@
     line-height: normal;
 }
 
-.formDescription {
-    width: 659px;
-}
-
-.formText {
-    color: #333;
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 16px;
-}
-
-.formTextBold {
-    color: #333;
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 700 !important;
-    line-height: 16px;
-    margin-bottom: 16px;
-}
-
-.formList {
-    color: #333;
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 16px;
-    padding-left: 16px;
-    margin-bottom: 16px;
-}
-
 /* CheckBox Styles */
 .checkboxContainer {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.checkboxInput {
-    width: 13.164px;
-    height: 12.341px;
-    border: 1px solid lightgray;
-    border-radius: 50%;
-}
-
-.checkboxLabel {
-    color: #787878;
-    font-family: 'Inter', sans-serif;
-    font-size: 11px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-}
-
-.checkboxLabelFlex {
     display: flex;
     align-items: center;
     gap: 4px;
@@ -1139,9 +1033,7 @@
 }
 
 .navigationLinksClickable {
-    color: #11273D;
     font-family: 'Inter', sans-serif;
-    font-size: 10px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
