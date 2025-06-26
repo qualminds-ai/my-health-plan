@@ -699,166 +699,74 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellLink}>
                                         View Codes
                                       </td>
-                                    </tr>                                      <tr>                                        <td style={{
-                                      padding: '4px 8px',
-                                      color: '#4444A2',
-                                      fontFamily: 'Inter',
-                                      fontSize: '13.904px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal',
-                                      cursor: 'pointer',
-                                      borderRadius: '0.617px 2.468px 0px 0px',
-                                      backgroundColor: selectedGuidelineRows.has('P-140') ? '#e4de77' : 'transparent'
-                                    }}
-                                      onClick={() => {
-                                        const newSelected = new Set(selectedGuidelineRows);
-                                        if (newSelected.has('P-140')) {
-                                          newSelected.delete('P-140');
-                                        } else {
-                                          newSelected.add('P-140');
+                                    </tr>
+                                    <tr>
+                                      <td
+                                        className={
+                                          `${styles.guidelineTableCell} ${styles.guidelineTableCellCode} ${styles.guidelineTableCellSelectable} ${selectedGuidelineRows.has('P-140') ? styles.guidelineTableCellSelected : ''}`
                                         }
-                                        setSelectedGuidelineRows(newSelected);
-                                      }}
-                                      onMouseEnter={(e) => {
-                                        if (!selectedGuidelineRows.has('P-140')) {
-                                          e.target.style.backgroundColor = '#e4de77';
-                                        }
-                                      }}
-                                      onMouseLeave={(e) => {
-                                        if (!selectedGuidelineRows.has('P-140')) {
-                                          e.target.style.backgroundColor = 'transparent';
-                                        }
-                                      }}
-                                    >
-                                      P-140
-                                    </td>
-                                      <td style={{
-                                        padding: '4px 8px',
-                                        color: '#424149',
-                                        fontFamily: 'Inter',
-                                        fontSize: '12.176px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 300,
-                                        lineHeight: 'normal'
-                                      }}>ISC</td>
-                                      <td style={{
-                                        padding: '4px 8px',
-                                        color: '#424149',
-                                        fontFamily: 'Inter',
-                                        fontSize: '12.176px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 300,
-                                        lineHeight: 'normal'
-                                      }}>ORG-P</td>
-                                      <td style={{
-                                        padding: '4px 8px',
-                                        color: '#484C56',
-                                        fontFamily: 'Inter',
-                                        fontSize: '13.74px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 400,
-                                        lineHeight: 'normal'
-                                      }}>Diabetes, Pediatric</td>
-                                      <td style={{
-                                        padding: '4px 8px',
-                                        color: '#B2B4BB',
-                                        fontFamily: 'Inter',
-                                        fontSize: '14.974px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 600,
-                                        lineHeight: 'normal'
-                                      }}>(DS)</td>
-                                      <td style={{
-                                        padding: '4px 8px',
-                                        color: '#4E4DA2',
-                                        fontFamily: 'Inter',
-                                        fontSize: '13.575px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 400,
-                                        lineHeight: 'normal'
-                                      }}>
+                                        onClick={() => {
+                                          const newSelected = new Set(selectedGuidelineRows);
+                                          if (newSelected.has('P-140')) {
+                                            newSelected.delete('P-140');
+                                          } else {
+                                            newSelected.add('P-140');
+                                          }
+                                          setSelectedGuidelineRows(newSelected);
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          if (!selectedGuidelineRows.has('P-140')) {
+                                            e.target.style.backgroundColor = '#e4de77';
+                                          }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          if (!selectedGuidelineRows.has('P-140')) {
+                                            e.target.style.backgroundColor = 'transparent';
+                                          }
+                                        }}
+                                      >
+                                        P-140
+                                      </td>
+                                      <td className={styles.guidelineTableCellType}>ISC</td>
+                                      <td className={styles.guidelineTableCellType}>ORG-P</td>
+                                      <td className={styles.guidelineTableCellTitle}>Diabetes, Pediatric</td>
+                                      <td className={styles.guidelineTableCellDs}>(DS)</td>
+                                      <td className={styles.guidelineTableCellLink}>
                                         View Codes
                                       </td>
                                     </tr>
-                                    <tr>                                      <td style={{
-                                      padding: '4px 8px',
-                                      color: '#675786',
-                                      fontFamily: 'Inter',
-                                      fontSize: '13.904px',
-                                      fontStyle: 'normal',
-                                      fontWeight: 400,
-                                      lineHeight: 'normal',
-                                      cursor: 'pointer',
-                                      borderRadius: '0.617px 2.468px 0px 0px',
-                                      backgroundColor: selectedGuidelineRows.has('M-130-RRG') ? '#e4de77' : 'transparent'
-                                    }}
-                                      onClick={() => {
-                                        const newSelected = new Set(selectedGuidelineRows);
-                                        if (newSelected.has('M-130-RRG')) {
-                                          newSelected.delete('M-130-RRG');
-                                        } else {
-                                          newSelected.add('M-130-RRG');
+                                    <tr>
+                                      <td
+                                        className={
+                                          `${styles.guidelineTableCell} ${styles.guidelineTableCellCodeM130RRG} ${styles.guidelineTableCellSelectable} ${selectedGuidelineRows.has('M-130-RRG') ? styles.guidelineTableCellSelected : ''}`
                                         }
-                                        setSelectedGuidelineRows(newSelected);
-                                      }}
-                                      onMouseEnter={(e) => {
-                                        if (!selectedGuidelineRows.has('M-130-RRG')) {
-                                          e.target.style.backgroundColor = '#e4de77';
-                                        }
-                                      }}
-                                      onMouseLeave={(e) => {
-                                        if (!selectedGuidelineRows.has('M-130-RRG')) {
-                                          e.target.style.backgroundColor = 'transparent';
-                                        }
-                                      }}
-                                    >
-                                      M-130-RRG
-                                    </td>
-                                      <td style={{
-                                        padding: '4px 8px',
-                                        color: '#424149',
-                                        fontFamily: 'Inter',
-                                        fontSize: '12.176px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 300,
-                                        lineHeight: 'normal'
-                                      }}>ISC</td>
-                                      <td style={{
-                                        padding: '4px 8px',
-                                        color: '#424149',
-                                        fontFamily: 'Inter',
-                                        fontSize: '12.176px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 300,
-                                        lineHeight: 'normal'
-                                      }}>RRG</td>
-                                      <td style={{
-                                        padding: '4px 8px',
-                                        color: '#484C56',
-                                        fontFamily: 'Inter',
-                                        fontSize: '13.74px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 400,
-                                        lineHeight: 'normal'
-                                      }}>Diabetes RRG</td>                                        <td style={{
-                                        padding: '4px 8px',
-                                        color: '#B2B4BB',
-                                        fontFamily: 'Inter',
-                                        fontSize: '14.974px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 600,
-                                        lineHeight: 'normal'
-                                      }}>2(DS)</td>
-                                      <td style={{
-                                        padding: '4px 8px',
-                                        color: '#4E4DA2',
-                                        fontFamily: 'Inter',
-                                        fontSize: '13.575px',
-                                        fontStyle: 'normal',
-                                        fontWeight: 400,
-                                        lineHeight: 'normal'
-                                      }}>
+                                        onClick={() => {
+                                          const newSelected = new Set(selectedGuidelineRows);
+                                          if (newSelected.has('M-130-RRG')) {
+                                            newSelected.delete('M-130-RRG');
+                                          } else {
+                                            newSelected.add('M-130-RRG');
+                                          }
+                                          setSelectedGuidelineRows(newSelected);
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          if (!selectedGuidelineRows.has('M-130-RRG')) {
+                                            e.target.style.backgroundColor = '#e4de77';
+                                          }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          if (!selectedGuidelineRows.has('M-130-RRG')) {
+                                            e.target.style.backgroundColor = 'transparent';
+                                          }
+                                        }}
+                                      >
+                                        M-130-RRG
+                                      </td>
+                                      <td className={styles.guidelineTableCellType}>ISC</td>
+                                      <td className={styles.guidelineTableCellType}>RRG</td>
+                                      <td className={styles.guidelineTableCellTitle}>Diabetes RRG</td>
+                                      <td className={styles.guidelineTableCellDs}>2(DS)</td>
+                                      <td className={styles.guidelineTableCellLink}>
                                         View Codes
                                       </td>
                                     </tr>
@@ -891,7 +799,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellType}>ISC</td>
                                       <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellType}>RRG-P</td>
                                       <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellTitle}>Diabetes, Pediatric RRG</td>
-                                      <td className={styles.guidelineTableCell} style={{ color: '#C7C9C8', fontSize: '15.879px', fontWeight: 600 }}>(DS)</td>
+                                      <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellDs}>(DS)</td>
                                       <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellLink}>
                                         View Codes
                                       </td>
@@ -925,7 +833,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                                       <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellType}>ISC</td>
                                       <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellType}>OCG</td>
                                       <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellTitle}>Diabetes: Observation Care</td>
-                                      <td className={styles.guidelineTableCell} style={{ color: '#C7C9C8', fontSize: '15.879px', fontWeight: 600 }}></td>
+                                      <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellDs}></td>
                                       <td className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellLink}>
                                         View Codes
                                       </td>

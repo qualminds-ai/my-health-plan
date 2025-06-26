@@ -43,6 +43,7 @@ my-health-plan/
     └── utils/         # Server utilities
 ```
 
+
 ## Coding Standards & Best Practices
 
 ### General Guidelines
@@ -54,30 +55,40 @@ my-health-plan/
 - **Security**: Basic security measures, environment variables for secrets
 - **Demo-Ready**: Code should work reliably for demonstrations
 
+### Refactoring & Code Organization Guidelines
+- **Component Decomposition**: When adding new UI or logic, always create a new logical React component instead of expanding existing large files. Keep components focused and maintainable.
+- **CSS Organization**: Write all new CSS in the respective CSS/Module CSS file for the component. Avoid inline styles and global CSS unless absolutely necessary.
+- **Separation of Concerns**: Move reusable logic into custom hooks (`hooks/`) or utility functions (`utils/`).
+- **File Structure**: Place new components in the correct subfolder under `components/` (e.g., `components/member/` for member-related UI).
+- **Naming**: Use clear, descriptive names for new components, hooks, and CSS classes.
+- **Refactor When Needed**: If a component grows too large or handles multiple concerns, refactor it into smaller, focused components.
+- **No Code Bloat**: Avoid adding unrelated logic or UI to existing components—prefer composition and modularity.
+- **Actionable Item IDs**: For every actionable item (buttons, links, rows, etc.), always add a unique and descriptive `id` attribute, following the existing project conventions. This improves testability and maintainability.
+
 ### Frontend (React) Guidelines
-- **MVP Simplicity**: Functional components with hooks, avoid complex state management
-- **Bootstrap First**: Use Bootstrap 5 classes extensively, minimal custom CSS
-- **Service Layer**: Use the service layer (apiService.js, authService.js) for API calls
-- **Demo UX**: Focus on working functionality over pixel-perfect design
-- **Error Handling**: Display user-friendly error messages with fallbacks
-- **Authentication**: Use the useAuth hook for auth state management
+- Use functional components with hooks; avoid complex state management.
+- Use Bootstrap 5 classes extensively; keep custom CSS minimal.
+- Use the service layer (`apiService.js`, `authService.js`) for API calls.
+- Focus on working functionality over pixel-perfect design.
+- Display user-friendly error messages with fallbacks.
+- Use the `useAuth` hook for auth state management.
 
 ### Backend (Node.js/Express) Guidelines
-- **MVP Architecture**: Simple routes with direct database queries, avoid over-abstraction
-- **Models**: Extend BaseModel class for common operations, keep business logic minimal
-- **Routes**: Use express.Router() and middleware (route handlers are in routes/, not controllers/)
-- **Database**: Use the pool connection, avoid complex ORM patterns
-- **Validation**: Basic input validation, sanitize data for demo safety
-- **Responses**: Use consistent response format with appropriate HTTP status codes
-- **Authentication**: Use JWT middleware for protected routes, simple role checking
+- Use simple routes with direct database queries; avoid over-abstraction.
+- Extend `BaseModel` for common operations; keep business logic minimal.
+- Use `express.Router()` and middleware (route handlers are in `routes/`).
+- Use the pool connection; avoid complex ORM patterns.
+- Basic input validation and data sanitization for demo safety.
+- Use consistent response format and appropriate HTTP status codes.
+- Use JWT middleware for protected routes and simple role checking.
 
 ### Database Guidelines
-- **MVP Migration Strategy**: Use the custom CLI for schema changes (`npm run db:create "description"`)
-- **SQL**: Write clean, readable SQL focused on core functionality, basic indexing
-- **Transactions**: Use transactions for multi-step operations where data integrity matters
-- **Naming**: Use snake_case for database columns, camelCase in JavaScript
-- **Foreign Keys**: Define relationships for core entities, avoid over-normalization
-- **Demo Data**: Seed with realistic sample data for effective demonstrations
+- Use the custom CLI for schema changes (`npm run db:create "description"`).
+- Write clean, readable SQL focused on core functionality and basic indexing.
+- Use transactions for multi-step operations where data integrity matters.
+- Use snake_case for database columns, camelCase in JavaScript.
+- Define relationships for core entities; avoid over-normalization.
+- Seed with realistic sample data for effective demonstrations.
 
 ## Authentication System
 
@@ -226,20 +237,12 @@ router.get('/endpoint', auth, async (req, res) => {
 ```
 
 ## Testing Guidelines
-
-- **Unit Tests**: Test individual functions and components
-- **Integration Tests**: Test API endpoints and database operations
-- **Error Cases**: Always test error handling paths
-- **Authentication**: Test both authenticated and unauthenticated scenarios
-
-## MVP Testing Guidelines
-
-- **Manual Testing Priority**: Focus on manual testing of core workflows over automated tests
-- **Happy Path Testing**: Ensure main user journeys work reliably
-- **Demo Scenarios**: Test with realistic demo data that tells a story
-- **Error Scenarios**: Basic error handling, graceful degradation
-- **Browser Testing**: Test in Chrome/Firefox, mobile responsive design
-- **Performance**: Ensure reasonable load times for demo purposes
+- Focus on manual testing of core workflows over automated tests.
+- Ensure main user journeys work reliably (happy path testing).
+- Test with realistic demo data and edge cases.
+- Verify authentication and navigation flows.
+- Check responsive design on different screen sizes.
+- Ensure error states are user-friendly.
 
 ## Security Considerations
 
@@ -250,14 +253,13 @@ router.get('/endpoint', auth, async (req, res) => {
 - **Rate Limiting**: Implement rate limiting for API endpoints
 - **Environment Variables**: Never commit secrets to version control
 
-## MVP Security Considerations
-
-- **Basic Security**: Input validation, SQL injection prevention, XSS protection
-- **Demo Credentials**: Fixed demo passwords, clear user instructions
-- **Environment Separation**: Clear development vs. demo environment setup
-- **CORS**: Properly configured for demo hosting
-- **Authentication**: JWT tokens with reasonable expiration times
-- **Data Protection**: Demo data only, no real sensitive information
+## Security Considerations
+- Input validation, SQL injection prevention, and XSS protection.
+- Use fixed demo passwords and clear user instructions.
+- Separate development and demo environments.
+- Configure CORS properly for demo hosting.
+- Use JWT tokens with reasonable expiration times.
+- Use demo data only; do not use real sensitive information.
 
 ## Performance Guidelines
 
@@ -267,45 +269,28 @@ router.get('/endpoint', auth, async (req, res) => {
 - **Bundle Size**: Keep client bundle size optimized
 - **Connection Pooling**: Use connection pooling for database
 
-## MVP Performance Guidelines
-
-- **Demo Performance**: Optimize for smooth demo experience
-- **Database Queries**: Keep queries simple and fast for demo data
-- **Loading States**: Show loading indicators for better UX
-- **Error Feedback**: Quick error recovery and clear messages
-- **Mobile Responsive**: Works well on tablets and phones for demos
-- **Fast Load Times**: Optimize bundle size for quick initial load
+## Performance Guidelines
+- Optimize for smooth demo experience.
+- Keep database queries simple and fast for demo data.
+- Show loading indicators for better UX.
+- Provide quick error recovery and clear messages.
+- Ensure mobile responsiveness for demos.
+- Optimize bundle size for quick initial load.
 
 ## Deployment Considerations
-
-- **Environment Variables**: Set all required environment variables
-- **Database Migrations**: Run migrations before deployment
-- **Health Checks**: Ensure health endpoint returns proper status
-- **Logging**: Implement proper logging for production debugging
-- **Error Monitoring**: Set up error tracking and monitoring
+- Set all required environment variables.
+- Run database migrations before deployment.
+- Ensure health endpoint returns proper status.
+- Implement proper logging for production debugging.
+- Set up error tracking and monitoring.
 
 ## Development Workflow
-
-1. **MVP Feature Development**:
-   - Focus on user-visible functionality first
-   - Create database migrations only if needed for core features
-   - Implement backend API endpoints with basic validation
-   - Create/update React components with Bootstrap styling
-   - Add basic error handling and user feedback
-   - Test core user workflows (login → dashboard → member lookup)
-
-2. **Database Changes**:
-   - Use `npm run db:create "description"` for schema changes
-   - Write clean SQL focused on essential functionality
-   - Test migrations with demo data
-   - Update seed data to support new features
-
-3. **MVP Testing Strategy**:
-   - Manual testing of core user workflows
-   - Test with demo data and edge cases
-   - Verify authentication and navigation flows
-   - Check responsive design on different screen sizes
-   - Ensure error states are user-friendly
+1. Focus on user-visible functionality first.
+2. Create database migrations only if needed for core features.
+3. Implement backend API endpoints with basic validation.
+4. Create/update React components with Bootstrap styling.
+5. Add basic error handling and user feedback.
+6. Test core user workflows (login → dashboard → member lookup).
 
 ## Common Issues & Solutions
 
