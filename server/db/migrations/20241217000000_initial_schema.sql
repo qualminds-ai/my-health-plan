@@ -225,20 +225,6 @@ CREATE TABLE IF NOT EXISTS authorization_documents (
     FOREIGN KEY (uploaded_by) REFERENCES users(id)
 );
 
--- Authorization History table
-CREATE TABLE IF NOT EXISTS authorization_history (
-    id SERIAL PRIMARY KEY,
-    authorization_id INTEGER NOT NULL,
-    status_from VARCHAR(50),
-    status_to VARCHAR(50) NOT NULL,
-    changed_by INTEGER,
-    change_reason TEXT,
-    notes TEXT,
-    changed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (authorization_id) REFERENCES authorizations(id),
-    FOREIGN KEY (changed_by) REFERENCES users(id)
-);
-
 -- Authorization Notes table
 CREATE TABLE IF NOT EXISTS authorization_notes (
     id SERIAL PRIMARY KEY,
@@ -326,8 +312,6 @@ CREATE INDEX IF NOT EXISTS idx_review_types_code ON review_types(review_code);
 CREATE INDEX IF NOT EXISTS idx_status_types_code ON status_types(status_code);
 
 CREATE INDEX IF NOT EXISTS idx_auth_documents_auth_id ON authorization_documents(authorization_id);
-CREATE INDEX IF NOT EXISTS idx_auth_history_auth_id ON authorization_history(authorization_id);
-CREATE INDEX IF NOT EXISTS idx_auth_history_changed_at ON authorization_history(changed_at);
 CREATE INDEX IF NOT EXISTS idx_auth_notes_auth_id ON authorization_notes(authorization_id);
 CREATE INDEX IF NOT EXISTS idx_auth_notes_created_at ON authorization_notes(created_at);
 
@@ -345,7 +329,7 @@ BEGIN
     WHERE table_schema = 'public' 
     AND table_name IN ('users', 'members', 'providers', 'diagnoses', 'drg_codes', 
                        'priority_levels', 'review_types', 'status_types', 'authorizations',
-                       'authorization_documents', 'authorization_history', 'authorization_notes',
+                       'authorization_documents', 'authorization_notes',
                        'dashboard_stats');
       IF tables_existing > 0 THEN
         RAISE NOTICE '✅ Initial schema migration completed. Found % existing tables, ensured all objects exist.', tables_existing;
