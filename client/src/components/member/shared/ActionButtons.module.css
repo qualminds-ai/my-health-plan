@@ -1,0 +1,28 @@
+/* Action Buttons Styles */
+.actionButton {
+    width: 32px;
+    height: 32px;
+    background-color: #F9FAFB;
+    border: 1px solid #D0D5DD;
+    border-radius: 6px;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.actionButtonGrayscale {
+    filter: grayscale(100%);
+}
+
+.actionButtonMedical {
+    border-radius: 3.523px;
+    background: lightgray 50% / cover no-repeat;
+}
+
+.actionButtonsContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from './ActionButtons.module.css';
 
 // Import assets
 import starIcon from '../../../assets/authorizations/star-icon.png';
@@ -18,100 +19,46 @@ const ActionButtons = ({
     onMedicalClick
 }) => {
     return (
-        <div className="flex items-center gap-2">
+        <div className={styles.actionButtonsContainer}>
             <button
-                className="flex items-center justify-center"
-                style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: '#F9FAFB',
-                    border: '1px solid #D0D5DD',
-                    borderRadius: '6px',
-                    padding: '0',
-                    cursor: 'pointer',
-                    filter: 'grayscale(100%)'
-                }}
+                className={`${styles.actionButton} ${styles.actionButtonGrayscale}`}
                 onClick={onStarClick}
             >
                 <img src={starIcon} alt="Star" />
             </button>
 
             <button
-                className="flex items-center justify-center"
-                style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: '#F9FAFB',
-                    border: '1px solid #D0D5DD',
-                    borderRadius: '6px',
-                    padding: '0',
-                    cursor: 'pointer'
-                }}
+                className={styles.actionButton}
                 onClick={onCallClick}
             >
                 <img src={callIcon} alt="Call" />
             </button>
 
             <button
-                className="flex items-center justify-center"
-                style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: '#F9FAFB',
-                    border: '1px solid #D0D5DD',
-                    borderRadius: '6px',
-                    padding: '0',
-                    cursor: 'pointer'
-                }}
+                className={styles.actionButton}
                 onClick={onTextChatClick}
             >
                 <img src={textChatIcon} alt="Chat" />
             </button>
 
             <button
-                className="flex items-center justify-center"
-                style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: '#F9FAFB',
-                    border: '1px solid #D0D5DD',
-                    borderRadius: '6px',
-                    padding: '0',
-                    cursor: 'pointer'
-                }}
+                className={styles.actionButton}
                 onClick={onMessageClick}
             >
                 <img src={messageIcon} alt="Message" />
             </button>
 
             <button
-                className="flex items-center justify-center"
-                style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: '#F9FAFB',
-                    border: '1px solid #D0D5DD',
-                    borderRadius: '6px',
-                    padding: '0',
-                    cursor: 'pointer'
-                }}
+                className={styles.actionButton}
                 onClick={onWatchClick}
             >
                 <img src={watchIcon} alt="Watch" />
             </button>
 
             <button
-                className="flex items-center justify-center"
+                className={`${styles.actionButton} ${styles.actionButtonMedical} ${styles.actionButtonGrayscale}`}
                 style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: '#F9FAFB',
-                    border: '1px solid #D0D5DD',
-                    borderRadius: '3.523px',
-                    padding: '0',
-                    cursor: 'pointer',
-                    background: `url(${medicalIcon}) lightgray 50% / cover no-repeat`,
-                    filter: 'grayscale(100%)'
+                    backgroundImage: `url(${medicalIcon})`
                 }}
                 onClick={onMedicalClick}
             >

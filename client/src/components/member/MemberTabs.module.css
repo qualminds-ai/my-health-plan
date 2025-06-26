@@ -1,0 +1,46 @@
+/* Member Tabs Styles */
+.memberTabs {
+    background-color: #FEFEFE;
+}
+
+.memberTabsContainer {
+    width: 100%;
+}
+
+.memberTabsList {
+    display: flex;
+    border: 0;
+    margin-bottom: 0;
+    gap: 30px;
+    border-bottom: 4px solid #EDEDED;
+}
+
+.memberTabItem {
+    list-style: none;
+}
+
+.memberTabButton {
+    padding: 8px 16px;
+    transition: colors 0.2s;
+    position: relative;
+    color: #727272;
+    font-family: 'Inter', sans-serif;
+    font-size: 11.455px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: transparent;
+    border-radius: 0;
+    border: none;
+    border-bottom: none;
+    margin-bottom: -4px;
+    cursor: pointer;
+}
+
+.memberTabButtonActive {
+    color: #000;
+    font-weight: 700;
+    background-color: #EDEDED;
+    border-radius: 6.545px 6.545px 0px 0px;
+    border-bottom: 4px solid #EDEDED;
+}

@@ -16,12 +16,7 @@ const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDat
     return (
         <div className={styles.tableContainer}>
             {authorizations.length > 0 && (
-                <div style={{
-                    position: 'absolute',
-                    top: '57px', // This value may need fine-tuning for perfect vertical alignment
-                    left: '8px',   // Position the icon within the container's padding
-                    zIndex: 1,
-                }}>
+                <div className={styles.vectorIcon}>
                     <img src={VectorRightIcon} alt="Row indicator" width="14" height="18" />
                 </div>
             )}
@@ -30,7 +25,7 @@ const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDat
                     <tr className={styles.tableHeader}>
                         <th className={styles.priorityCell}></th>
                         <th className={styles.tableHeaderCell}>
-                            Priority <span style={{ color: '#8C8C8C', fontWeight: 400, fontSize: 10, marginLeft: '5px' }}>↓</span>
+                            Priority <span className={styles.prioritySortIcon}>↓</span>
                         </th>
                         <th className={styles.tableHeaderCell}>Authorization #</th>
                         <th className={styles.tableHeaderCell}>Received Date</th>
@@ -38,7 +33,7 @@ const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDat
                         <th className={styles.tableHeaderCell}>Diagnosis</th>
                         <th className={styles.tableHeaderCell}>DRG</th>
                         <th className={styles.tableHeaderCell}>Request Type</th>
-                        <th className={styles.tableHeaderCell} style={{ maxWidth: '80px', width: '80px' }}>POS</th>
+                        <th className={`${styles.tableHeaderCell} ${styles.posColumnHeader}`}>POS</th>
                         <th className={styles.tableHeaderCell}>Type</th>
                         <th className={styles.tableHeaderCell}>Member Name</th>
                         <th className={styles.tableHeaderCell}>Approved Days</th>

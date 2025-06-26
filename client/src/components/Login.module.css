@@ -1,0 +1,240 @@
+/* Login Component Styles */
+.loginPage {
+    min-height: 100vh;
+    display: flex;
+}
+
+.loginFormSection {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    width: 42.9%;
+}
+
+.loginFormContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+}
+
+.loginFormContent {
+    width: 100%;
+    max-width: 592px;
+}
+
+.loginHeader {
+    margin-bottom: 48px;
+    text-align: center;
+}
+
+.loginLogoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginLogoIcon {
+    margin-right: 16px;
+}
+
+.loginBrandTitle {
+    color: #2563EB;
+    font-size: 37.231px;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.formFieldsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.fieldContainer {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.fieldIcon {
+    position: absolute;
+    left: -32px;
+    top: 50%;
+    transform: translateY(-50%);
+    aspect-ratio: 1/1;
+}
+
+.formInput {
+    width: 484px;
+    height: 65px;
+    border: 1px solid #B7BABA;
+    background: #F4F6F5;
+    color: #2563EB;
+    font-family: 'Inter', sans-serif;
+    font-size: 15.3px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 0 20px;
+    outline: none;
+    transition: colors 0.2s;
+}
+
+.passwordToggleButton {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.errorMessage {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 24px;
+    width: 484px;
+}
+
+.errorText {
+    font-size: 14px;
+    color: #dc2626;
+}
+
+.loginButton {
+    width: 481px;
+    height: 57px;
+    background-color: #2563EB;
+    color: #FFF;
+    font-size: 15.7px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 12px;
+    outline: none;
+    transition: opacity 0.2s;
+}
+
+.loginButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.formLinks {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    width: 481px;
+}
+
+.linkButton {
+    color: #2563EB;
+    font-size: 15.2px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    text-decoration: underline;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.linkButton:hover {
+    opacity: 0.8;
+}
+
+.dividerSection {
+    position: relative;
+    margin-bottom: 24px;
+    width: 481px;
+}
+
+.dividerLine {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+}
+
+.dividerBorder {
+    width: 100%;
+    border-top: 1.5px solid #2563EB;
+}
+
+.dividerTextContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.dividerText {
+    padding: 0 16px;
+    background: white;
+    color: #2563EB;
+    font-family: 'Inter', sans-serif;
+    font-size: 15.5px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.ssoButton {
+    width: 481px;
+    height: 57px;
+    background-color: #2563EB;
+    color: #FFF;
+    font-size: 14.5px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border-radius: 3px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    outline: none;
+    transition: opacity 0.2s;
+}
+
+.copyrightSection {
+    padding: 0 64px 20px;
+}
+
+.copyrightText {
+    text-align: center;
+    color: #757D8A;
+    font-size: 15.6px;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+}
+
+.backgroundImageSection {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    width: 57.1%;
+}
+
+.backgroundOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(37, 99, 235, 0.05);
+}

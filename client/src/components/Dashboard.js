@@ -160,7 +160,7 @@ const Dashboard = ({ user, onLogout, onMemberClick, onNavigate }) => {
         {/* Main Content Container */}
         <div className={styles.contentContainer}>
           {/* Stats Cards and Section Title Container */}
-          <div style={{ padding: '24px' }}>
+          <div className={styles.statsContainer}>
             {/* Stats Cards Row */}
             <div className={styles.statsRow}>
               {statsCards.map((card) => (

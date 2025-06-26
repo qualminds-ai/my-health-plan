@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from './MemberHeader.module.css';
 import ActionButtons from './shared/ActionButtons';
 
 const MemberHeader = ({
@@ -12,19 +13,12 @@ const MemberHeader = ({
     onMedicalClick
 }) => {
     return (
-        <div style={{ width: '100%' }}>
-            <div className="flex items-center py-3">
-                <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                        <div className="flex flex-col">
-                            <h3 style={{
-                                fontFamily: 'Inter',
-                                fontSize: '20px',
-                                fontWeight: '590',
-                                lineHeight: '28px',
-                                color: '#1D2939',
-                                margin: '0'
-                            }}>
+        <div className={styles.memberHeaderContainer}>
+            <div className={styles.memberHeaderContent}>
+                <div className={styles.memberHeaderLeft}>
+                    <div className={styles.memberHeaderTitleContainer}>
+                        <div className={styles.memberHeaderTitleWrapper}>
+                            <h3 className={styles.memberHeaderTitle}>
                                 Member Overview: {memberName}
                             </h3>
                         </div>

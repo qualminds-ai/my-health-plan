@@ -12,6 +12,29 @@
     background: white;
 }
 
+.statsContainer {
+    padding: 24px;
+}
+
+.vectorIcon {
+    position: absolute;
+    top: 57px;
+    left: 8px;
+    z-index: 1;
+}
+
+.prioritySortIcon {
+    color: #8C8C8C;
+    font-weight: 400;
+    font-size: 10px;
+    margin-left: 5px;
+}
+
+.posColumnHeader {
+    max-width: 80px;
+    width: 80px;
+}
+
 .topSection {
     display: flex;
     justify-content: space-between;

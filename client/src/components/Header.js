@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { NAV_ITEMS } from '../constants';
+import styles from './Header.module.css';
 import LogoIcon from '../assets/header/Logo.svg';
 import FileIcon from '../assets/header/mdi_file.svg';
 import ExpandIcon from '../assets/header/fluent_arrow-expand-24-filled.svg';
@@ -28,103 +29,79 @@ const Header = ({ user, onLogout, onNavigate, activeTab = 'Dashboard' }) => {
   return (
     <header
       id="main-header"
-      style={{ background: '#898989', height: '60px', minHeight: '60px', width: '100%' }}
-      className="flex items-center">
-      <div className="flex items-center w-full px-6" style={{ minHeight: '60px' }}>
+      className={styles.header}>
+      <div className={styles.headerContainer}>
         {/* Logo and Brand */}
-        <div id="header-logo-brand" className="flex items-center" style={{ minWidth: 180 }}>
+        <div id="header-logo-brand" className={styles.logoBrand}>
           <img
             id="header-logo-image"
             src={LogoIcon}
             alt="Logo"
-            style={{ width: '34px', height: '34px' }}
+            className={styles.logoImage}
           />
           <span
             id="header-brand-text"
-            style={{ color: '#fff', fontWeight: 700, fontSize: '32px', marginLeft: 14, letterSpacing: 0.2, height: '38px', lineHeight: '38px', display: 'flex', alignItems: 'center' }}>
+            className={styles.brandText}>
             MyHealthPlan
           </span>
         </div>
+
         {/* Navigation */}
-        <nav id="main-navigation" className="flex" style={{ flex: 1, marginLeft: 60 }}>
-          {navItems.map((item, idx) => (<button
-            key={item.name}
-            id={`nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
-            onClick={() => handleNavClick(item.name)}
-            style={{
-              color: '#E1E1E1',
-              fontWeight: item.active ? 700 : 400,
-              fontSize: '13.089px',
-              fontStyle: 'normal',
-              lineHeight: 'normal',
-              background: 'none',
-              border: 'none',
-              outline: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              marginRight: idx !== navItems.length - 1 ? 22 : 0,
-              letterSpacing: 0.1,
-              transition: 'color 0.2s',
-              height: '60px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            {item.name === 'Dashboard' ? 'My Dashboard' : item.name}
-          </button>
+        <nav id="main-navigation" className={styles.navigation}>
+          {navItems.map((item, idx) => (
+            <button
+              key={item.name}
+              id={`nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+              onClick={() => handleNavClick(item.name)}
+              className={`${styles.navButton} ${item.active ? styles.navButtonActive : styles.navButtonInactive}`}
+              style={{ marginRight: idx !== navItems.length - 1 ? 22 : 0 }}
+            >
+              {item.name === 'Dashboard' ? 'My Dashboard' : item.name}
+            </button>
           ))}
         </nav>
+
         {/* Right icons and user */}
-        <div id="header-actions" className="flex items-center" style={{ minWidth: 320, justifyContent: 'flex-end', gap: 14 }}>
+        <div id="header-actions" className={styles.headerActions}>
           <img
             id="header-file-icon"
             src={FileIcon}
             alt="File"
-            style={{ width: '18px', height: '18px', aspectRatio: '1/1', filter: 'brightness(0) invert(1)', cursor: 'pointer' }}
+            className={styles.headerIcon}
           />
           <img
             id="header-expand-icon"
             src={ExpandIcon}
             alt="Expand"
-            style={{ width: '18px', height: '18px', aspectRatio: '1/1', filter: 'brightness(0) invert(1)', cursor: 'pointer' }}
+            className={styles.headerIcon}
           />
+
           {/* Globe + arrow */}
-          <span id="header-globe-dropdown" style={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }}>
-            <img src={GlobeIcon} alt="Globe" style={{ width: '18px', height: '18px', aspectRatio: '1/1', filter: 'brightness(0) invert(1)' }} />
-            <img src={ArrowIcon} alt="Arrow" style={{ width: '18px', height: '18px', aspectRatio: '1/1', marginLeft: -2, filter: 'brightness(0) invert(1)' }} />
+          <span id="header-globe-dropdown" className={styles.headerDropdown}>
+            <img src={GlobeIcon} alt="Globe" className={styles.headerIcon} />
+            <img src={ArrowIcon} alt="Arrow" className={styles.headerDropdownArrow} />
           </span>
+
           {/* Question + arrow */}
-          <span id="header-help-dropdown" style={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }}>
-            <img src={QuestionIcon} alt="Help" style={{ width: '18px', height: '18px', aspectRatio: '1/1', filter: 'brightness(0) invert(1)' }} />
-            <img src={ArrowIcon} alt="Arrow" style={{ width: '18px', height: '18px', aspectRatio: '1/1', marginLeft: -2, filter: 'brightness(0) invert(1)' }} />
+          <span id="header-help-dropdown" className={styles.headerDropdown}>
+            <img src={QuestionIcon} alt="Help" className={styles.headerIcon} />
+            <img src={ArrowIcon} alt="Arrow" className={styles.headerDropdownArrow} />
           </span>
           {/* User dropdown */}
-          <div id="header-user-dropdown" style={{ position: 'relative', marginLeft: 14 }}>
+          <div id="header-user-dropdown" className={styles.userDropdown}>
             <button
               id="user-menu-button"
-              style={{
-                color: '#fff',
-                fontWeight: 600,
-                fontSize: '13.09px',
-                fontStyle: 'normal',
-                lineHeight: 'normal',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-              }} onClick={() => setShowUserMenu((v) => !v)}
+              className={styles.userMenuButton}
+              onClick={() => setShowUserMenu((v) => !v)}
             >
               {user?.fullName || user?.full_name || user?.name || `${user?.first_name || ''} ${user?.last_name || ''}`.trim() || 'User'}{user?.role ? ` (${user.role})` : ''}
             </button>
             {showUserMenu && (
-              <div id="user-menu-dropdown" style={{ position: 'absolute', right: 0, top: '110%', background: '#fff', borderRadius: 6, boxShadow: '0 2px 8px rgba(0,0,0,0.15)', minWidth: 120, zIndex: 100 }}>
+              <div id="user-menu-dropdown" className={styles.userMenuDropdown}>
                 <button
                   id="logout-button"
                   onClick={handleLogout}
-                  style={{ width: '100%', padding: '8px 16px', background: 'none', border: 'none', color: '#333', textAlign: 'left', fontSize: 15, cursor: 'pointer', borderRadius: 6 }}
+                  className={styles.logoutButton}
                 >
                   Log out
                 </button>
