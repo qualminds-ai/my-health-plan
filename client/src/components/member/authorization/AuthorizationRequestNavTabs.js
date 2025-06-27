@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from '../../Member.module.css';
 
 const AuthorizationRequestNavTabs = ({ activeRequestTab, setActiveRequestTab }) => (
-    <div className={styles.flexItemsCenterMb4}>
-        <div className={styles.requestNavContainer}>
+    <div id="authorization-request-nav-tabs" className={styles.flexItemsCenterMb4}>
+        <div id="request-nav-container" className={styles.requestNavContainer}>
             <button
+                id="request-history-tab-button"
                 className={
                     `${styles.requestTabButton} ${activeRequestTab === 'Request History' ? styles.requestTabButtonActive : styles.requestTabButtonInactive}`
                 }
@@ -13,6 +15,7 @@ const AuthorizationRequestNavTabs = ({ activeRequestTab, setActiveRequestTab }) 
                 Request History
             </button>
             <button
+                id="request-detail-tab-button"
                 className={
                     `${styles.requestTabButton} ${activeRequestTab === '20250P000367' ? styles.requestTabButtonActive : styles.requestTabButtonInactive}`
                 }
@@ -23,5 +26,10 @@ const AuthorizationRequestNavTabs = ({ activeRequestTab, setActiveRequestTab }) 
         </div>
     </div>
 );
+
+AuthorizationRequestNavTabs.propTypes = {
+    activeRequestTab: PropTypes.string.isRequired,
+    setActiveRequestTab: PropTypes.func.isRequired
+};
 
 export default AuthorizationRequestNavTabs;

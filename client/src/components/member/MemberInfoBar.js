@@ -15,22 +15,22 @@ const MemberInfoBar = ({
     optOut
 }) => {
     return (
-        <div style={{
+        <div id="member-info-bar" style={{
             backgroundColor: '#F7F7F7',
             borderRadius: '13.091px',
             height: '72px',
             marginBottom: '20px'
         }}>
-            <div style={{ width: '100%' }} className="px-4">
-                <div className="flex py-3 items-center" style={{ height: '72px' }}>
+            <div id="member-info-bar-content" style={{ width: '100%' }} className="px-4">
+                <div id="member-info-bar-details" className="flex py-3 items-center" style={{ height: '72px' }}>
                     {/* Icon Column (Far Left) */}
-                    <div className="flex items-center justify-center mr-4">
-                        <img src={userIcon} alt="User" style={{ width: '24px', height: '24px' }} />
+                    <div id="member-info-icon-column" className="flex items-center justify-center mr-4">
+                        <img id="member-info-user-icon" src={userIcon} alt="User" style={{ width: '24px', height: '24px' }} />
                     </div>
 
                     {/* Member Details Column */}
-                    <div className="mr-6 flex flex-col" style={{ gap: '5px' }}>
-                        <div style={{
+                    <div id="member-details-column" className="mr-6 flex flex-col" style={{ gap: '5px' }}>
+                        <div id="member-name-display" style={{
                             fontFamily: 'Inter',
                             fontSize: '14px',
                             fontWeight: '600',
@@ -39,7 +39,7 @@ const MemberInfoBar = ({
                         }}>
                             {memberName}
                         </div>
-                        <div style={{
+                        <div id="member-basic-info" style={{
                             fontFamily: 'Inter',
                             fontSize: '11px',
                             fontWeight: '400',
@@ -51,10 +51,10 @@ const MemberInfoBar = ({
                     </div>
 
                     {/* Data Columns */}
-                    <div className="flex-1 flex justify-between">
+                    <div id="member-data-columns" className="flex-1 flex justify-between">
                         {/* Eligibility Column */}
-                        <div className="flex flex-col" style={{ gap: '5px' }}>
-                            <div style={{
+                        <div id="member-eligibility-column" className="flex flex-col" style={{ gap: '5px' }}>
+                            <div id="member-eligibility-label" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '9px',
                                 fontWeight: '400',
@@ -63,7 +63,7 @@ const MemberInfoBar = ({
                             }}>
                                 Eligibility
                             </div>
-                            <div style={{
+                            <div id="member-eligibility-value" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '11px',
                                 fontWeight: '500',
@@ -75,8 +75,8 @@ const MemberInfoBar = ({
                         </div>
 
                         {/* MRIN Column */}
-                        <div className="flex flex-col" style={{ gap: '5px' }}>
-                            <div style={{
+                        <div id="member-mrin-column" className="flex flex-col" style={{ gap: '5px' }}>
+                            <div id="member-mrin-label" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '9px',
                                 fontWeight: '400',
@@ -85,7 +85,7 @@ const MemberInfoBar = ({
                             }}>
                                 MRIN
                             </div>
-                            <div style={{
+                            <div id="member-mrin-value" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '11px',
                                 fontWeight: '500',
@@ -97,8 +97,8 @@ const MemberInfoBar = ({
                         </div>
 
                         {/* Language Column */}
-                        <div className="flex flex-col" style={{ gap: '5px' }}>
-                            <div style={{
+                        <div id="member-language-column" className="flex flex-col" style={{ gap: '5px' }}>
+                            <div id="member-language-label" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '9px',
                                 fontWeight: '400',
@@ -107,7 +107,7 @@ const MemberInfoBar = ({
                             }}>
                                 Language (1st)
                             </div>
-                            <div style={{
+                            <div id="member-language-value" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '11px',
                                 fontWeight: '500',
@@ -119,8 +119,8 @@ const MemberInfoBar = ({
                         </div>
 
                         {/* Programs Column */}
-                        <div className="flex flex-col" style={{ gap: '5px' }}>
-                            <div style={{
+                        <div id="member-programs-column" className="flex flex-col" style={{ gap: '5px' }}>
+                            <div id="member-programs-label" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '9px',
                                 fontWeight: '400',
@@ -129,7 +129,7 @@ const MemberInfoBar = ({
                             }}>
                                 Programs
                             </div>
-                            <div style={{
+                            <div id="member-programs-value" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '11px',
                                 fontWeight: '500',
@@ -141,8 +141,8 @@ const MemberInfoBar = ({
                         </div>
 
                         {/* BHP Column */}
-                        <div className="flex flex-col" style={{ gap: '5px' }}>
-                            <div style={{
+                        <div id="member-bhp-column" className="flex flex-col" style={{ gap: '5px' }}>
+                            <div id="member-bhp-label" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '9px',
                                 fontWeight: '400',
@@ -151,7 +151,7 @@ const MemberInfoBar = ({
                             }}>
                                 BHP
                             </div>
-                            <div style={{
+                            <div id="member-bhp-value" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '11px',
                                 fontWeight: '500',
@@ -163,8 +163,8 @@ const MemberInfoBar = ({
                         </div>
 
                         {/* Opt Out Column */}
-                        <div className="flex flex-col" style={{ gap: '5px' }}>
-                            <div style={{
+                        <div id="member-opt-out-column" className="flex flex-col" style={{ gap: '5px' }}>
+                            <div id="member-opt-out-label" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '9px',
                                 fontWeight: '400',
@@ -173,7 +173,7 @@ const MemberInfoBar = ({
                             }}>
                                 Opt out
                             </div>
-                            <div style={{
+                            <div id="member-opt-out-value" style={{
                                 fontFamily: 'Inter',
                                 fontSize: '11px',
                                 fontWeight: '500',

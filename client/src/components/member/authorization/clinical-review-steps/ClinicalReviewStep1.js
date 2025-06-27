@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * ClinicalReviewStep1 Component
@@ -14,12 +15,13 @@ const ClinicalReviewStep1 = ({
     return (
         <div className={styles.navigationSection}>
             {/* Guideline Selection Checkboxes */}
-            <div className={styles.guidelinesSelectionContainer}>
-                <span className={styles.guidelinesEditionLabel}>
+            <div id="guidelines-selection-container" className={styles.guidelinesSelectionContainer}>
+                <span id="guidelines-edition-label" className={styles.guidelinesEditionLabel}>
                     1st Edition
                 </span>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-aco"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -29,6 +31,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-isc"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -38,6 +41,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-grc"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -47,6 +51,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-mcm"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -56,6 +61,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-rfc"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -65,6 +71,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-hhc"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -74,6 +81,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-ccg"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -83,6 +91,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-tc"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -92,6 +101,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-dbhc"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -101,6 +111,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-pip"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -110,6 +121,7 @@ const ClinicalReviewStep1 = ({
                 </label>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
+                        id="guideline-checkbox-mcr"
                         type="checkbox"
                         className={`${styles.customCheckbox} ${styles.guidelinesCheckboxInput}`}
                     />
@@ -120,22 +132,23 @@ const ClinicalReviewStep1 = ({
             </div>
 
             {/* Quick Search */}
-            <div className={styles.quickSearchContainer}>
-                <span className={styles.quickSearchLabel}>
+            <div id="quick-search-container" className={styles.quickSearchContainer}>
+                <span id="quick-search-label" className={styles.quickSearchLabel}>
                     Quick Search
                 </span>
                 <input
+                    id="quick-search-input"
                     type="text"
                     defaultValue="DKA"
                     className={styles.quickSearchInput}
                 />
-                <button className={styles.quickSearchButton}>
+                <button id="quick-search-button" className={styles.quickSearchButton}>
                     Search
                 </button>
             </div>
 
             {/* Results Summary */}
-            <div className={styles.resultsContainer}>
+            <div id="search-results-container" className={styles.resultsContainer}>
                 6 results for DKA
                 <span className={styles.resultsFloatRight}>
                     (Results 1 - 6 of 6)
@@ -143,8 +156,8 @@ const ClinicalReviewStep1 = ({
             </div>
 
             {/* Guidelines Table */}
-            <div className={styles.guidelinesTableContainer}>
-                <table className={styles.guidelinesTable}>
+            <div id="guidelines-table-container" className={styles.guidelinesTableContainer}>
+                <table id="guidelines-table" className={styles.guidelinesTable}>
                     <thead>
                         <tr>
                             <th className={styles.guidelinesTableHeaderCell}>
@@ -185,6 +198,7 @@ const ClinicalReviewStep1 = ({
                     <tbody>
                         <tr>
                             <td
+                                id="guideline-cell-m-130"
                                 className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellCode}
                                 style={{ backgroundColor: selectedGuidelineRows.has('M-130') ? '#e4de77' : 'transparent' }}
                                 onClick={() => {
@@ -219,6 +233,7 @@ const ClinicalReviewStep1 = ({
                         </tr>
                         <tr>
                             <td
+                                id="guideline-cell-p-140"
                                 className={
                                     `${styles.guidelineTableCell} ${styles.guidelineTableCellCode} ${styles.guidelineTableCellSelectable} ${selectedGuidelineRows.has('P-140') ? styles.guidelineTableCellSelected : ''}`
                                 }
@@ -254,6 +269,7 @@ const ClinicalReviewStep1 = ({
                         </tr>
                         <tr>
                             <td
+                                id="guideline-cell-m-130-rrg"
                                 className={
                                     `${styles.guidelineTableCell} ${styles.guidelineTableCellCodeM130RRG} ${styles.guidelineTableCellSelectable} ${selectedGuidelineRows.has('M-130-RRG') ? styles.guidelineTableCellSelected : ''}`
                                 }
@@ -289,6 +305,7 @@ const ClinicalReviewStep1 = ({
                         </tr>
                         <tr>
                             <td
+                                id="guideline-cell-p-140-rrg"
                                 className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellCode}
                                 style={{ color: '#4444A2', backgroundColor: selectedGuidelineRows.has('P-140-RRG') ? '#e4de77' : 'transparent' }}
                                 onClick={() => {
@@ -323,6 +340,7 @@ const ClinicalReviewStep1 = ({
                         </tr>
                         <tr>
                             <td
+                                id="guideline-cell-oc-014"
                                 className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellCode}
                                 style={{ color: '#4444A2', backgroundColor: selectedGuidelineRows.has('OC-014') ? '#e4de77' : 'transparent' }}
                                 onClick={() => {
@@ -357,6 +375,7 @@ const ClinicalReviewStep1 = ({
                         </tr>
                         <tr>
                             <td
+                                id="guideline-cell-ccc-015"
                                 className={styles.guidelineTableCell + ' ' + styles.guidelineTableCellCode}
                                 style={{ color: '#4444A2', backgroundColor: selectedGuidelineRows.has('CCC-015') ? '#e4de77' : 'transparent' }}
                                 onClick={() => {
@@ -394,6 +413,12 @@ const ClinicalReviewStep1 = ({
             </div>
         </div>
     );
+};
+
+ClinicalReviewStep1.propTypes = {
+    styles: PropTypes.object.isRequired,
+    selectedGuidelineRows: PropTypes.instanceOf(Set).isRequired,
+    setSelectedGuidelineRows: PropTypes.func.isRequired
 };
 
 export default ClinicalReviewStep1;

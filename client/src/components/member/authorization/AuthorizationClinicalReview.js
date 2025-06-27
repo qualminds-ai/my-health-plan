@@ -102,6 +102,7 @@ const AuthorizationClinicalReview = ({
 
             {/* Navigation Controls */}
             <div
+                id="clinical-review-navigation-controls"
                 className={
                     clinicalReviewStep === 4
                         ? `${styles.navigationControls} ${styles.navigationControlsStep4}`
@@ -109,6 +110,7 @@ const AuthorizationClinicalReview = ({
                 }
             >
                 <button
+                    id="clinical-review-prev-button"
                     onClick={handleClinicalReviewPrev}
                     disabled={clinicalReviewStep === 1}
                     className={
@@ -124,6 +126,7 @@ const AuthorizationClinicalReview = ({
                     />
                 </button>
                 <button
+                    id="clinical-review-next-button"
                     onClick={clinicalReviewStep === 4 ? () => setActiveAuthTab('Closed') : handleClinicalReviewNext}
                     disabled={false}
                     className={

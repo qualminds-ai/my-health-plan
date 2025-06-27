@@ -19,8 +19,9 @@ const ActionButtons = ({
     onMedicalClick
 }) => {
     return (
-        <div className={styles.actionButtonsContainer}>
+        <div id="member-action-buttons-container" className={styles.actionButtonsContainer}>
             <button
+                id="member-star-button"
                 className={`${styles.actionButton} ${styles.actionButtonGrayscale}`}
                 onClick={onStarClick}
             >
@@ -28,6 +29,7 @@ const ActionButtons = ({
             </button>
 
             <button
+                id="member-call-button"
                 className={styles.actionButton}
                 onClick={onCallClick}
             >
@@ -35,6 +37,7 @@ const ActionButtons = ({
             </button>
 
             <button
+                id="member-text-chat-button"
                 className={styles.actionButton}
                 onClick={onTextChatClick}
             >
@@ -42,6 +45,7 @@ const ActionButtons = ({
             </button>
 
             <button
+                id="member-message-button"
                 className={styles.actionButton}
                 onClick={onMessageClick}
             >
@@ -49,6 +53,7 @@ const ActionButtons = ({
             </button>
 
             <button
+                id="member-watch-button"
                 className={styles.actionButton}
                 onClick={onWatchClick}
             >
@@ -56,6 +61,7 @@ const ActionButtons = ({
             </button>
 
             <button
+                id="member-medical-button"
                 className={`${styles.actionButton} ${styles.actionButtonMedical} ${styles.actionButtonGrayscale}`}
                 style={{
                     backgroundImage: `url(${medicalIcon})`

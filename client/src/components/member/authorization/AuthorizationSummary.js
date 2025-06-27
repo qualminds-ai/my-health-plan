@@ -2,10 +2,10 @@ import React from 'react';
 import styles from '../../Member.module.css';
 
 const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) => (
-    <div className={styles.authorizationContent}>
-        <h2 className={styles.authorizationHeader}>Authorization Request Summary</h2>
-        <div>
-            <div className={styles.authGridLayout}>
+    <div id="authorization-summary" className={styles.authorizationContent}>
+        <h2 id="authorization-summary-header" className={styles.authorizationHeader}>Authorization Request Summary</h2>
+        <div id="authorization-summary-content">
+            <div id="authorization-details-grid" className={styles.authGridLayout}>
                 <div className={styles.authGridItem}>
                     <div className={styles.authGridLabel}>Authorization #</div>
                     <div className={styles.authGridValue}>2025OP000367</div>
@@ -25,13 +25,13 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
                 <div className={styles.authGridItem}>
                     <div className={styles.authGridLabel}>Status</div>
                     <div className={styles.flexCenterGap10}>
-                        <select className={styles.authStatusSelect}>
+                        <select id="authorization-status-select" className={styles.authStatusSelect}>
                             <option>Pending</option>
                             <option>Approve</option>
                             <option>Send to Review</option>
                             <option>Deny</option>
                         </select>
-                        <button className={`bg-gray-500 rounded hover:bg-gray-600 ${styles.actionButton}`}>
+                        <button id="check-guidelines-button" className={`bg-gray-500 rounded hover:bg-gray-600 ${styles.actionButton}`}>
                             Check Guidelines
                         </button>
                     </div>

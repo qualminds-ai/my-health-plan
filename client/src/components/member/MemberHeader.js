@@ -13,12 +13,12 @@ const MemberHeader = ({
     onMedicalClick
 }) => {
     return (
-        <div className={styles.memberHeaderContainer}>
-            <div className={styles.memberHeaderContent}>
-                <div className={styles.memberHeaderLeft}>
-                    <div className={styles.memberHeaderTitleContainer}>
-                        <div className={styles.memberHeaderTitleWrapper}>
-                            <h3 className={styles.memberHeaderTitle}>
+        <div id="member-header-container" className={styles.memberHeaderContainer}>
+            <div id="member-header-content" className={styles.memberHeaderContent}>
+                <div id="member-header-left" className={styles.memberHeaderLeft}>
+                    <div id="member-header-title-container" className={styles.memberHeaderTitleContainer}>
+                        <div id="member-header-title-wrapper" className={styles.memberHeaderTitleWrapper}>
+                            <h3 id="member-header-title" className={styles.memberHeaderTitle}>
                                 Member Overview: {memberName}
                             </h3>
                         </div>

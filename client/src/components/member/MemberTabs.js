@@ -8,12 +8,13 @@ const MemberTabs = ({
     onTabChange
 }) => {
     return (
-        <div className={styles.memberTabs}>
-            <div className={styles.memberTabsContainer}>
-                <ul className={styles.memberTabsList}>
+        <div id="member-tabs" className={styles.memberTabs}>
+            <div id="member-tabs-container" className={styles.memberTabsContainer}>
+                <ul id="member-tabs-list" className={styles.memberTabsList}>
                     {tabs.map((tab) => (
-                        <li className={styles.memberTabItem} key={tab}>
+                        <li id={`member-tab-item-${tab.toLowerCase().replace(/\s+/g, '-')}`} className={styles.memberTabItem} key={tab}>
                             <button
+                                id={`member-tab-button-${tab.toLowerCase().replace(/\s+/g, '-')}`}
                                 className={`${styles.memberTabButton} ${activeTab === tab ? styles.memberTabButtonActive : ''}`}
                                 onClick={() => onTabChange(tab)}
                             >
