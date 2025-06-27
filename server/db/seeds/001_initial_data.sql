@@ -61,10 +61,10 @@ WHERE NOT EXISTS (SELECT 1 FROM providers WHERE providers.provider_code = v.prov
 -- Insert sample users (only if they don't exist) - all using the same password: 'password123'
 INSERT INTO users (id, username, email, password_hash, full_name, role, created_at, updated_at) 
 SELECT * FROM (VALUES
-(1, 'admin', 'admin@myhealthplan.com', '$2b$10$UkbPFVCy7mrJrOjaQ4V4OeVkH7.i6/IAML2k1n9o.7efwpUScN.VW', 'System Administrator', 'admin', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 'maria.hartsell', 'maria.hartsell@myhealthplan.com', '$2b$10$UkbPFVCy7mrJrOjaQ4V4OeVkH7.i6/IAML2k1n9o.7efwpUScN.VW', 'Maria Hartsell', 'admin', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(3, 'john.doe', 'john.doe@myhealthplan.com', '$2b$10$UkbPFVCy7mrJrOjaQ4V4OeVkH7.i6/IAML2k1n9o.7efwpUScN.VW', 'John Doe', 'user', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 'jane.smith', 'jane.smith@myhealthplan.com', '$2b$10$UkbPFVCy7mrJrOjaQ4V4OeVkH7.i6/IAML2k1n9o.7efwpUScN.VW', 'Jane Smith', 'user', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+(1, 'admin', 'admin@myhealthplan.com', '$2b$10$UkbPFVCy7mrJrOjaQ4V4OeVkH7.i6/IAML2k1n9o.7efwpUScN.VW', 'System Admin', 'SA', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 'maria.hartsell', 'maria.hartsell@myhealthplan.com', '$2b$10$UkbPFVCy7mrJrOjaQ4V4OeVkH7.i6/IAML2k1n9o.7efwpUScN.VW', 'Maria Hartsell', 'UM', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(3, 'elise.tran', 'elise.tran@myhealthplan.com', '$2b$10$UkbPFVCy7mrJrOjaQ4V4OeVkH7.i6/IAML2k1n9o.7efwpUScN.VW', 'Elise Tran', 'UM, SNF', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(4, 'karen.white', 'karen.white@myhealthplan.com', '$2b$10$UkbPFVCy7mrJrOjaQ4V4OeVkH7.i6/IAML2k1n9o.7efwpUScN.VW', 'Karen White', 'CM', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ) AS v(id, username, email, password_hash, full_name, role, created_at, updated_at)
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE users.username = v.username);
 

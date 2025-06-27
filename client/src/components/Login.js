@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Login.module.css';
-import authService from '../services/authService';
 import loginBackgroundImage from '../assets/login/background-image.jpg';
 
 const Login = ({ onLogin }) => {
@@ -33,8 +32,8 @@ const Login = ({ onLogin }) => {
     setError('');
 
     try {
-      const response = await authService.login(formData);
-      onLogin(response.user, response.token);
+      // Pass credentials to the new auth system
+      await onLogin(formData);
     } catch (err) {
       console.error('Login error:', err);
       setError(err.message || 'Login failed. Please try again.');

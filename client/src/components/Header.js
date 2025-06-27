@@ -9,7 +9,16 @@ import GlobeIcon from '../assets/header/ion_earth-sharp.svg';
 import QuestionIcon from '../assets/header/mingcute_question-fill.svg';
 import ArrowIcon from '../assets/header/weui_arrow-filled.svg';
 
-const Header = ({ user, onLogout, onNavigate, activeTab = 'Dashboard' }) => {
+const Header = ({
+  user,
+  onLogout,
+  onNavigate,
+  activeTab = 'Dashboard',
+  // Persona props
+  availablePersonas = [],
+  activePersona = null,
+  onPersonaSwitch = () => { }
+}) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const navItems = NAV_ITEMS.map(item => ({
     ...item,
@@ -26,6 +35,16 @@ const Header = ({ user, onLogout, onNavigate, activeTab = 'Dashboard' }) => {
     setShowUserMenu(false);
     if (onLogout) onLogout();
   };
+
+  const handlePersonaSwitch = (personaId) => {
+    setShowUserMenu(false);
+    if (onPersonaSwitch) onPersonaSwitch(personaId);
+  };
+
+  // Get display name and role
+  const displayName = user?.full_name || user?.fullName || user?.name || `${user?.first_name || ''} ${user?.last_name || ''}`.trim() || 'User';
+  const displayRole = user?.displayRole || user?.role || '';
+
   return (
     <header
       id="main-header"
@@ -94,10 +113,38 @@ const Header = ({ user, onLogout, onNavigate, activeTab = 'Dashboard' }) => {
               className={styles.userMenuButton}
               onClick={() => setShowUserMenu((v) => !v)}
             >
-              {user?.fullName || user?.full_name || user?.name || `${user?.first_name || ''} ${user?.last_name || ''}`.trim() || 'User'}{user?.role ? ` (${user.role})` : ''}
+              {displayName}{displayRole ? ` (${displayRole})` : ''}
+              <span style={{
+                marginLeft: '6px',
+                fontSize: '10px',
+                opacity: 0.8,
+                transition: 'transform 0.2s ease',
+                transform: showUserMenu ? 'rotate(180deg)' : 'rotate(0deg)'
+              }}>
+                ▼
+              </span>
             </button>
             {showUserMenu && (
               <div id="user-menu-dropdown" className={styles.userMenuDropdown}>
+                {/* Show persona options if more than one is available */}
+                {availablePersonas.length > 1 && (
+                  <>
+                    <div className={styles.menuSection}>
+                      <div className={styles.menuSectionTitle}>Switch User</div>
+                      {availablePersonas.map((persona) => (
+                        <button
+                          key={persona.id}
+                          onClick={() => handlePersonaSwitch(persona.id)}
+                          className={`${styles.personaButton} ${activePersona?.id === persona.id ? styles.activePersona : ''
+                            }`}
+                        >
+                          {persona.full_name} ({persona.role})
+                        </button>
+                      ))}
+                    </div>
+                    <div className={styles.menuDivider}></div>
+                  </>
+                )}
                 <button
                   id="logout-button"
                   onClick={handleLogout}
@@ -121,11 +168,24 @@ Header.propTypes = {
     full_name: PropTypes.string,
     first_name: PropTypes.string,
     last_name: PropTypes.string,
-    role: PropTypes.string
+    role: PropTypes.string,
+    displayRole: PropTypes.string,
+    email: PropTypes.string
   }),
   onLogout: PropTypes.func,
   onNavigate: PropTypes.func,
-  activeTab: PropTypes.string
+  activeTab: PropTypes.string,
+  availablePersonas: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    full_name: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired
+  })),
+  activePersona: PropTypes.shape({
+    id: PropTypes.string,
+    full_name: PropTypes.string,
+    role: PropTypes.string
+  }),
+  onPersonaSwitch: PropTypes.func
 };
 
 export default Header;

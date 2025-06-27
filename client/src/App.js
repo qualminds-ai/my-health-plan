@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Member from './components/Member';
 import memberService from './services/memberService';
-import { ROUTES, STORAGE_KEYS } from './constants';
+import { useAuth } from './hooks/useAuth';
+import { ROUTES } from './constants';
 import './App.css';
 
 /**
  * Member Page Component
  * Handles member detail view
  */
-const MemberPage = ({ user, onLogout, onNavigate }) => {
+const MemberPage = ({
+  user,
+  onLogout,
+  onNavigate,
+  activeMode,
+  scenarios,
+  availablePersonas,
+  activePersona,
+  onPersonaSwitch,
+  getMemberSepsisInfo,
+  hasScenario
+}) => {
   const { memberNumber } = useParams();
   const [memberData, setMemberData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -79,58 +92,60 @@ const MemberPage = ({ user, onLogout, onNavigate }) => {
       onLogout={onLogout}
       onBack={() => navigate(ROUTES.DASHBOARD)}
       onNavigate={onNavigate}
+      // Pass user mode props
+      activeMode={activeMode}
+      scenarios={scenarios}
+      // Pass persona props
+      availablePersonas={availablePersonas}
+      activePersona={activePersona}
+      onPersonaSwitch={onPersonaSwitch}
+      // Pass sepsis scenario functions
+      getMemberSepsisInfo={getMemberSepsisInfo}
+      hasScenario={hasScenario}
     />
   );
+};
+
+MemberPage.propTypes = {
+  user: PropTypes.object.isRequired,
+  onLogout: PropTypes.func.isRequired,
+  onNavigate: PropTypes.func.isRequired,
+  activeMode: PropTypes.string,
+  scenarios: PropTypes.arrayOf(PropTypes.string),
+  availablePersonas: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    full_name: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired
+  })),
+  activePersona: PropTypes.shape({
+    id: PropTypes.string,
+    full_name: PropTypes.string,
+    role: PropTypes.string
+  }),
+  onPersonaSwitch: PropTypes.func,
+  getMemberSepsisInfo: PropTypes.func,
+  hasScenario: PropTypes.func
 };
 
 /**
  * Main Application Component
  */
 function App() {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const auth = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    initializeAuth();
-  }, []);
-
-  const initializeAuth = () => {
+  const handleLogin = async (credentials) => {
     try {
-      const savedToken = localStorage.getItem(STORAGE_KEYS.TOKEN);
-      const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
-
-      if (savedToken && savedUser) {
-        setToken(savedToken);
-        setUser(JSON.parse(savedUser));
-      }
+      await auth.login(credentials);
+      // Navigation is handled inside auth.login()
     } catch (error) {
-      console.error('Error parsing saved user data:', error);
-      clearAuthData();
-    } finally {
-      setLoading(false);
+      console.error('Login error:', error);
+      // Error is handled by the auth hook
     }
   };
 
-  const clearAuthData = () => {
-    localStorage.removeItem(STORAGE_KEYS.TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.USER);
-    setUser(null);
-    setToken(null);
-  };
-
-  const handleLogin = (userData, userToken) => {
-    setUser(userData);
-    setToken(userToken);
-    localStorage.setItem(STORAGE_KEYS.TOKEN, userToken);
-    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userData));
-    navigate(ROUTES.DASHBOARD);
-  };
-
   const handleLogout = () => {
-    clearAuthData();
-    navigate(ROUTES.LOGIN);
+    auth.logout();
   };
 
   const handleMemberClick = (memberData) => {
@@ -152,9 +167,7 @@ function App() {
     }
   };
 
-  const isAuthenticated = !!(user && token);
-
-  if (loading) {
+  if (auth.loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" aria-label="Loading">
@@ -168,16 +181,52 @@ function App() {
     <div className="App">
       <Routes>
         <Route path={ROUTES.LOGIN} element={<Login onLogin={handleLogin} />} />
-        {isAuthenticated ? (
+        {auth.isAuthenticated() ? (
           <>
+            <Route path="/" element={<Dashboard
+              user={auth.user}
+              onLogout={handleLogout}
+              onMemberClick={handleMemberClick}
+              onNavigate={handleNavigation}
+              // Pass user mode props
+              activeMode={auth.activeMode}
+              scenarios={auth.scenarios}
+              availableModes={auth.availableModes}
+              switchUserMode={auth.switchUserMode}
+              toggleScenario={auth.toggleScenario}
+              // Pass persona props
+              availablePersonas={auth.availablePersonas}
+              activePersona={auth.activePersona}
+              onPersonaSwitch={auth.switchPersona}
+              // Pass sepsis scenario functions
+              applySepsisModifications={auth.applySepsisModifications}
+              getSepsisModifiedStats={auth.getSepsisModifiedStats}
+              shouldHideArrow={auth.shouldHideArrow}
+              hasScenario={auth.hasScenario}
+            />} />
             <Route
               path={ROUTES.DASHBOARD}
               element={
                 <Dashboard
-                  user={user}
+                  user={auth.user}
                   onLogout={handleLogout}
                   onMemberClick={handleMemberClick}
                   onNavigate={handleNavigation}
+                  // Pass user mode props
+                  activeMode={auth.activeMode}
+                  scenarios={auth.scenarios}
+                  availableModes={auth.availableModes}
+                  switchUserMode={auth.switchUserMode}
+                  toggleScenario={auth.toggleScenario}
+                  // Pass persona props
+                  availablePersonas={auth.availablePersonas}
+                  activePersona={auth.activePersona}
+                  onPersonaSwitch={auth.switchPersona}
+                  // Pass sepsis scenario functions
+                  applySepsisModifications={auth.applySepsisModifications}
+                  getSepsisModifiedStats={auth.getSepsisModifiedStats}
+                  shouldHideArrow={auth.shouldHideArrow}
+                  hasScenario={auth.hasScenario}
                 />
               }
             />
@@ -185,9 +234,19 @@ function App() {
               path="/member/:memberNumber"
               element={
                 <MemberPage
-                  user={user}
+                  user={auth.user}
                   onLogout={handleLogout}
                   onNavigate={handleNavigation}
+                  // Pass user mode props
+                  activeMode={auth.activeMode}
+                  scenarios={auth.scenarios}
+                  // Pass persona props
+                  availablePersonas={auth.availablePersonas}
+                  activePersona={auth.activePersona}
+                  onPersonaSwitch={auth.switchPersona}
+                  // Pass sepsis scenario functions
+                  getMemberSepsisInfo={auth.getMemberSepsisInfo}
+                  hasScenario={auth.hasScenario}
                 />
               }
             />
@@ -195,10 +254,25 @@ function App() {
               path="*"
               element={
                 <Dashboard
-                  user={user}
+                  user={auth.user}
                   onLogout={handleLogout}
                   onMemberClick={handleMemberClick}
                   onNavigate={handleNavigation}
+                  // Pass user mode props
+                  activeMode={auth.activeMode}
+                  scenarios={auth.scenarios}
+                  availableModes={auth.availableModes}
+                  switchUserMode={auth.switchUserMode}
+                  toggleScenario={auth.toggleScenario}
+                  // Pass persona props
+                  availablePersonas={auth.availablePersonas}
+                  activePersona={auth.activePersona}
+                  onPersonaSwitch={auth.switchPersona}
+                  // Pass sepsis scenario functions
+                  applySepsisModifications={auth.applySepsisModifications}
+                  getSepsisModifiedStats={auth.getSepsisModifiedStats}
+                  shouldHideArrow={auth.shouldHideArrow}
+                  hasScenario={auth.hasScenario}
                 />
               }
             />

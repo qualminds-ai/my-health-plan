@@ -23,7 +23,6 @@ const MemberInfoBar = ({
         }}>
             <div id="member-info-bar-content" style={{ width: '100%' }} className="px-4">
                 <div id="member-info-bar-details" className="flex py-3 items-center" style={{ height: '72px' }}>
-                    {/* Icon Column (Far Left) */}
                     <div id="member-info-icon-column" className="flex items-center justify-center mr-4">
                         <img id="member-info-user-icon" src={userIcon} alt="User" style={{ width: '24px', height: '24px' }} />
                     </div>

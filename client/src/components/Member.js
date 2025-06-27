@@ -1,4 +1,5 @@
 ﻿import React, { useState, useRef, useEffect, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import Header from './Header';
 import MemberHeader from './member/MemberHeader';
 import MemberInfoBar from './member/MemberInfoBar';
@@ -17,7 +18,19 @@ import textDocIcon from '../assets/authorizations/text-doc-icon.png';
 
 // Member Component with hash-based routing for deep linking and browser navigation
 
-const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate }) => {
+const Member = ({
+  user,
+  memberData: propMemberData,
+  onLogout,
+  onBack,
+  onNavigate,
+  activeMode,
+  scenarios,
+  availablePersonas,
+  activePersona,
+  onPersonaSwitch,
+  hasScenario
+}) => {
   const topRef = useRef(null);
   const authContentRef = useRef(null);
 
@@ -388,7 +401,15 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
   return (
     <div className="min-h-screen">
       <div ref={topRef} id="top"></div>
-      <Header user={user} onLogout={onLogout} onNavigate={handleHeaderNavigation} activeTab="Members" />      {/* Main Content */}
+      <Header
+        user={user}
+        onLogout={onLogout}
+        onNavigate={handleHeaderNavigation}
+        activeTab="Members"
+        availablePersonas={availablePersonas}
+        activePersona={activePersona}
+        onPersonaSwitch={onPersonaSwitch}
+      />      {/* Main Content */}
       <div className={styles.mainContent}>
         {/* Member Header Content */}
         <MemberHeader
@@ -544,7 +565,43 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
   );
 };
 
+Member.propTypes = {
+  user: PropTypes.object.isRequired,
+  memberData: PropTypes.object,
+  onLogout: PropTypes.func.isRequired,
+  onBack: PropTypes.func,
+  onNavigate: PropTypes.func,
+  activeMode: PropTypes.string,
+  scenarios: PropTypes.arrayOf(PropTypes.string),
+  availablePersonas: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    full_name: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired
+  })),
+  activePersona: PropTypes.shape({
+    id: PropTypes.string,
+    full_name: PropTypes.string,
+    role: PropTypes.string
+  }),
+  onPersonaSwitch: PropTypes.func,
+  hasScenario: PropTypes.func
+};
+
+Member.defaultProps = {
+  memberData: null,
+  onBack: null,
+  onNavigate: null,
+  activeMode: 'UM',
+  scenarios: []
+};
+
 export default Member;
+
+
+
+
+
+
 
 
 

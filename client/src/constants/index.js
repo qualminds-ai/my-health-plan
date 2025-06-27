@@ -23,7 +23,10 @@ export const ROUTES = {
 export const STORAGE_KEYS = {
     TOKEN: 'token',
     USER: 'user',
-    PREFERENCES: 'userPreferences'
+    PREFERENCES: 'userPreferences',
+    USER_MODE: 'userMode',
+    USER_SCENARIOS: 'userScenarios',
+    ACTIVE_PERSONA: 'activePersona'
 };
 
 // Application Messages

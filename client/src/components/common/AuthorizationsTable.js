@@ -3,8 +3,26 @@ import PropTypes from 'prop-types';
 import styles from '../Dashboard.module.css';
 import VectorRightIcon from '../../assets/dashboard/Vector-right.svg';
 
-const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDateTime }) => {
-    const getPriorityClass = (priority) => {
+/**
+ * Authorizations Table with mode and scenario support
+ */
+const AuthorizationsTable = ({
+    authorizations,
+    onRowClick,
+    formatDate,
+    formatDateTime,
+    userMode,
+    scenarios,
+    shouldHideArrow = false,
+    hasScenario
+}) => {
+    const getPriorityClass = (priority, auth) => {
+        // Special case for authorization 2025OP000312 ONLY when sepsis scenario is active
+        if (hasScenario?.('sepsis') && auth?.authorization_number === '2025OP000312') {
+            return styles.specialBlue;
+        }
+
+        // Normal priority-based styling (no special blue by default)
         switch (priority?.toLowerCase()) {
             case 'high': return styles.high;
             case 'medium': return styles.medium;
@@ -13,9 +31,71 @@ const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDat
         }
     };
 
+    // Transform data based on user mode (scenarios are handled in useUserMode hook)
+    const transformAuthorizationData = (auth) => {
+        const transformed = { ...auth };
+        // Authorization modifications are now handled in useUserMode applySepsisModifications
+        return transformed;
+    };
+
+    // Filter and transform authorizations based on mode
+    const getFilteredAuthorizations = () => {
+        let filtered = authorizations.map(transformAuthorizationData);
+
+        // Apply mode-specific filtering
+        switch (userMode) {
+            case 'SNF':
+                // SNF users see only certain types of authorizations
+                filtered = filtered.filter(auth =>
+                    auth.pos?.includes('Skilled Nursing') ||
+                    auth.review_type === 'Concurrent Review'
+                );
+                break;
+            case 'CM':
+                // Case managers see authorizations requiring case management
+                filtered = filtered.filter(auth =>
+                    auth.priority === 'High' ||
+                    auth.status === 'Appeal' ||
+                    scenarios.includes('sepsis')
+                );
+                break;
+            case 'UM':
+            default:
+                // UM users see all authorizations
+                break;
+        }
+
+        return filtered;
+    };
+
+    // Check if arrow should be shown (remove for sepsis scenario)
+    const shouldShowArrow = () => {
+        // If shouldHideArrow prop is true, don't show the arrow
+        if (shouldHideArrow) {
+            return false;
+        }
+
+        const filteredAuths = getFilteredAuthorizations();
+        return filteredAuths.length > 0;
+    };
+
+    // Get row styling based on scenario
+    const getRowStyling = (auth) => {
+        let className = styles.tableRow;
+
+        // Special styling for sepsis scenario
+        if (scenarios.includes('sepsis') && auth.member_name === 'Robert Abbott') {
+            className += ` ${styles.sepsisHighlight}`;
+        }
+
+        return className;
+    };
+
+    const filteredAuthorizations = getFilteredAuthorizations();
+
     return (
         <div className={styles.tableContainer}>
-            {authorizations.length > 0 && (
+            {shouldShowArrow() && (
                 <div className={styles.vectorIcon}>
                     <img src={VectorRightIcon} alt="Row indicator" width="14" height="18" />
                 </div>
@@ -43,10 +123,10 @@ const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDat
                     </tr>
                 </thead>
                 <tbody className={styles.tableBody}>
-                    {authorizations.map((auth, idx) => {
+                    {filteredAuthorizations.map((auth, idx) => {
                         const memberRowId = auth.member_number || `MEM${String(idx + 1).padStart(3, '0')}`;
-                        const priorityClass = getPriorityClass(auth.priority);
-                        const rowClass = styles.tableRow;
+                        const priorityClass = getPriorityClass(auth.priority, auth);
+                        const rowClass = getRowStyling(auth);
 
                         return (
                             <tr
@@ -54,6 +134,7 @@ const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDat
                                 id={`member-row-${memberRowId}`}
                                 data-member-id={auth.member_id}
                                 data-authorization-number={auth.authorization_number}
+                                data-scenario={scenarios.includes('sepsis') && auth.member_name === 'Robert Abbott' ? 'sepsis' : ''}
                                 className={rowClass}
                                 onClick={() => onRowClick(auth)}
                             >
@@ -72,7 +153,9 @@ const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDat
                                 >
                                     {auth.pos}
                                 </td>
-                                <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.review_type}</td>
+                                <td className={`${styles.tableCell} ${styles.secondary} ${scenarios.includes('sepsis') && auth.member_name === 'Robert Abbott' ? styles.typeHighlight : ''}`}>
+                                    {auth.review_type}
+                                </td>
                                 <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.member_name}</td>
                                 <td className={`${styles.tableCell} ${styles.primary}`}>{auth.approved_days}</td>
                                 <td className={`${styles.tableCell} ${styles.primary}`}>{formatDateTime(auth.next_review_date)}</td>
@@ -81,6 +164,8 @@ const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDat
                                     <button
                                         id={`action-menu-${memberRowId}`}
                                         className={styles.actionButton}
+                                        type="button"
+                                        aria-label="Open action menu"
                                     >
                                         <svg width="20" height="5" viewBox="0 0 20 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="2.5" cy="2.5" r="2.5" fill="#02060E" />
@@ -94,6 +179,25 @@ const AuthorizationsTable = ({ authorizations, onRowClick, formatDate, formatDat
                     })}
                 </tbody>
             </table>
+
+            {/* Mode-specific empty states */}
+            {filteredAuthorizations.length === 0 && (
+                <div className={styles.emptyState}>
+                    <svg className={styles.emptyIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <h3 className={styles.emptyTitle}>
+                        {userMode === 'SNF' && 'No SNF authorizations'}
+                        {userMode === 'CM' && 'No case management tasks'}
+                        {userMode === 'UM' && 'No authorizations'}
+                    </h3>
+                    <p className={styles.emptyText}>
+                        {userMode === 'SNF' && 'No skilled nursing facility authorizations to display.'}
+                        {userMode === 'CM' && 'No high-priority or appeal cases requiring case management.'}
+                        {userMode === 'UM' && 'Get started by creating a new authorization.'}
+                    </p>
+                </div>
+            )}
         </div>
     );
 };
@@ -102,7 +206,18 @@ AuthorizationsTable.propTypes = {
     authorizations: PropTypes.arrayOf(PropTypes.object).isRequired,
     onRowClick: PropTypes.func.isRequired,
     formatDate: PropTypes.func.isRequired,
-    formatDateTime: PropTypes.func.isRequired
+    formatDateTime: PropTypes.func.isRequired,
+    userMode: PropTypes.string,
+    scenarios: PropTypes.arrayOf(PropTypes.string),
+    shouldHideArrow: PropTypes.bool,
+    hasScenario: PropTypes.func
+};
+
+AuthorizationsTable.defaultProps = {
+    userMode: 'UM',
+    scenarios: [],
+    shouldHideArrow: false,
+    hasScenario: () => false
 };
 
 export default AuthorizationsTable;

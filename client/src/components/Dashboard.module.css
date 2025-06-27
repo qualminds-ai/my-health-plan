@@ -38,9 +38,10 @@
 .topSection {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-top: 32px;
     margin-bottom: 16px;
+    gap: 20px;
 }
 
 .leftSection {
@@ -357,6 +358,10 @@
     background: #E0E0E0;
 }
 
+.priorityStrip.specialBlue {
+    background: #0077B6;
+}
+
 .tableCell {
     padding: 12px;
     font-size: 10px;
@@ -548,4 +553,120 @@
     font-size: 14px;
     color: #b91c1c;
     margin-top: 4px;
+}
+
+.typeHighlight {
+    background-color: #fff2cc !important;
+    font-weight: 600 !important;
+    color: #d69e2e !important;
+}
+
+/* Mode switcher integration */
+.dashboardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dashboardHeaderLeft {
+    flex: 1;
+}
+
+.dashboardHeaderRight {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* User mode indicator */
+.modeIndicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.modeIndicatorIcon {
+    font-size: 14px;
+}
+
+/* Sepsis Scenario Controls */
+.scenarioControls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+}
+
+.scenarioButton {
+    padding: 8px 16px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.scenarioButton:hover {
+    background: #5a6268;
+}
+
+.scenarioButton.scenarioActive {
+    background: #dc3545;
+    animation: pulse 2s infinite;
+}
+
+.scenarioButton.scenarioActive:hover {
+    background: #c82333;
+}
+
+.scenarioHelp {
+    font-size: 11px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+/* Special blue background for authorization 2025OP000312 during sepsis scenario */
+.specialBlue {
+    background-color: #0077B6 !important;
+}
+
+/* Enhanced stats cards for different modes */
+.statsRow.snfMode .statsCard:first-child {
+    border-left: 4px solid #28a745;
+}
+
+.statsRow.cmMode .statsCard:first-child {
+    border-left: 4px solid #ffc107;
+}
+
+.statsRow.umMode .statsCard:first-child {
+    border-left: 4px solid #007bff;
 }

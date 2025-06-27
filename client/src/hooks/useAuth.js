@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { STORAGE_KEYS, ROUTES, MESSAGES } from '../constants';
 import authService from '../services/authService';
+import { useUserMode } from './useUserMode';
 
 /**
- * Custom hook for authentication management
+ * Enhanced Custom hook for authentication management with user mode support
  */
 export const useAuth = () => {
-    const [user, setUser] = useState(null);
+    const [baseUser, setBaseUser] = useState(null);
     const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,19 +16,26 @@ export const useAuth = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Initialize authentication state
-    useEffect(() => {
-        initializeAuth();
+    // Initialize user mode management
+    const userModeState = useUserMode(baseUser);
+
+    const clearAuthData = useCallback(() => {
+        localStorage.removeItem(STORAGE_KEYS.TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.USER);
+        setBaseUser(null);
+        setToken(null);
+        setError(null);
     }, []);
 
-    const initializeAuth = () => {
+    // Initialize authentication state
+    const initializeAuth = useCallback(() => {
         try {
             const savedToken = localStorage.getItem(STORAGE_KEYS.TOKEN);
             const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
 
             if (savedToken && savedUser) {
                 setToken(savedToken);
-                setUser(JSON.parse(savedUser));
+                setBaseUser(JSON.parse(savedUser));
             }
         } catch (error) {
             console.error('Error parsing saved user data:', error);
@@ -35,7 +43,11 @@ export const useAuth = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [clearAuthData]);
+
+    useEffect(() => {
+        initializeAuth();
+    }, [initializeAuth]);
 
     const login = async (credentials) => {
         try {
@@ -46,7 +58,7 @@ export const useAuth = () => {
 
             if (response.token && response.user) {
                 setToken(response.token);
-                setUser(response.user);
+                setBaseUser(response.user);
 
                 localStorage.setItem(STORAGE_KEYS.TOKEN, response.token);
                 localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user));
@@ -78,32 +90,45 @@ export const useAuth = () => {
             console.error('Logout error:', error);
             // Continue with logout even if API call fails
         } finally {
+            // Clear sepsis scenario on logout
+            userModeState.clearSepsisScenario?.();
             clearAuthData();
             navigate(ROUTES.LOGIN, { replace: true });
             setLoading(false);
         }
     };
 
-    const clearAuthData = () => {
-        localStorage.removeItem(STORAGE_KEYS.TOKEN);
-        localStorage.removeItem(STORAGE_KEYS.USER);
-        setUser(null);
-        setToken(null);
-        setError(null);
-    };
-
     const isAuthenticated = () => {
-        return !!(user && token);
+        return !!(userModeState.user && token);
     };
 
     return {
-        user,
+        user: userModeState.user,
         token,
-        loading,
+        loading: loading || userModeState.loading,
         error,
         login,
         logout,
         isAuthenticated,
-        clearError: () => setError(null)
+        clearError: () => setError(null),
+        // User mode functions
+        activeMode: userModeState.activeMode,
+        scenarios: userModeState.scenarios,
+        switchUserMode: userModeState.switchUserMode,
+        toggleScenario: userModeState.toggleScenario,
+        hasScenario: userModeState.hasScenario,
+        resetMode: userModeState.resetMode,
+        availableModes: userModeState.availableModes,
+        // Persona functions
+        activePersona: userModeState.activePersona,
+        availablePersonas: userModeState.availablePersonas,
+        switchPersona: userModeState.switchPersona,
+        // Sepsis scenario functions
+        applySepsisModifications: userModeState.applySepsisModifications,
+        getSepsisModifiedStats: userModeState.getSepsisModifiedStats,
+        shouldHideArrow: userModeState.shouldHideArrow,
+        getMemberSepsisInfo: userModeState.getMemberSepsisInfo,
+        clearSepsisScenario: userModeState.clearSepsisScenario,
+        sepsisModifications: userModeState.sepsisModifications
     };
 };
