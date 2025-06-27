@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Login.module.css';
 import authService from '../services/authService';
+import loginBackgroundImage from '../assets/login/background-image.jpg';
 
 const Login = ({ onLogin }) => {
   const [formData, setFormData] = useState({
@@ -200,7 +201,7 @@ const Login = ({ onLogin }) => {
         id="background-image-section"
         className={styles.backgroundImageSection}
         style={{
-          backgroundImage: `url('/e98c1df0a2e1528278f53f8e1982321197654854.jpg')`,
+          backgroundImage: `url(${loginBackgroundImage})`,
         }}
       >
         {/* Optional overlay for better contrast if needed */}
