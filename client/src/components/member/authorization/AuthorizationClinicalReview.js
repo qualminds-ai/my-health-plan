@@ -24,6 +24,7 @@ const AuthorizationClinicalReview = ({
     selectedGuidelineRows,
     handleClinicalReviewNext,
     handleClinicalReviewPrev,
+    handleClinicalReviewClose,
     setShowClinicalIndicators,
     setSelectedGuidelineRows,
     setActiveAuthTab
@@ -127,7 +128,7 @@ const AuthorizationClinicalReview = ({
                 </button>
                 <button
                     id="clinical-review-next-button"
-                    onClick={clinicalReviewStep === 4 ? () => setActiveAuthTab('Closed') : handleClinicalReviewNext}
+                    onClick={clinicalReviewStep === 4 ? handleClinicalReviewClose : handleClinicalReviewNext}
                     disabled={false}
                     className={
                         clinicalReviewStep === 4

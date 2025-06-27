@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+﻿import React, { useState, useRef, useEffect, useMemo } from 'react';
 import Header from './Header';
 import MemberHeader from './member/MemberHeader';
 import MemberInfoBar from './member/MemberInfoBar';
@@ -15,12 +15,189 @@ import faxDocIcon from '../assets/authorizations/fax-doc-icon.png';
 import pdfDocIcon from '../assets/authorizations/pdf-doc-icon.png';
 import textDocIcon from '../assets/authorizations/text-doc-icon.png';
 
+// Member Component with hash-based routing for deep linking and browser navigation
+
 const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate }) => {
-  const topRef = useRef(null); const authContentRef = useRef(null); const [activeTab, setActiveTab] = useState('Authorizations');
-  const [activeAuthTab, setActiveAuthTab] = useState('Request Submitted');
-  const [activeRequestTab, setActiveRequestTab] = useState('20250P000367'); const [clinicalReviewStep, setClinicalReviewStep] = useState(1);
+  const topRef = useRef(null);
+  const authContentRef = useRef(null);
+
+  // Define the tabs - memoized to prevent useEffect re-runs
+  const tabs = useMemo(() => ['Overview', 'Eligibility & Benefits', 'Care Plans', 'Discharge Plans', 'Concierge Care', 'Authorizations', 'Notes', 'Medications', 'Cases', 'Assessments'], []);
+
+  // Define authorization sub-tabs - memoized to prevent useEffect re-runs
+  const authTabs = useMemo(() => [
+    { id: 'Request Submitted', label: 'Request Submitted', status: 'active' },
+    { id: 'Clinical Review', label: 'Clinical Review', status: 'pending' },
+    { id: 'Request Decision Appeal', label: 'Request Decision Appeal', status: 'pending' },
+    { id: 'MD Review', label: 'MD Review', status: 'pending' },
+    { id: 'Concurrent Review', label: 'Concurrent Review', status: 'pending' },
+    { id: 'Closed', label: 'Closed', status: 'pending' }
+  ], []);
+
+  // Helper function to parse hash and extract tab info - ADAPTED FOR HASHROUTER
+  const parseHashForTabs = () => {
+    const hash = window.location.hash; // Full hash including route
+
+    // With HashRouter, hash format is: #/member/MEM001?tab=Authorizations&authTab=Clinical%20Review&step=2
+    // Split by '?' to separate route from query parameters
+    const hashParts = hash.split('?');
+
+    if (hashParts.length < 2) {
+      // No query parameters, return defaults
+      return { mainTab: 'Authorizations', authTab: 'Request Submitted', requestTab: '20250P000367', clinicalStep: 1 };
+    }
+
+    const queryString = hashParts[1]; // Everything after the '?'
+
+    // Parse the query parameters
+    const params = new URLSearchParams(queryString);
+    const mainTab = params.get('tab') || 'Authorizations';
+    const authTab = params.get('authTab') || 'Request Submitted';
+    const requestTab = params.get('requestTab') || '20250P000367';
+    const clinicalStep = parseInt(params.get('step')) || 1;
+
+    // Validate that the main tab exists
+    const validMainTab = tabs.includes(mainTab) ? mainTab : 'Authorizations';
+    const validAuthTab = authTabs.find(tab => tab.id === authTab) ? authTab : 'Request Submitted';
+    const validClinicalStep = (clinicalStep >= 1 && clinicalStep <= 4) ? clinicalStep : 1;
+
+    return { mainTab: validMainTab, authTab: validAuthTab, requestTab, clinicalStep: validClinicalStep };
+  };
+
+  // Helper function to update hash - ADAPTED FOR HASHROUTER
+  const updateHash = (mainTab, authTab = null, requestTab = null, clinicalStep = null) => {
+    const params = new URLSearchParams();
+    params.set('tab', mainTab);
+
+    if (mainTab === 'Authorizations') {
+      if (authTab) params.set('authTab', authTab);
+      if (requestTab) params.set('requestTab', requestTab);
+      // Add clinical review step to URL only when in Clinical Review tab
+      if (authTab === 'Clinical Review' && clinicalStep) {
+        params.set('step', clinicalStep.toString());
+      }
+    }
+
+    const tabHash = params.toString();
+
+    // HASHROUTER FIX: Preserve the route path and append our tab hash
+    // With HashRouter, window.location.hash contains the route (e.g., '#/member/MEM001')
+    // We need to append our tab parameters to this route hash
+    let currentRouteHash = window.location.hash;
+
+    // If there's no hash, we shouldn't be here, but default to member page
+    if (!currentRouteHash || currentRouteHash === '#') {
+      currentRouteHash = '#/member/M1000020000'; // fallback
+    }
+
+    // Remove any existing tab parameters from the route hash
+    const routePart = currentRouteHash.split('?')[0]; // Keep only the route part
+
+    // Combine route with tab parameters
+    const newHash = `${routePart}?${tabHash}`;
+
+    // Update the hash (this preserves the route)
+    window.location.hash = newHash;
+  };
+
+  // Initialize state from hash
+  const initialTabState = parseHashForTabs();
+  const [activeTab, setActiveTab] = useState(initialTabState.mainTab);
+  const [activeAuthTab, setActiveAuthTab] = useState(initialTabState.authTab);
+  const [activeRequestTab, setActiveRequestTab] = useState(initialTabState.requestTab);
+  const [clinicalReviewStep, setClinicalReviewStep] = useState(initialTabState.clinicalStep);
   const [showClinicalIndicators, setShowClinicalIndicators] = useState([false, false, false]);
   const [selectedGuidelineRows, setSelectedGuidelineRows] = useState(new Set());
+  // Set initial hash on component mount if none exists
+  useEffect(() => {
+    // CRITICAL FIX: Handle incorrect URL format for HashRouter
+    // With HashRouter, ALL routes should be in the hash, not in pathname
+    if (window.location.pathname !== '/') {
+      // Extract member info from pathname
+      const pathname = window.location.pathname;
+      const currentHash = window.location.hash;
+
+      // Build correct HashRouter URL
+      let correctHash;
+      if (currentHash && currentHash.startsWith('#')) {
+        // If there's already a hash, preserve any tab parameters
+        const hashParts = currentHash.split('?');
+        if (hashParts.length > 1) {
+          // There are tab parameters, preserve them
+          correctHash = `#${pathname}?${hashParts[1]}`;
+        } else {
+          // No tab parameters, just the route
+          correctHash = `#${pathname}`;
+        }
+      } else {
+        // No hash, just move pathname to hash
+        correctHash = `#${pathname}`;
+      }
+
+      // Redirect to correct HashRouter format
+      window.location.href = `/${correctHash}`;
+      return; // Exit early, component will remount with correct URL
+    }
+
+    const hash = window.location.hash;
+    const hashParts = hash.split('?');
+
+    if (hashParts.length < 2) {
+      // No query parameters, set initial hash with current state
+      updateHash(initialTabState.mainTab, initialTabState.authTab, initialTabState.requestTab, initialTabState.clinicalStep);
+    }
+  }, [initialTabState.mainTab, initialTabState.authTab, initialTabState.requestTab, initialTabState.clinicalStep]);
+
+  // Listen for hash changes - ADAPTED FOR HASHROUTER
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+
+      // Split by '?' to separate route from query parameters
+      const hashParts = hash.split('?');
+
+      if (hashParts.length < 2) {
+        // No query parameters, set defaults
+        setActiveTab('Authorizations');
+        setActiveAuthTab('Request Submitted');
+        setActiveRequestTab('20250P000367');
+        setClinicalReviewStep(1);
+        return;
+      }
+
+      const queryString = hashParts[1];
+
+      // Parse the query parameters
+      const params = new URLSearchParams(queryString);
+      const mainTab = params.get('tab') || 'Authorizations';
+      const authTab = params.get('authTab') || 'Request Submitted';
+      const requestTab = params.get('requestTab') || '20250P000367';
+      const clinicalStep = parseInt(params.get('step')) || 1;
+
+      // Validate that the main tab exists
+      const validMainTab = tabs.includes(mainTab) ? mainTab : 'Authorizations';
+      const validAuthTab = authTabs.find(tab => tab.id === authTab) ? authTab : 'Request Submitted';
+      const validClinicalStep = (clinicalStep >= 1 && clinicalStep <= 4) ? clinicalStep : 1;
+
+      setActiveTab(validMainTab);
+      setActiveAuthTab(validAuthTab);
+      setActiveRequestTab(requestTab);
+      setClinicalReviewStep(validClinicalStep);
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [tabs, authTabs]);
+
+  // Enhanced tab change handler
+  const handleTabChange = (newTab) => {
+    setActiveTab(newTab);
+    // Reset clinical review step when switching away from Clinical Review
+    if (newTab !== 'Authorizations' || activeAuthTab !== 'Clinical Review') {
+      setClinicalReviewStep(1);
+    }
+    updateHash(newTab, newTab === 'Authorizations' ? activeAuthTab : null, newTab === 'Authorizations' ? activeRequestTab : null, newTab === 'Authorizations' && activeAuthTab === 'Clinical Review' ? clinicalReviewStep : null);
+  };
 
   // Use prop data if available, otherwise use static demo data
   const memberData = propMemberData || {
@@ -115,20 +292,14 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
       default: return `${baseClass} bg-gray-500`;
     }
   };
-  // Define the tabs
-  const tabs = ['Overview', 'Eligibility & Benefits', 'Care Plans', 'Discharge Plans', 'Concierge Care', 'Authorizations', 'Notes', 'Medications', 'Cases', 'Assessments'];
-
-  // Define authorization sub-tabs - simplified
-  const authTabs = [
-    { id: 'Request Submitted', label: 'Request Submitted', status: 'active' },
-    { id: 'Clinical Review', label: 'Clinical Review', status: 'pending' },
-    { id: 'Request Decision Appeal', label: 'Request Decision Appeal', status: 'pending' },
-    { id: 'MD Review', label: 'MD Review', status: 'pending' },
-    { id: 'Concurrent Review', label: 'Concurrent Review', status: 'pending' },
-    { id: 'Closed', label: 'Closed', status: 'pending' }
-  ];  // Handle auth tab click - simplified without animations
+  // Enhanced auth tab click handler
   const handleAuthTabClick = (tabId) => {
     setActiveAuthTab(tabId);
+    // Reset clinical review step when switching away from Clinical Review
+    if (tabId !== 'Clinical Review') {
+      setClinicalReviewStep(1);
+    }
+    updateHash(activeTab, tabId, activeRequestTab, tabId === 'Clinical Review' ? clinicalReviewStep : null);
 
     // Simple scroll to top
     if (authContentRef.current) {
@@ -139,10 +310,19 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
     }
   };
 
-  // Handle clinical review step navigation
+  // Enhanced request tab change handler
+  const handleRequestTabChange = (requestTab) => {
+    setActiveRequestTab(requestTab);
+    updateHash(activeTab, activeAuthTab, requestTab, activeAuthTab === 'Clinical Review' ? clinicalReviewStep : null);
+  };
+  // Handle clinical review step navigation with URL updates
   const handleClinicalReviewNext = () => {
     if (clinicalReviewStep < 4) {
-      setClinicalReviewStep(clinicalReviewStep + 1);      // Reset indicators for step 2 animation
+      const nextStep = clinicalReviewStep + 1;
+      setClinicalReviewStep(nextStep);
+      updateHash(activeTab, activeAuthTab, activeRequestTab, nextStep);
+
+      // Reset indicators for step 2 animation
       if (clinicalReviewStep === 1) {
         setShowClinicalIndicators([false, false, false]);
         // Animate indicators one by one with slower timing and initial delay
@@ -155,8 +335,17 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
 
   const handleClinicalReviewPrev = () => {
     if (clinicalReviewStep > 1) {
-      setClinicalReviewStep(clinicalReviewStep - 1);
+      const prevStep = clinicalReviewStep - 1;
+      setClinicalReviewStep(prevStep);
+      updateHash(activeTab, activeAuthTab, activeRequestTab, prevStep);
     }
+  };
+
+  // Enhanced handler for closing clinical review (step 4 → Closed tab)
+  const handleClinicalReviewClose = () => {
+    setActiveAuthTab('Closed');
+    setClinicalReviewStep(1); // Reset for next time
+    updateHash(activeTab, 'Closed', activeRequestTab, null);
   };
 
   // Action button handlers
@@ -184,10 +373,22 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
     console.log('ðŸ¥ Medical button clicked');
   };
 
+  // Handle navigation from header - prevent navigation away from member page for non-critical actions
+  const handleHeaderNavigation = (navItem) => {
+    // Only allow logout and dashboard navigation, ignore others to prevent accidental navigation
+    if (navItem === 'Dashboard' && onNavigate) {
+      onNavigate(navItem);
+    }
+    // For other nav items, just log for now to prevent accidental navigation away from member
+    else {
+      console.log('Ignoring header navigation to:', navItem, 'to stay on member page');
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <div ref={topRef} id="top"></div>
-      <Header user={user} onLogout={onLogout} onNavigate={onNavigate} activeTab="Members" />      {/* Main Content */}
+      <Header user={user} onLogout={onLogout} onNavigate={handleHeaderNavigation} activeTab="Members" />      {/* Main Content */}
       <div className={styles.mainContent}>
         {/* Member Header Content */}
         <MemberHeader
@@ -218,7 +419,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
         <MemberTabs
           tabs={tabs}
           activeTab={activeTab}
-          onTabChange={setActiveTab}
+          onTabChange={handleTabChange}
         />
 
         {/* Tab Content */}
@@ -240,7 +441,10 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
               <div className="w-full">
                 <div className="py-4">
                   {/* Request Navigation */}
-                  <AuthorizationRequestNavTabs activeRequestTab={activeRequestTab} setActiveRequestTab={setActiveRequestTab} />
+                  <AuthorizationRequestNavTabs
+                    activeRequestTab={activeRequestTab}
+                    setActiveRequestTab={handleRequestTabChange}
+                  />
 
                   {/* Request History Tab Content - Placeholder */}
                   {activeRequestTab === 'Request History' && (
@@ -286,6 +490,7 @@ const Member = ({ user, memberData: propMemberData, onLogout, onBack, onNavigate
                           selectedGuidelineRows={selectedGuidelineRows}
                           handleClinicalReviewNext={handleClinicalReviewNext}
                           handleClinicalReviewPrev={handleClinicalReviewPrev}
+                          handleClinicalReviewClose={handleClinicalReviewClose}
                           setShowClinicalIndicators={setShowClinicalIndicators}
                           setSelectedGuidelineRows={setSelectedGuidelineRows}
                           setActiveAuthTab={setActiveAuthTab}
