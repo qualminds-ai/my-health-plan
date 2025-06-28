@@ -20,11 +20,23 @@ export const useAuth = () => {
     const userModeState = useUserMode(baseUser);
 
     const clearAuthData = useCallback(() => {
+        // Clear authentication tokens and user data
         localStorage.removeItem(STORAGE_KEYS.TOKEN);
         localStorage.removeItem(STORAGE_KEYS.USER);
+
+        // Clear user mode and scenario data
+        localStorage.removeItem(STORAGE_KEYS.USER_MODE);
+        localStorage.removeItem(STORAGE_KEYS.USER_SCENARIOS);
+        localStorage.removeItem(STORAGE_KEYS.ACTIVE_PERSONA);
+
+        // Clear any other user preferences
+        localStorage.removeItem(STORAGE_KEYS.PREFERENCES);
+
         setBaseUser(null);
         setToken(null);
         setError(null);
+
+        console.log('🧹 All user and sepsis storage cleared on logout/session expiration');
     }, []);
 
     // Initialize authentication state
@@ -90,8 +102,9 @@ export const useAuth = () => {
             console.error('Logout error:', error);
             // Continue with logout even if API call fails
         } finally {
-            // Clear sepsis scenario on logout
-            userModeState.clearSepsisScenario?.();
+            // Clear user mode state without saving to localStorage
+            userModeState.clearAllForLogout?.();
+            // Clear all localStorage data
             clearAuthData();
             navigate(ROUTES.LOGIN, { replace: true });
             setLoading(false);
@@ -129,6 +142,7 @@ export const useAuth = () => {
         shouldHideArrow: userModeState.shouldHideArrow,
         getMemberSepsisInfo: userModeState.getMemberSepsisInfo,
         clearSepsisScenario: userModeState.clearSepsisScenario,
+        clearAllForLogout: userModeState.clearAllForLogout,
         sepsisModifications: userModeState.sepsisModifications
     };
 };

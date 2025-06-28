@@ -32,8 +32,15 @@ class ApiService {
             (response) => response,
             (error) => {
                 if (error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
+                    // Clear all authentication and user-related storage on session expiration
                     localStorage.removeItem(STORAGE_KEYS.TOKEN);
                     localStorage.removeItem(STORAGE_KEYS.USER);
+                    localStorage.removeItem(STORAGE_KEYS.USER_MODE);
+                    localStorage.removeItem(STORAGE_KEYS.USER_SCENARIOS);
+                    localStorage.removeItem(STORAGE_KEYS.ACTIVE_PERSONA);
+                    localStorage.removeItem(STORAGE_KEYS.PREFERENCES);
+
+                    console.log('🧹 All user storage cleared due to session expiration');
                     window.location.href = '/login';
                 }
                 return Promise.reject(error);

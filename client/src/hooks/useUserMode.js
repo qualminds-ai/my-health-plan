@@ -42,7 +42,7 @@ const SEPSIS_MODIFICATIONS = {
  */
 export const useUserMode = (initialUser) => {
     const [user, setUser] = useState(initialUser);
-    const [activeMode, setActiveMode] = useState('UM'); // UM, SNF, CM
+    const [activeMode, setActiveMode] = useState('UM'); // UM, UM-SNF (internal for "UM, SNF"), CM
     const [scenarios, setScenarios] = useState(new Set()); // Active scenarios
     const [loading, setLoading] = useState(false);
     const [activePersona, setActivePersona] = useState(null); // Active user persona
@@ -62,8 +62,8 @@ export const useUserMode = (initialUser) => {
             email: 'elise.tran@myhealthplan.com',
             full_name: 'Elise Tran',
             role: 'UM, SNF',
-            displayRole: 'UM',
-            availableModes: ['UM', 'SNF']
+            displayRole: 'UM, SNF',
+            availableModes: ['UM-SNF'] // Internal representation of "UM, SNF" as single role
         },
         {
             id: 'karen.white',
@@ -124,11 +124,11 @@ export const useUserMode = (initialUser) => {
 
         switch (email) {
             case 'admin@myhealthplan.com':
-                return ['UM', 'SNF', 'CM']; // Admin can access all modes
+                return ['UM', 'UM-SNF', 'CM']; // Admin can access all modes (3 distinct roles)
             case 'maria.hartsell@myhealthplan.com':
                 return ['UM']; // Maria is UM only
             case 'elise.tran@myhealthplan.com':
-                return ['UM', 'SNF']; // Elise can do UM and SNF
+                return ['UM-SNF']; // Elise has the combined UM, SNF role
             case 'karen.white@myhealthplan.com':
                 return ['CM']; // Karen is CM only
             default:
@@ -153,14 +153,14 @@ export const useUserMode = (initialUser) => {
 
         const email = persona.email.toLowerCase();
 
-        // Set default modes based on user email/role
+        // Set default modes based on user email/role (3 distinct roles)
         switch (email) {
             case 'admin@myhealthplan.com':
                 return 'UM'; // Admin defaults to UM (as Maria Hartsell persona)
             case 'maria.hartsell@myhealthplan.com':
                 return 'UM'; // Maria is UM
             case 'elise.tran@myhealthplan.com':
-                return 'UM'; // Elise defaults to UM (can switch to SNF)
+                return 'UM-SNF'; // Elise has the combined UM, SNF role
             case 'karen.white@myhealthplan.com':
                 return 'CM'; // Karen is CM
             default:
@@ -193,6 +193,18 @@ export const useUserMode = (initialUser) => {
         return urlParams;
     }, []);
 
+    // Save mode changes to localStorage
+    const saveMode = useCallback((mode, currentScenarios) => {
+        // Convert internal mode representation to display format for storage
+        let storageMode = mode;
+        if (mode === 'UM-SNF') {
+            storageMode = 'UM, SNF'; // Store as "UM, SNF" for display consistency
+        }
+
+        localStorage.setItem(STORAGE_KEYS.USER_MODE, storageMode);
+        localStorage.setItem(STORAGE_KEYS.USER_SCENARIOS, JSON.stringify([...currentScenarios]));
+    }, []);
+
     // Initialize mode from localStorage or set default based on user
     useEffect(() => {
         // Wait for both user and persona to be initialized
@@ -211,13 +223,26 @@ export const useUserMode = (initialUser) => {
                 const currentUserContext = activePersona || initialUser;
                 const defaultMode = getDefaultModeForUser(currentUserContext);
 
-                if (savedMode && isValidModeForUser(savedMode, currentUserContext)) {
-                    setActiveMode(savedMode);
-                    console.log(`🔄 Restored saved mode: ${savedMode} for ${currentUserContext?.full_name || currentUserContext?.email}`);
+                if (savedMode) {
+                    // Convert stored mode back to internal representation
+                    let internalMode = savedMode;
+                    if (savedMode === 'UM, SNF') {
+                        internalMode = 'UM-SNF'; // Convert display format to internal format
+                    }
+
+                    if (isValidModeForUser(internalMode, currentUserContext)) {
+                        setActiveMode(internalMode);
+                        console.log(`🔄 Restored saved mode: ${savedMode} (internal: ${internalMode}) for ${currentUserContext?.full_name || currentUserContext?.email}`);
+                    } else {
+                        // Set default mode for user
+                        setActiveMode(defaultMode);
+                        saveMode(defaultMode, new Set());
+                        console.log(`🔄 Invalid saved mode, set default for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
+                    }
                 } else {
                     // Set default mode for user
                     setActiveMode(defaultMode);
-                    localStorage.setItem(STORAGE_KEYS.USER_MODE, defaultMode);
+                    saveMode(defaultMode, new Set());
                     console.log(`🔄 Set default mode for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
                 }
 
@@ -251,13 +276,7 @@ export const useUserMode = (initialUser) => {
                 setTimeout(initializeMode, 100);
             }
         }
-    }, [initialUser, activePersona, getDefaultModeForUser, isValidModeForUser, getUrlParams]);
-
-    // Save mode changes to localStorage
-    const saveMode = useCallback((mode, currentScenarios) => {
-        localStorage.setItem(STORAGE_KEYS.USER_MODE, mode);
-        localStorage.setItem(STORAGE_KEYS.USER_SCENARIOS, JSON.stringify([...currentScenarios]));
-    }, []);
+    }, [initialUser, activePersona, getDefaultModeForUser, isValidModeForUser, getUrlParams, saveMode]);
 
     // Switch user persona
     const switchPersona = useCallback(async (personaId) => {
@@ -278,7 +297,8 @@ export const useUserMode = (initialUser) => {
             setScenarios(new Set());
             saveMode(defaultMode, new Set());
 
-            console.log(`👤 Switched to persona: ${newPersona.full_name} (${defaultMode} mode)`);
+            const displayMode = defaultMode === 'UM-SNF' ? 'UM, SNF' : defaultMode;
+            console.log(`👤 Switched to persona: ${newPersona.full_name} (${displayMode} mode)`);
         } catch (error) {
             console.error('Error switching persona:', error);
         } finally {
@@ -286,9 +306,15 @@ export const useUserMode = (initialUser) => {
         }
     }, [activePersona, availablePersonas, getDefaultModeForUser, saveMode]);
 
-    // Switch user mode (UM, SNF, CM)
+    // Switch user mode (UM, UM-SNF, CM)
     const switchUserMode = useCallback(async (newMode) => {
-        if (newMode === activeMode) return;
+        // Convert display mode to internal representation if needed
+        let internalMode = newMode;
+        if (newMode === 'UM, SNF') {
+            internalMode = 'UM-SNF';
+        }
+
+        if (internalMode === activeMode) return;
 
         setLoading(true);
 
@@ -296,11 +322,12 @@ export const useUserMode = (initialUser) => {
             // Clear scenarios when switching modes
             const clearedScenarios = new Set();
 
-            setActiveMode(newMode);
+            setActiveMode(internalMode);
             setScenarios(clearedScenarios);
-            saveMode(newMode, clearedScenarios);
+            saveMode(internalMode, clearedScenarios);
 
-            console.log(`🔄 Switched to ${newMode} mode`);
+            const displayMode = internalMode === 'UM-SNF' ? 'UM, SNF' : internalMode;
+            console.log(`🔄 Switched to ${displayMode} mode`);
         } catch (error) {
             console.error('Error switching user mode:', error);
         } finally {
@@ -344,19 +371,18 @@ export const useUserMode = (initialUser) => {
         // Use active persona if available, otherwise use original user
         const currentUser = activePersona || user;
 
-        // For role display, show the full capabilities, not just current mode
+        // Convert internal mode representation to display format
         let displayRole;
-        if (currentUser.email === 'elise.tran@myhealthplan.com') {
-            displayRole = 'UM, SNF'; // Show full capabilities for Elise
+        if (activeMode === 'UM-SNF') {
+            displayRole = 'UM, SNF'; // Display as "UM, SNF"
         } else {
-            // For other users, show current active mode or their role
             displayRole = currentUser.role || activeMode;
         }
 
         return {
             ...user,
             ...currentUser,
-            currentMode: activeMode,
+            currentMode: activeMode === 'UM-SNF' ? 'UM, SNF' : activeMode, // Display format for current mode
             scenarios: [...scenarios],
             displayRole,
             isPersonaSwitched: !!activePersona
@@ -365,15 +391,19 @@ export const useUserMode = (initialUser) => {
 
     // Reset to default mode
     const resetMode = useCallback(() => {
-        const defaultMode = getDefaultModeForUser(user);
+        const defaultMode = getDefaultModeForUser(activePersona || user);
         setActiveMode(defaultMode);
         setScenarios(new Set());
         saveMode(defaultMode, new Set());
-        console.log(`🔄 Reset to default ${defaultMode} mode`);
-    }, [saveMode, getDefaultModeForUser, user]);
+
+        const displayMode = defaultMode === 'UM-SNF' ? 'UM, SNF' : defaultMode;
+        console.log(`🔄 Reset to default ${displayMode} mode`);
+    }, [saveMode, getDefaultModeForUser, activePersona, user]);
 
     // Available modes for current user/persona
-    const availableModes = getAvailableModesForUser(activePersona || user);
+    const availableModes = getAvailableModesForUser(activePersona || user).map(mode =>
+        mode === 'UM-SNF' ? 'UM, SNF' : mode // Convert to display format
+    );
 
     // Check URL parameters for sepsis scenario on load and URL changes (supports hash routing)
     useEffect(() => {
@@ -517,6 +547,14 @@ export const useUserMode = (initialUser) => {
         });
     }, [activeMode, saveMode]);
 
+    // Clear all user mode data for logout (doesn't save back to localStorage)
+    const clearAllForLogout = useCallback(() => {
+        setScenarios(new Set());
+        setActiveMode('UM');
+        setActivePersona(null);
+        console.log('🧹 All user mode data cleared for logout (no localStorage writes)');
+    }, []);
+
     return {
         user: getUserWithMode(),
         activeMode,
@@ -537,6 +575,7 @@ export const useUserMode = (initialUser) => {
         shouldHideArrow,
         getMemberSepsisInfo,
         clearSepsisScenario,
+        clearAllForLogout,
         sepsisModifications: SEPSIS_MODIFICATIONS
     };
 };
