@@ -36,6 +36,23 @@ const SEPSIS_MODIFICATIONS = {
     }
 };
 
+// SNF user modifications - always active when user is in SNF mode
+const SNF_MODIFICATIONS = {
+    // Authorization changes for SNF users
+    authorization: {
+        '2025OP000152': { // MEM007 (Oliver James)
+            priority: 'High'
+        },
+        '2025OP000389': { // MEM001 (Robert Abbott) 
+            request_type: 'Discharge to SNF',
+            review_type: 'Post Acute Transition',
+            drg_code: 'JKL'
+        }
+    },
+    // All priority stripes should be #A8A8A8 for SNF users
+    uniformPriorityStripe: true
+};
+
 /**
  * Enhanced User Mode Hook
  * Manages user role switching and scenario modes without logout/login
@@ -540,6 +557,32 @@ export const useUserMode = (initialUser) => {
         return modifiedData;
     }, [hasScenario, activeMode]);
 
+    // Apply SNF modifications to authorization data
+    const applySNFModifications = useCallback((authorizationsData) => {
+        // Only apply SNF modifications for SNF users (UM-SNF mode)
+        if (activeMode !== 'UM-SNF') {
+            return authorizationsData;
+        }
+
+        console.log('🏥 Applying SNF modifications to', authorizationsData.length, 'authorizations for SNF user');
+
+        const modifiedData = authorizationsData.map(auth => {
+            const authMods = SNF_MODIFICATIONS.authorization[auth.authorization_number];
+            if (authMods) {
+                console.log(`📝 Modifying authorization ${auth.authorization_number}:`, authMods);
+                return {
+                    ...auth,
+                    ...authMods,
+                    originalData: auth // Keep original for reference
+                };
+            }
+            return auth;
+        });
+
+        console.log('✅ SNF modifications applied');
+        return modifiedData;
+    }, [activeMode]);
+
     // Get sepsis-modified dashboard stats
     const getSepsisModifiedStats = useCallback((originalStats) => {
         if (!hasScenario('sepsis')) {
@@ -632,6 +675,9 @@ export const useUserMode = (initialUser) => {
         shouldHideArrow,
         getMemberSepsisInfo,
         clearSepsisScenario,
+        // SNF user functions
+        applySNFModifications,
+        snfModifications: SNF_MODIFICATIONS,
         clearAllForLogout,
         sepsisModifications: SEPSIS_MODIFICATIONS
     };

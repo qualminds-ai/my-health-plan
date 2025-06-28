@@ -228,6 +228,8 @@ function App() {
               getSepsisModifiedStats={auth.getSepsisModifiedStats}
               shouldHideArrow={auth.shouldHideArrow}
               hasScenario={auth.hasScenario}
+              // Pass SNF user functions
+              applySNFModifications={auth.applySNFModifications}
             />} />
             <Route
               path={ROUTES.DASHBOARD}
@@ -252,6 +254,8 @@ function App() {
                   getSepsisModifiedStats={auth.getSepsisModifiedStats}
                   shouldHideArrow={auth.shouldHideArrow}
                   hasScenario={auth.hasScenario}
+                  // Pass SNF user functions
+                  applySNFModifications={auth.applySNFModifications}
                 />
               }
             />
@@ -298,6 +302,8 @@ function App() {
                   getSepsisModifiedStats={auth.getSepsisModifiedStats}
                   shouldHideArrow={auth.shouldHideArrow}
                   hasScenario={auth.hasScenario}
+                  // Pass SNF user functions
+                  applySNFModifications={auth.applySNFModifications}
                 />
               }
             />

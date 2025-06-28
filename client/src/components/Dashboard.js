@@ -26,7 +26,9 @@ const Dashboard = ({
   applySepsisModifications,
   getSepsisModifiedStats,
   shouldHideArrow,
-  hasScenario
+  hasScenario,
+  // SNF user functions
+  applySNFModifications
 }) => {
   const [dashboardStats, setDashboardStats] = useState({
     due_today_count: 0,
@@ -59,8 +61,13 @@ const Dashboard = ({
       console.log('📋 Original authorizations response:', authResponse.data.slice(0, 3));
 
       // Apply sepsis modifications to authorizations if scenario is active
-      const modifiedAuthorizations = applySepsisModifications ? applySepsisModifications(authResponse.data) : authResponse.data;
-      console.log('📋 Modified authorizations:', modifiedAuthorizations.slice(0, 3));
+      let modifiedAuthorizations = applySepsisModifications ? applySepsisModifications(authResponse.data) : authResponse.data;
+      console.log('📋 Sepsis modified authorizations:', modifiedAuthorizations.slice(0, 3));
+
+      // Apply SNF modifications to authorizations if user is in SNF mode
+      modifiedAuthorizations = applySNFModifications ? applySNFModifications(modifiedAuthorizations) : modifiedAuthorizations;
+      console.log('🏥 SNF modified authorizations:', modifiedAuthorizations.slice(0, 3));
+
       setAuthorizations(modifiedAuthorizations);
 
     } catch (error) {
@@ -69,7 +76,7 @@ const Dashboard = ({
     } finally {
       setLoading(false);
     }
-  }, [applySepsisModifications, getSepsisModifiedStats, scenarios]);
+  }, [applySepsisModifications, applySNFModifications, getSepsisModifiedStats, scenarios]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -129,8 +136,22 @@ const Dashboard = ({
       start_this_week_count: 21
     };
 
-    // Use sepsis stats if sepsis scenario is active AND user is UM, otherwise use regular stats
-    const currentStats = scenarios.includes('sepsis') && activeMode === 'UM' ? sepsisStats : dashboardStats;
+    // SNF user values
+    const snfStats = {
+      due_today_count: 51,
+      high_priority_count: 6,
+      reminders_count: 7,
+      start_this_week_count: 19
+    };
+
+    // Choose stats based on user mode and scenarios
+    let currentStats = dashboardStats;
+
+    if (scenarios.includes('sepsis') && activeMode === 'UM') {
+      currentStats = sepsisStats;
+    } else if (activeMode === 'UM-SNF') {
+      currentStats = snfStats;
+    }
 
     const baseCards = [
       {
@@ -165,7 +186,7 @@ const Dashboard = ({
     ];
 
     // Modify based on user mode
-    if (activeMode === 'SNF') {
+    if (activeMode === 'UM-SNF') {
       baseCards[0].title = 'SNF Authorizations';
       baseCards[0].label = 'Skilled Nursing';
     } else if (activeMode === 'CM') {
@@ -217,7 +238,7 @@ const Dashboard = ({
           <div className={styles.leftSection}>
             <div className={styles.title}>
               {activeMode === 'UM' && 'UM Dashboard'}
-              {activeMode === 'SNF' && 'SNF Dashboard'}
+              {activeMode === 'UM-SNF' && 'SNF Dashboard'}
               {activeMode === 'CM' && 'Case Management Dashboard'}
             </div>
             <TabNavigation
@@ -367,7 +388,9 @@ Dashboard.propTypes = {
   applySepsisModifications: PropTypes.func,
   getSepsisModifiedStats: PropTypes.func,
   shouldHideArrow: PropTypes.func,
-  hasScenario: PropTypes.func
+  hasScenario: PropTypes.func,
+  // SNF user functions
+  applySNFModifications: PropTypes.func
 };
 
 Dashboard.defaultProps = {

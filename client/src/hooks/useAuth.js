@@ -152,6 +152,9 @@ export const useAuth = () => {
         shouldHideArrow: userModeState.shouldHideArrow,
         getMemberSepsisInfo: userModeState.getMemberSepsisInfo,
         clearSepsisScenario: userModeState.clearSepsisScenario,
+        // SNF user functions
+        applySNFModifications: userModeState.applySNFModifications,
+        snfModifications: userModeState.snfModifications,
         clearAllForLogout: userModeState.clearAllForLogout,
         sepsisModifications: userModeState.sepsisModifications
     };

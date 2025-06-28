@@ -22,6 +22,11 @@ const AuthorizationsTable = ({
             return styles.specialBlue;
         }
 
+        // SNF mode: All rows get #A8A8A8 color regardless of priority - ONLY for UM-SNF mode users
+        if (userMode === 'UM-SNF') {
+            return styles.snfMode;
+        }
+
         // Normal priority-based styling (no special blue by default)
         switch (priority?.toLowerCase()) {
             case 'high': return styles.high;
@@ -44,12 +49,8 @@ const AuthorizationsTable = ({
 
         // Apply mode-specific filtering
         switch (userMode) {
-            case 'SNF':
-                // SNF users see only certain types of authorizations
-                filtered = filtered.filter(auth =>
-                    auth.pos?.includes('Skilled Nursing') ||
-                    auth.review_type === 'Concurrent Review'
-                );
+            case 'UM-SNF':
+                // SNF users see all authorizations (no filtering, just styling changes)
                 break;
             case 'CM':
                 // Case managers see authorizations requiring case management
@@ -68,10 +69,15 @@ const AuthorizationsTable = ({
         return filtered;
     };
 
-    // Check if arrow should be shown (remove for sepsis scenario)
+    // Check if arrow should be shown (remove for sepsis scenario and SNF users)
     const shouldShowArrow = () => {
         // If shouldHideArrow prop is true, don't show the arrow
         if (shouldHideArrow) {
+            return false;
+        }
+
+        // Hide arrow for SNF users
+        if (userMode === 'UM-SNF') {
             return false;
         }
 
@@ -187,12 +193,12 @@ const AuthorizationsTable = ({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     <h3 className={styles.emptyTitle}>
-                        {userMode === 'SNF' && 'No SNF authorizations'}
+                        {userMode === 'UM-SNF' && 'No SNF authorizations'}
                         {userMode === 'CM' && 'No case management tasks'}
                         {userMode === 'UM' && 'No authorizations'}
                     </h3>
                     <p className={styles.emptyText}>
-                        {userMode === 'SNF' && 'No skilled nursing facility authorizations to display.'}
+                        {userMode === 'UM-SNF' && 'No skilled nursing facility authorizations to display.'}
                         {userMode === 'CM' && 'No high-priority or appeal cases requiring case management.'}
                         {userMode === 'UM' && 'Get started by creating a new authorization.'}
                     </p>

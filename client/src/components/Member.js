@@ -557,6 +557,7 @@ const Member = ({
                         <AuthorizationClosed
                           attachments={attachments}
                           AttachmentItem={AttachmentItem}
+                          activeRequestTab={activeRequestTab}
                         />
                       )}
 

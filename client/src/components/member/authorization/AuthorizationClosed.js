@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AuthorizationClosedSummary from './AuthorizationClosedSummary';
 import AuthorizationAttachments from './AuthorizationAttachments';
 
@@ -10,17 +11,24 @@ import AuthorizationAttachments from './AuthorizationAttachments';
  */
 const AuthorizationClosed = ({
     attachments,
-    AttachmentItem
+    AttachmentItem,
+    activeRequestTab
 }) => {
     return (
         <>
-            <AuthorizationClosedSummary />
+            <AuthorizationClosedSummary activeRequestTab={activeRequestTab} />
             <AuthorizationAttachments
                 attachments={attachments}
                 AttachmentItem={AttachmentItem}
             />
         </>
     );
+};
+
+AuthorizationClosed.propTypes = {
+    attachments: PropTypes.array.isRequired,
+    AttachmentItem: PropTypes.func.isRequired,
+    activeRequestTab: PropTypes.string
 };
 
 export default AuthorizationClosed;
