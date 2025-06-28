@@ -234,15 +234,15 @@ export const useUserMode = (initialUser) => {
                         setActiveMode(internalMode);
                         console.log(`🔄 Restored saved mode: ${savedMode} (internal: ${internalMode}) for ${currentUserContext?.full_name || currentUserContext?.email}`);
                     } else {
-                        // Set default mode for user
+                        // Set default mode for user, but preserve existing scenarios
                         setActiveMode(defaultMode);
-                        saveMode(defaultMode, new Set());
+                        // Don't clear scenarios here - let the scenario initialization handle it
                         console.log(`🔄 Invalid saved mode, set default for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
                     }
                 } else {
-                    // Set default mode for user
+                    // Set default mode for user, but preserve existing scenarios
                     setActiveMode(defaultMode);
-                    saveMode(defaultMode, new Set());
+                    // Don't clear scenarios here - let the scenario initialization handle it
                     console.log(`🔄 Set default mode for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
                 }
 
@@ -254,7 +254,8 @@ export const useUserMode = (initialUser) => {
                     // No URL parameter, restore from localStorage
                     try {
                         const scenarioArray = JSON.parse(savedScenarios);
-                        setScenarios(new Set(scenarioArray));
+                        const restoredScenarios = new Set(scenarioArray);
+                        setScenarios(restoredScenarios);
                         console.log(`🎯 Restored scenarios from localStorage: ${scenarioArray.join(', ')}`);
                     } catch (error) {
                         console.error('Error parsing saved scenarios:', error);
@@ -278,6 +279,14 @@ export const useUserMode = (initialUser) => {
         }
     }, [initialUser, activePersona, getDefaultModeForUser, isValidModeForUser, getUrlParams, saveMode]);
 
+    // Synchronize scenarios with localStorage when they change during initialization
+    useEffect(() => {
+        // Only sync if we have an active mode and user context
+        if (activeMode && (activePersona || user)) {
+            saveMode(activeMode, scenarios);
+        }
+    }, [scenarios, activeMode, saveMode, activePersona, user]);
+
     // Switch user persona
     const switchPersona = useCallback(async (personaId) => {
         const newPersona = availablePersonas.find(p => p.id === personaId);
@@ -293,9 +302,14 @@ export const useUserMode = (initialUser) => {
             const defaultMode = getDefaultModeForUser(newPersona);
             setActiveMode(defaultMode);
 
-            // Clear scenarios when switching personas
-            setScenarios(new Set());
-            saveMode(defaultMode, new Set());
+            // Preserve sepsis scenario when switching personas, but clear other scenarios
+            const preservedScenarios = new Set();
+            if (scenarios.has('sepsis')) {
+                preservedScenarios.add('sepsis');
+                console.log('🦠 Preserving sepsis scenario during persona switch');
+            }
+            setScenarios(preservedScenarios);
+            saveMode(defaultMode, preservedScenarios);
 
             const displayMode = defaultMode === 'UM-SNF' ? 'UM, SNF' : defaultMode;
             console.log(`👤 Switched to persona: ${newPersona.full_name} (${displayMode} mode)`);
@@ -304,7 +318,7 @@ export const useUserMode = (initialUser) => {
         } finally {
             setLoading(false);
         }
-    }, [activePersona, availablePersonas, getDefaultModeForUser, saveMode]);
+    }, [activePersona, availablePersonas, getDefaultModeForUser, saveMode, scenarios]);
 
     // Switch user mode (UM, UM-SNF, CM)
     const switchUserMode = useCallback(async (newMode) => {
@@ -319,12 +333,16 @@ export const useUserMode = (initialUser) => {
         setLoading(true);
 
         try {
-            // Clear scenarios when switching modes
-            const clearedScenarios = new Set();
+            // Preserve sepsis scenario when switching modes, but clear other scenarios
+            const preservedScenarios = new Set();
+            if (scenarios.has('sepsis')) {
+                preservedScenarios.add('sepsis');
+                console.log('🦠 Preserving sepsis scenario during mode switch');
+            }
 
             setActiveMode(internalMode);
-            setScenarios(clearedScenarios);
-            saveMode(internalMode, clearedScenarios);
+            setScenarios(preservedScenarios);
+            saveMode(internalMode, preservedScenarios);
 
             const displayMode = internalMode === 'UM-SNF' ? 'UM, SNF' : internalMode;
             console.log(`🔄 Switched to ${displayMode} mode`);
@@ -333,7 +351,7 @@ export const useUserMode = (initialUser) => {
         } finally {
             setLoading(false);
         }
-    }, [activeMode, saveMode]);
+    }, [activeMode, saveMode, scenarios]);
 
     // Toggle scenario (e.g., "sepsis" for Robert Abbott)
     const toggleScenario = useCallback(async (scenarioKey) => {
@@ -392,13 +410,21 @@ export const useUserMode = (initialUser) => {
     // Reset to default mode
     const resetMode = useCallback(() => {
         const defaultMode = getDefaultModeForUser(activePersona || user);
+
+        // Preserve sepsis scenario when resetting mode
+        const preservedScenarios = new Set();
+        if (scenarios.has('sepsis')) {
+            preservedScenarios.add('sepsis');
+            console.log('🦠 Preserving sepsis scenario during mode reset');
+        }
+
         setActiveMode(defaultMode);
-        setScenarios(new Set());
-        saveMode(defaultMode, new Set());
+        setScenarios(preservedScenarios);
+        saveMode(defaultMode, preservedScenarios);
 
         const displayMode = defaultMode === 'UM-SNF' ? 'UM, SNF' : defaultMode;
         console.log(`🔄 Reset to default ${displayMode} mode`);
-    }, [saveMode, getDefaultModeForUser, activePersona, user]);
+    }, [saveMode, getDefaultModeForUser, activePersona, user, scenarios]);
 
     // Available modes for current user/persona
     const availableModes = getAvailableModesForUser(activePersona || user).map(mode =>
