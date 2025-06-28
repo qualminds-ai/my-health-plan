@@ -129,8 +129,8 @@ const Dashboard = ({
       start_this_week_count: 21
     };
 
-    // Use sepsis stats if sepsis scenario is active, otherwise use regular stats
-    const currentStats = scenarios.includes('sepsis') ? sepsisStats : dashboardStats;
+    // Use sepsis stats if sepsis scenario is active AND user is UM, otherwise use regular stats
+    const currentStats = scenarios.includes('sepsis') && activeMode === 'UM' ? sepsisStats : dashboardStats;
 
     const baseCards = [
       {
@@ -258,7 +258,7 @@ const Dashboard = ({
 
             {/* Section Title */}
             <div className={styles.sectionTitle}>
-              Inpatient Tasks - Due Today ({scenarios.includes('sepsis') ? 48 : (dashboardStats.due_today_count || 0)})
+              Inpatient Tasks - Due Today ({scenarios.includes('sepsis') && activeMode === 'UM' ? 48 : (dashboardStats.due_today_count || 0)})
               <ExpandIcon />
             </div>
 

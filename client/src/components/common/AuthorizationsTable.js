@@ -17,8 +17,8 @@ const AuthorizationsTable = ({
     hasScenario
 }) => {
     const getPriorityClass = (priority, auth) => {
-        // Special case for authorization 2025OP000312 ONLY when sepsis scenario is active
-        if (hasScenario?.('sepsis') && auth?.authorization_number === '2025OP000312') {
+        // Special case for authorization 2025OP000312 ONLY when sepsis scenario is active and user is UM
+        if (hasScenario?.('sepsis') && userMode === 'UM' && auth?.authorization_number === '2025OP000312') {
             return styles.specialBlue;
         }
 
@@ -56,7 +56,7 @@ const AuthorizationsTable = ({
                 filtered = filtered.filter(auth =>
                     auth.priority === 'High' ||
                     auth.status === 'Appeal' ||
-                    scenarios.includes('sepsis')
+                    (scenarios.includes('sepsis') && userMode === 'UM') // Only show sepsis for UM users
                 );
                 break;
             case 'UM':
@@ -83,8 +83,8 @@ const AuthorizationsTable = ({
     const getRowStyling = (auth) => {
         let className = styles.tableRow;
 
-        // Special styling for sepsis scenario
-        if (scenarios.includes('sepsis') && auth.member_name === 'Robert Abbott') {
+        // Special styling for sepsis scenario - only for UM users
+        if (scenarios.includes('sepsis') && userMode === 'UM' && auth.member_name === 'Robert Abbott') {
             className += ` ${styles.sepsisHighlight}`;
         }
 
@@ -134,7 +134,7 @@ const AuthorizationsTable = ({
                                 id={`member-row-${memberRowId}`}
                                 data-member-id={auth.member_id}
                                 data-authorization-number={auth.authorization_number}
-                                data-scenario={scenarios.includes('sepsis') && auth.member_name === 'Robert Abbott' ? 'sepsis' : ''}
+                                data-scenario={scenarios.includes('sepsis') && userMode === 'UM' && auth.member_name === 'Robert Abbott' ? 'sepsis' : ''}
                                 className={rowClass}
                                 onClick={() => onRowClick(auth)}
                             >
@@ -153,7 +153,7 @@ const AuthorizationsTable = ({
                                 >
                                     {auth.pos}
                                 </td>
-                                <td className={`${styles.tableCell} ${styles.secondary} ${scenarios.includes('sepsis') && auth.member_name === 'Robert Abbott' ? styles.typeHighlight : ''}`}>
+                                <td className={`${styles.tableCell} ${styles.secondary} ${scenarios.includes('sepsis') && userMode === 'UM' && auth.member_name === 'Robert Abbott' ? styles.typeHighlight : ''}`}>
                                     {auth.review_type}
                                 </td>
                                 <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.member_name}</td>

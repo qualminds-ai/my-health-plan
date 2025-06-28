@@ -503,7 +503,13 @@ export const useUserMode = (initialUser) => {
             return authorizationsData;
         }
 
-        console.log('🦠 Applying sepsis modifications to', authorizationsData.length, 'authorizations');
+        // Only apply sepsis modifications for UM users, keep default view for others
+        if (activeMode !== 'UM') {
+            console.log(`🔍 Sepsis scenario active but user mode is ${activeMode}, keeping default view`);
+            return authorizationsData;
+        }
+
+        console.log('🦠 Applying sepsis modifications to', authorizationsData.length, 'authorizations for UM user');
 
         const modifiedData = authorizationsData.map(auth => {
             const authMods = SEPSIS_MODIFICATIONS.authorization[auth.authorization_number];
@@ -520,7 +526,7 @@ export const useUserMode = (initialUser) => {
 
         console.log('✅ Sepsis modifications applied, modified data:', modifiedData);
         return modifiedData;
-    }, [hasScenario]);
+    }, [hasScenario, activeMode]);
 
     // Get sepsis-modified dashboard stats
     const getSepsisModifiedStats = useCallback((originalStats) => {
@@ -529,29 +535,42 @@ export const useUserMode = (initialUser) => {
             return originalStats;
         }
 
+        // Only apply sepsis modifications for UM users, keep default view for others
+        if (activeMode !== 'UM') {
+            console.log(`🔍 Sepsis scenario active but user mode is ${activeMode}, keeping default stats`);
+            return originalStats;
+        }
+
         const modifiedStats = {
             ...originalStats,
             ...SEPSIS_MODIFICATIONS.dashboardStats
         };
 
-        console.log('📊 Applying sepsis stats modifications:');
+        console.log('📊 Applying sepsis stats modifications for UM user:');
         console.log('Original:', originalStats);
         console.log('Modified:', modifiedStats);
 
         return modifiedStats;
-    }, [hasScenario]);
+    }, [hasScenario, activeMode]);
 
     // Check if blue arrow should be hidden
     const shouldHideArrow = useCallback(() => {
-        return hasScenario('sepsis') && SEPSIS_MODIFICATIONS.removeArrow;
-    }, [hasScenario]);
+        // Only hide arrow for UM users when sepsis is active, keep default view for others
+        return hasScenario('sepsis') && activeMode === 'UM' && SEPSIS_MODIFICATIONS.removeArrow;
+    }, [hasScenario, activeMode]);
 
     // Get member info modifications for sepsis
     const getMemberSepsisInfo = useCallback((memberNumber) => {
         if (!hasScenario('sepsis')) return null;
 
+        // Only apply sepsis modifications for UM users, keep default view for others
+        if (activeMode !== 'UM') {
+            console.log(`🔍 Sepsis scenario active but user mode is ${activeMode}, no member modifications`);
+            return null;
+        }
+
         return SEPSIS_MODIFICATIONS.memberInfo[memberNumber] || null;
-    }, [hasScenario]);
+    }, [hasScenario, activeMode]);
 
     // Clear sepsis scenario (for logout or manual clearing)
     const clearSepsisScenario = useCallback(() => {
