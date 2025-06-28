@@ -12,180 +12,224 @@ const MemberInfoBar = ({
     language,
     programs,
     bhpType,
-    optOut
+    optOut,
+    urgentAlert,
+    alertMessage,
+    sepsisActive
 }) => {
     return (
-        <div id="member-info-bar" style={{
-            backgroundColor: '#F7F7F7',
-            borderRadius: '13.091px',
-            height: '72px',
-            marginBottom: '20px'
-        }}>
-            <div id="member-info-bar-content" style={{ width: '100%' }} className="px-4">
-                <div id="member-info-bar-details" className="flex py-3 items-center" style={{ height: '72px' }}>
-                    <div id="member-info-icon-column" className="flex items-center justify-center mr-4">
-                        <img id="member-info-user-icon" src={userIcon} alt="User" style={{ width: '24px', height: '24px' }} />
+        <>
+            {/* Sepsis Alert Banner */}
+            {urgentAlert && sepsisActive && (
+                <div
+                    id="sepsis-alert-banner"
+                    style={{
+                        backgroundColor: '#FEF3C7',
+                        border: '1px solid #F59E0B',
+                        borderRadius: '8px',
+                        padding: '12px 16px',
+                        marginBottom: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                    }}
+                >
+                    <div style={{
+                        width: '20px',
+                        height: '20px',
+                        backgroundColor: '#F59E0B',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }}>
+                        !
                     </div>
-
-                    {/* Member Details Column */}
-                    <div id="member-details-column" className="mr-6 flex flex-col" style={{ gap: '5px' }}>
-                        <div id="member-name-display" style={{
-                            fontFamily: 'Inter',
-                            fontSize: '14px',
-                            fontWeight: '600',
-                            color: '#1D2939',
-                            lineHeight: 'normal'
-                        }}>
-                            {memberName}
-                        </div>
-                        <div id="member-basic-info" style={{
-                            fontFamily: 'Inter',
-                            fontSize: '11px',
-                            fontWeight: '400',
-                            color: '#667085',
-                            lineHeight: 'normal'
-                        }}>
-                            {dateOfBirth}, {age} Years, {gender}
-                        </div>
+                    <div style={{
+                        fontFamily: 'Inter',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        color: '#92400E'
+                    }}>
+                        {alertMessage}
                     </div>
+                </div>
+            )}
 
-                    {/* Data Columns */}
-                    <div id="member-data-columns" className="flex-1 flex justify-between">
-                        {/* Eligibility Column */}
-                        <div id="member-eligibility-column" className="flex flex-col" style={{ gap: '5px' }}>
-                            <div id="member-eligibility-label" style={{
+            <div id="member-info-bar" style={{
+                backgroundColor: '#F7F7F7',
+                borderRadius: '13.091px',
+                height: '72px',
+                marginBottom: '20px'
+            }}>
+                <div id="member-info-bar-content" style={{ width: '100%' }} className="px-4">
+                    <div id="member-info-bar-details" className="flex py-3 items-center" style={{ height: '72px' }}>
+                        <div id="member-info-icon-column" className="flex items-center justify-center mr-4">
+                            <img id="member-info-user-icon" src={userIcon} alt="User" style={{ width: '24px', height: '24px' }} />
+                        </div>
+
+                        {/* Member Details Column */}
+                        <div id="member-details-column" className="mr-6 flex flex-col" style={{ gap: '5px' }}>
+                            <div id="member-name-display" style={{
                                 fontFamily: 'Inter',
-                                fontSize: '9px',
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                color: '#1D2939',
+                                lineHeight: 'normal'
+                            }}>
+                                {memberName}
+                            </div>
+                            <div id="member-basic-info" style={{
+                                fontFamily: 'Inter',
+                                fontSize: '11px',
                                 fontWeight: '400',
                                 color: '#667085',
                                 lineHeight: 'normal'
                             }}>
-                                Eligibility
-                            </div>
-                            <div id="member-eligibility-value" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '11px',
-                                fontWeight: '500',
-                                color: '#1D2939',
-                                lineHeight: 'normal'
-                            }}>
-                                {eligibilityPeriod}
+                                {dateOfBirth}, {age} Years, {gender}
                             </div>
                         </div>
 
-                        {/* MRIN Column */}
-                        <div id="member-mrin-column" className="flex flex-col" style={{ gap: '5px' }}>
-                            <div id="member-mrin-label" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '9px',
-                                fontWeight: '400',
-                                color: '#667085',
-                                lineHeight: 'normal'
-                            }}>
-                                MRIN
+                        {/* Data Columns */}
+                        <div id="member-data-columns" className="flex-1 flex justify-between">
+                            {/* Eligibility Column */}
+                            <div id="member-eligibility-column" className="flex flex-col" style={{ gap: '5px' }}>
+                                <div id="member-eligibility-label" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '9px',
+                                    fontWeight: '400',
+                                    color: '#667085',
+                                    lineHeight: 'normal'
+                                }}>
+                                    Eligibility
+                                </div>
+                                <div id="member-eligibility-value" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '11px',
+                                    fontWeight: '500',
+                                    color: '#1D2939',
+                                    lineHeight: 'normal'
+                                }}>
+                                    {eligibilityPeriod}
+                                </div>
                             </div>
-                            <div id="member-mrin-value" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '11px',
-                                fontWeight: '500',
-                                color: '#1D2939',
-                                lineHeight: 'normal'
-                            }}>
-                                {memberNumber}
-                            </div>
-                        </div>
 
-                        {/* Language Column */}
-                        <div id="member-language-column" className="flex flex-col" style={{ gap: '5px' }}>
-                            <div id="member-language-label" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '9px',
-                                fontWeight: '400',
-                                color: '#667085',
-                                lineHeight: 'normal'
-                            }}>
-                                Language (1st)
+                            {/* MRIN Column */}
+                            <div id="member-mrin-column" className="flex flex-col" style={{ gap: '5px' }}>
+                                <div id="member-mrin-label" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '9px',
+                                    fontWeight: '400',
+                                    color: '#667085',
+                                    lineHeight: 'normal'
+                                }}>
+                                    MRIN
+                                </div>
+                                <div id="member-mrin-value" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '11px',
+                                    fontWeight: '500',
+                                    color: '#1D2939',
+                                    lineHeight: 'normal'
+                                }}>
+                                    {memberNumber}
+                                </div>
                             </div>
-                            <div id="member-language-value" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '11px',
-                                fontWeight: '500',
-                                color: '#1D2939',
-                                lineHeight: 'normal'
-                            }}>
-                                {language}
-                            </div>
-                        </div>
 
-                        {/* Programs Column */}
-                        <div id="member-programs-column" className="flex flex-col" style={{ gap: '5px' }}>
-                            <div id="member-programs-label" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '9px',
-                                fontWeight: '400',
-                                color: '#667085',
-                                lineHeight: 'normal'
-                            }}>
-                                Programs
+                            {/* Language Column */}
+                            <div id="member-language-column" className="flex flex-col" style={{ gap: '5px' }}>
+                                <div id="member-language-label" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '9px',
+                                    fontWeight: '400',
+                                    color: '#667085',
+                                    lineHeight: 'normal'
+                                }}>
+                                    Language (1st)
+                                </div>
+                                <div id="member-language-value" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '11px',
+                                    fontWeight: '500',
+                                    color: '#1D2939',
+                                    lineHeight: 'normal'
+                                }}>
+                                    {language}
+                                </div>
                             </div>
-                            <div id="member-programs-value" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '11px',
-                                fontWeight: '500',
-                                color: '#1D2939',
-                                lineHeight: 'normal'
-                            }}>
-                                {programs}
-                            </div>
-                        </div>
 
-                        {/* BHP Column */}
-                        <div id="member-bhp-column" className="flex flex-col" style={{ gap: '5px' }}>
-                            <div id="member-bhp-label" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '9px',
-                                fontWeight: '400',
-                                color: '#667085',
-                                lineHeight: 'normal'
-                            }}>
-                                BHP
+                            {/* Programs Column */}
+                            <div id="member-programs-column" className="flex flex-col" style={{ gap: '5px' }}>
+                                <div id="member-programs-label" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '9px',
+                                    fontWeight: '400',
+                                    color: '#667085',
+                                    lineHeight: 'normal'
+                                }}>
+                                    Programs
+                                </div>
+                                <div id="member-programs-value" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '11px',
+                                    fontWeight: '500',
+                                    color: '#1D2939',
+                                    lineHeight: 'normal'
+                                }}>
+                                    {programs}
+                                </div>
                             </div>
-                            <div id="member-bhp-value" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '11px',
-                                fontWeight: '500',
-                                color: '#1D2939',
-                                lineHeight: 'normal'
-                            }}>
-                                {bhpType}
-                            </div>
-                        </div>
 
-                        {/* Opt Out Column */}
-                        <div id="member-opt-out-column" className="flex flex-col" style={{ gap: '5px' }}>
-                            <div id="member-opt-out-label" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '9px',
-                                fontWeight: '400',
-                                color: '#667085',
-                                lineHeight: 'normal'
-                            }}>
-                                Opt out
+                            {/* BHP Column */}
+                            <div id="member-bhp-column" className="flex flex-col" style={{ gap: '5px' }}>
+                                <div id="member-bhp-label" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '9px',
+                                    fontWeight: '400',
+                                    color: '#667085',
+                                    lineHeight: 'normal'
+                                }}>
+                                    BHP
+                                </div>
+                                <div id="member-bhp-value" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '11px',
+                                    fontWeight: '500',
+                                    color: '#1D2939',
+                                    lineHeight: 'normal'
+                                }}>
+                                    {bhpType}
+                                </div>
                             </div>
-                            <div id="member-opt-out-value" style={{
-                                fontFamily: 'Inter',
-                                fontSize: '11px',
-                                fontWeight: '500',
-                                color: '#1D2939',
-                                lineHeight: 'normal'
-                            }}>
-                                {optOut}
-                            </div>
-                        </div>
+
+                            {/* Opt Out Column */}
+                            <div id="member-opt-out-column" className="flex flex-col" style={{ gap: '5px' }}>
+                                <div id="member-opt-out-label" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '9px',
+                                    fontWeight: '400',
+                                    color: '#667085',
+                                    lineHeight: 'normal'
+                                }}>
+                                    Opt out
+                                </div>
+                                <div id="member-opt-out-value" style={{
+                                    fontFamily: 'Inter',
+                                    fontSize: '11px',
+                                    fontWeight: '500',
+                                    color: '#1D2939',
+                                    lineHeight: 'normal'
+                                }}>
+                                    {optOut}
+                                </div>
+                            </div>                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
@@ -199,14 +243,20 @@ MemberInfoBar.propTypes = {
     language: PropTypes.string,
     programs: PropTypes.string,
     bhpType: PropTypes.string,
-    optOut: PropTypes.string
+    optOut: PropTypes.string,
+    urgentAlert: PropTypes.bool,
+    alertMessage: PropTypes.string,
+    sepsisActive: PropTypes.bool
 };
 
 MemberInfoBar.defaultProps = {
     language: 'English',
     programs: 'Care Coordination: ERM PH',
     bhpType: 'Large Group',
-    optOut: 'No'
+    optOut: 'No',
+    urgentAlert: false,
+    alertMessage: '',
+    sepsisActive: false
 };
 
 export default MemberInfoBar;

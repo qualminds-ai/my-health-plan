@@ -34,6 +34,37 @@ const Member = ({
   const topRef = useRef(null);
   const authContentRef = useRef(null);
 
+  // Listen for user/persona changes and apply any necessary data modifications
+  const [modifiedMemberData, setModifiedMemberData] = useState(propMemberData);
+
+  // Update modified member data when props change or scenarios change
+  useEffect(() => {
+    if (propMemberData) {
+      let updatedData = { ...propMemberData };
+
+      // Apply scenario-specific modifications if needed
+      if (scenarios.includes('sepsis') && activeMode === 'UM') {
+        // Add sepsis-related modifications for Robert Abbott specifically
+        if (propMemberData.memberNumber === 'M1000020000' || propMemberData.name === 'Robert Abbott') {
+          updatedData = {
+            ...updatedData,
+            urgentAlert: true,
+            alertMessage: 'SEPSIS ALERT: Patient condition escalated to concurrent review',
+            additionalNotes: 'Immediate clinical attention required',
+            sepsisActive: true
+          };
+          console.log('🦠 Applied sepsis modifications to member data for Robert Abbott');
+        }
+      }
+
+      // Apply persona-specific modifications if needed
+      // (Future: different personas might see different data or have different permissions)
+
+      setModifiedMemberData(updatedData);
+      console.log('👤 Member data updated for user/persona/scenario changes');
+    }
+  }, [propMemberData, scenarios, activeMode, activePersona]);
+
   // Define the tabs - memoized to prevent useEffect re-runs
   const tabs = useMemo(() => ['Overview', 'Eligibility & Benefits', 'Care Plans', 'Discharge Plans', 'Concierge Care', 'Authorizations', 'Notes', 'Medications', 'Cases', 'Assessments'], []);
 
@@ -212,8 +243,8 @@ const Member = ({
     updateHash(newTab, newTab === 'Authorizations' ? activeAuthTab : null, newTab === 'Authorizations' ? activeRequestTab : null, newTab === 'Authorizations' && activeAuthTab === 'Clinical Review' ? clinicalReviewStep : null);
   };
 
-  // Use prop data if available, otherwise use static demo data
-  const memberData = propMemberData || {
+  // Use modified member data if available, otherwise use prop data or static demo data
+  const memberData = modifiedMemberData || propMemberData || {
     id: 'M001234',
     name: 'Robert Abbott',
     memberNumber: 'M1000020000',
@@ -434,6 +465,9 @@ const Member = ({
           programs="Care Coordination: ERM PH"
           bhpType="Large Group"
           optOut="No"
+          urgentAlert={memberData.urgentAlert}
+          alertMessage={memberData.alertMessage}
+          sepsisActive={memberData.sepsisActive}
         />
 
         {/* Tab Navigation */}

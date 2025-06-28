@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import Login from './components/Login';
@@ -31,35 +31,60 @@ const MemberPage = ({
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchMemberData = async () => {
-      if (!memberNumber) {
-        setError('Member number not provided in URL.');
-        setLoading(false);
-        return;
-      }
+  const fetchMemberData = useCallback(async () => {
+    if (!memberNumber) {
+      setError('Member number not provided in URL.');
+      setLoading(false);
+      return;
+    }
 
-      try {
-        setLoading(true);
-        setError(null);
+    try {
+      setLoading(true);
+      setError(null);
 
-        const data = await memberService.getMemberByNumber(memberNumber);
+      console.log('🔄 Fetching member data...');
+      console.log('Current user:', user);
+      console.log('Current activePersona:', activePersona);
+      console.log('Current scenarios:', scenarios);
 
-        if (data) {
-          setMemberData(data);
-        } else {
-          setError('Member not found.');
+      const data = await memberService.getMemberByNumber(memberNumber);
+
+      if (data) {
+        // Apply persona/scenario-specific member data modifications if needed
+        let modifiedData = data;
+
+        // Apply sepsis modifications if scenario is active and user is appropriate
+        if (getMemberSepsisInfo && scenarios.includes('sepsis')) {
+          const sepsisInfo = getMemberSepsisInfo(data.memberNumber || memberNumber);
+          if (sepsisInfo) {
+            modifiedData = {
+              ...data,
+              ...sepsisInfo,
+              originalData: data // Keep original for reference
+            };
+            console.log('🦠 Applied sepsis modifications to member data:', sepsisInfo);
+          }
         }
-      } catch (err) {
-        console.error('Error fetching member data:', err);
-        setError(err.message || 'Failed to load member data.');
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchMemberData();
-  }, [memberNumber]);
+        setMemberData(modifiedData);
+        console.log('👤 Member data loaded successfully');
+      } else {
+        setError('Member not found.');
+      }
+    } catch (err) {
+      console.error('Error fetching member data:', err);
+      setError(err.message || 'Failed to load member data.');
+    } finally {
+      setLoading(false);
+    }
+  }, [memberNumber, user, activePersona, scenarios, getMemberSepsisInfo]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (user && token) {
+      fetchMemberData();
+    }
+  }, [user, scenarios, activePersona, fetchMemberData]); // Re-fetch when persona/scenarios change
 
   if (loading) {
     return (
