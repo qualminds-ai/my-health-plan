@@ -1149,6 +1149,46 @@
     color: #787878;
 }
 
+/* Partial approval option styling */
+.authStatusSelectClosed option[value="Partial approval"] {
+    color: #F80;
+    font-weight: 700;
+}
+
+/* Status Select Dropdown for Sepsis Case - Increased width for longer text */
+.authStatusSelectSepsis {
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    background-color: white;
+    width: 125px;
+    padding: 5px 10px;
+    color: #F80;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+}
+
+.authStatusSelectSepsis option {
+    font-weight: 400;
+}
+
+.authStatusSelectSepsis option:first-child {
+    color: #F80;
+}
+
+.authStatusSelectSepsis option:not(:first-child) {
+    color: #787878;
+}
+
+.authStatusSelectSepsis option[value="Partial approval"] {
+    color: #F80;
+    font-weight: 700;
+}
+
 /* Attachments Container */
 .attachmentsContainer {
     display: grid;

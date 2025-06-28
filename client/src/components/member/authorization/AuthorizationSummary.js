@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useAuth } from '../../../hooks/useAuth';
 import styles from '../../Member.module.css';
 
 const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) => {
     const { activeMode, hasScenario } = useAuth();
+    const [selectedStatus, setSelectedStatus] = useState('Pending');
 
     // Authorization number for Robert Abbott's sepsis case
     const authorizationNumber = '2025OP000389';
@@ -16,12 +18,29 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
         activeMode,
         hasSepsisScenario: hasScenario('sepsis'),
         authorizationNumber,
-        isUMWithSepsisForAuth
+        isUMWithSepsisForAuth,
+        selectedStatus
     });
 
     // Dynamic values based on sepsis scenario for this specific authorization
     const diagnosisValue = isUMWithSepsisForAuth ? 'Sepsis, Other' : 'DKA';
     const updatedValue = isUMWithSepsisForAuth ? 'Concurrent Review' : 'Initial Review';
+
+    // Handle status change
+    const handleStatusChange = (event) => {
+        const newStatus = event.target.value;
+        setSelectedStatus(newStatus);
+        console.log('🔄 Status changed to:', newStatus);
+    };
+
+    // Determine which CSS class to use based on selected status
+    const getStatusSelectClass = () => {
+        if (selectedStatus === 'Partial approval') {
+            // Use the sepsis-specific class with increased width (125px)
+            return styles.authStatusSelectSepsis;
+        }
+        return styles.authStatusSelect;
+    };
 
     return (
         <div id="authorization-summary" className={styles.authorizationContent}>
@@ -47,11 +66,20 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Status</div>
                         <div className={styles.flexCenterGap10}>
-                            <select id="authorization-status-select" className={styles.authStatusSelect}>
-                                <option>Pending</option>
-                                <option>Approve</option>
-                                <option>Send to Review</option>
-                                <option>Deny</option>
+                            <select
+                                id="authorization-status-select"
+                                className={getStatusSelectClass()}
+                                value={selectedStatus}
+                                onChange={handleStatusChange}
+                            >
+                                <option value="Pending">Pending</option>
+                                <option value="Approve">Approve</option>
+                                <option value="Send to Review">Send to Review</option>
+                                <option value="Deny">Deny</option>
+                                {/* Add Partial approval option when sepsis scenario is enabled */}
+                                {isUMWithSepsisForAuth && (
+                                    <option value="Partial approval">Partial approval</option>
+                                )}
                             </select>
                             <button id="check-guidelines-button" className={`bg-gray-500 rounded hover:bg-gray-600 ${styles.actionButton}`}>
                                 Check Guidelines
@@ -139,6 +167,11 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
             </div>
         </div>
     );
+};
+
+AuthorizationSummary.propTypes = {
+    getStatusBadgeClass: PropTypes.func,
+    getPriorityBadgeClass: PropTypes.func
 };
 
 export default AuthorizationSummary;
