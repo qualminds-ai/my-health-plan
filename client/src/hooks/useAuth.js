@@ -19,15 +19,21 @@ export const useAuth = () => {
     // Initialize user mode management
     const userModeState = useUserMode(baseUser);
 
-    const clearAuthData = useCallback(() => {
+    const clearAuthData = useCallback((includeUserModeData = true) => {
+        console.log(`🧹 clearAuthData called with includeUserModeData: ${includeUserModeData}`);
         // Clear authentication tokens and user data
         localStorage.removeItem(STORAGE_KEYS.TOKEN);
         localStorage.removeItem(STORAGE_KEYS.USER);
 
-        // Clear user mode and scenario data
-        localStorage.removeItem(STORAGE_KEYS.USER_MODE);
-        localStorage.removeItem(STORAGE_KEYS.USER_SCENARIOS);
-        localStorage.removeItem(STORAGE_KEYS.ACTIVE_PERSONA);
+        // Only clear user mode and scenario data when explicitly requested (logout/session expiration)
+        if (includeUserModeData) {
+            localStorage.removeItem(STORAGE_KEYS.USER_MODE);
+            localStorage.removeItem(STORAGE_KEYS.USER_SCENARIOS);
+            localStorage.removeItem(STORAGE_KEYS.ACTIVE_PERSONA);
+            console.log('🧹 All user and sepsis storage cleared on logout/session expiration');
+        } else {
+            console.log('🧹 Auth data cleared but preserving user mode/scenario data');
+        }
 
         // Clear any other user preferences
         localStorage.removeItem(STORAGE_KEYS.PREFERENCES);
@@ -35,12 +41,11 @@ export const useAuth = () => {
         setBaseUser(null);
         setToken(null);
         setError(null);
-
-        console.log('🧹 All user and sepsis storage cleared on logout/session expiration');
     }, []);
 
     // Initialize authentication state
     const initializeAuth = useCallback(() => {
+        console.log('🔑 Starting auth initialization...');
         try {
             const savedToken = localStorage.getItem(STORAGE_KEYS.TOKEN);
             const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
@@ -48,12 +53,17 @@ export const useAuth = () => {
             if (savedToken && savedUser) {
                 setToken(savedToken);
                 setBaseUser(JSON.parse(savedUser));
+                console.log('🔑 Auth data restored from localStorage');
+            } else {
+                console.log('🔑 No saved auth data found');
             }
         } catch (error) {
-            console.error('Error parsing saved user data:', error);
-            clearAuthData();
+            console.error('🔑 Error parsing saved user data:', error);
+            // Only clear auth data, preserve user mode/scenario data
+            clearAuthData(false);
         } finally {
             setLoading(false);
+            console.log('🔑 Auth initialization complete');
         }
     }, [clearAuthData]);
 
@@ -104,8 +114,8 @@ export const useAuth = () => {
         } finally {
             // Clear user mode state without saving to localStorage
             userModeState.clearAllForLogout?.();
-            // Clear all localStorage data
-            clearAuthData();
+            // Clear all localStorage data including user mode/scenario data
+            clearAuthData(true);
             navigate(ROUTES.LOGIN, { replace: true });
             setLoading(false);
         }

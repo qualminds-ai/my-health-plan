@@ -147,23 +147,32 @@ export const useUserMode = (initialUser) => {
 
     // Get default mode for user based on their profile or active persona
     const getDefaultModeForUser = useCallback((userProfile) => {
-        // Use active persona if available, otherwise fallback to user profile
-        const persona = activePersona || userProfile;
-        if (!persona?.email) return 'UM';
+        // Use the passed userProfile if available, otherwise use activePersona
+        const persona = userProfile || activePersona;
+        if (!persona?.email) {
+            console.log('⚠️ getDefaultModeForUser: No persona email, returning UM');
+            return 'UM';
+        }
 
         const email = persona.email.toLowerCase();
+        console.log(`🔍 getDefaultModeForUser: Using persona "${persona.full_name}" (${email})`);
 
         // Set default modes based on user email/role (3 distinct roles)
         switch (email) {
             case 'admin@myhealthplan.com':
+                console.log('🔍 getDefaultModeForUser: Admin user, returning UM');
                 return 'UM'; // Admin defaults to UM (as Maria Hartsell persona)
             case 'maria.hartsell@myhealthplan.com':
+                console.log('🔍 getDefaultModeForUser: Maria Hartsell, returning UM');
                 return 'UM'; // Maria is UM
             case 'elise.tran@myhealthplan.com':
+                console.log('🔍 getDefaultModeForUser: Elise Tran, returning UM-SNF');
                 return 'UM-SNF'; // Elise has the combined UM, SNF role
             case 'karen.white@myhealthplan.com':
+                console.log('🔍 getDefaultModeForUser: Karen White, returning CM');
                 return 'CM'; // Karen is CM
             default:
+                console.log(`🔍 getDefaultModeForUser: Unknown email ${email}, returning UM`);
                 return 'UM'; // Default fallback
         }
     }, [activePersona]);
@@ -201,13 +210,14 @@ export const useUserMode = (initialUser) => {
             storageMode = 'UM, SNF'; // Store as "UM, SNF" for display consistency
         }
 
+        console.log(`💾 Saving to localStorage: mode="${storageMode}", scenarios=[${[...currentScenarios].join(', ')}]`);
         localStorage.setItem(STORAGE_KEYS.USER_MODE, storageMode);
         localStorage.setItem(STORAGE_KEYS.USER_SCENARIOS, JSON.stringify([...currentScenarios]));
     }, []);
 
     // Initialize mode from localStorage or set default based on user
     useEffect(() => {
-        // Wait for both user and persona to be initialized
+        // Wait for both user and persona to be initialized, but only run once per user change
         if (initialUser) {
             // Add a small delay to ensure persona is set first
             const initializeMode = () => {
@@ -236,13 +246,11 @@ export const useUserMode = (initialUser) => {
                     } else {
                         // Set default mode for user, but preserve existing scenarios
                         setActiveMode(defaultMode);
-                        // Don't clear scenarios here - let the scenario initialization handle it
                         console.log(`🔄 Invalid saved mode, set default for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
                     }
                 } else {
                     // Set default mode for user, but preserve existing scenarios
                     setActiveMode(defaultMode);
-                    // Don't clear scenarios here - let the scenario initialization handle it
                     console.log(`🔄 Set default mode for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
                 }
 
@@ -263,9 +271,16 @@ export const useUserMode = (initialUser) => {
                         setScenarios(new Set());
                     }
                 } else {
-                    // No URL parameter and no saved scenarios
-                    setScenarios(new Set());
-                    console.log(`🧹 No saved scenarios found, starting clean`);
+                    // No URL parameter and no saved scenarios - but only clear if not already set
+                    setScenarios(prevScenarios => {
+                        if (prevScenarios.size === 0) {
+                            console.log(`🧹 No saved scenarios found, starting clean`);
+                            return new Set();
+                        } else {
+                            console.log(`🔒 Preserving existing scenarios during initialization: ${[...prevScenarios].join(', ')}`);
+                            return prevScenarios;
+                        }
+                    });
                 }
             };
 
@@ -277,15 +292,10 @@ export const useUserMode = (initialUser) => {
                 setTimeout(initializeMode, 100);
             }
         }
-    }, [initialUser, activePersona, getDefaultModeForUser, isValidModeForUser, getUrlParams, saveMode]);
-
-    // Synchronize scenarios with localStorage when they change during initialization
-    useEffect(() => {
-        // Only sync if we have an active mode and user context
-        if (activeMode && (activePersona || user)) {
-            saveMode(activeMode, scenarios);
-        }
-    }, [scenarios, activeMode, saveMode, activePersona, user]);
+        // Only run this effect when user changes, but make it more stable
+        // Disable exhaustive deps to prevent over-initialization
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialUser?.email]);
 
     // Switch user persona
     const switchPersona = useCallback(async (personaId) => {
@@ -301,6 +311,8 @@ export const useUserMode = (initialUser) => {
             // Reset to default mode for the new persona
             const defaultMode = getDefaultModeForUser(newPersona);
             setActiveMode(defaultMode);
+
+            console.log(`🔄 Setting mode for ${newPersona.full_name}: internal="${defaultMode}", storage="${defaultMode === 'UM-SNF' ? 'UM, SNF' : defaultMode}"`);
 
             // Preserve sepsis scenario when switching personas, but clear other scenarios
             const preservedScenarios = new Set();
