@@ -4,6 +4,8 @@ import Header from './Header';
 import MemberHeader from './member/MemberHeader';
 import MemberInfoBar from './member/MemberInfoBar';
 import MemberTabs from './member/MemberTabs';
+import CMAlert from './member/CMAlert';
+import CMOverview from './member/CMOverview';
 import styles from './Member.module.css';
 import AuthorizationWorkflowTabs from './member/authorization/AuthorizationWorkflowTabs';
 import AuthorizationRequestNavTabs from './member/authorization/AuthorizationRequestNavTabs';
@@ -470,6 +472,9 @@ const Member = ({
           sepsisActive={memberData.sepsisActive}
         />
 
+        {/* CM Alert Section - Only for CM users */}
+        <CMAlert activeMode={activeMode} />
+
         {/* Tab Navigation */}
         <MemberTabs
           tabs={tabs}
@@ -481,15 +486,19 @@ const Member = ({
         <div className={`${styles.tabContent} py-4`}>
           {activeTab === 'Overview' && (
             <div className="w-full">
-              <div className="w-full">
-                <div className="bg-white border-0 shadow-sm rounded-lg">
-                  <div className="p-6 text-center py-12">
-                    <i className="bi bi-construction text-gray-600 text-5xl"></i>
-                    <h5 className="text-gray-600 mt-3 text-lg font-semibold">Member Overview</h5>
-                    <p className="text-gray-600">This section is under development</p>
+              {activeMode === 'CM' ? (
+                <CMOverview memberData={memberData} activeMode={activeMode} />
+              ) : (
+                <div className="w-full">
+                  <div className="bg-white border-0 shadow-sm rounded-lg">
+                    <div className="p-6 text-center py-12">
+                      <i className="bi bi-construction text-gray-600 text-5xl"></i>
+                      <h5 className="text-gray-600 mt-3 text-lg font-semibold">Member Overview</h5>
+                      <p className="text-gray-600">This section is under development</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           )}            {activeTab === 'Authorizations' && (
             <div className="w-full">

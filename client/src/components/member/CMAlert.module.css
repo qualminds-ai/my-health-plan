@@ -1,0 +1,59 @@
+/* CM Alert Component Styles */
+.alertContainer {
+    background: #FDF9F9;
+    border: 1px solid #E5E7EB;
+    border-radius: 7px;
+    padding: 16.36px 16.36px 25.36px 16.36px;
+    margin-bottom: 16px;
+}
+
+.alertHeader {
+    display: flex;
+    align-items: center;
+    gap: 6.545px;
+    margin-bottom: 14.27px;
+}
+
+.alertTitle {
+    color: #11273D;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.091px;
+    font-weight: 600;
+}
+
+.alertIcon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    /* Apply #11273D color filter - more accurate conversion */
+    filter: invert(10%) sepia(23%) saturate(1831%) hue-rotate(172deg) brightness(95%) contrast(97%);
+}
+
+.alertList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.alertItem {
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 7px;
+    padding-left: 16px;
+    position: relative;
+}
+
+.alertItem:before {
+    content: '•';
+    color: #000;
+    position: absolute;
+    left: 0;
+    font-weight: 500;
+}
+
+.alertItem:last-child {
+    margin-bottom: 0;
+}

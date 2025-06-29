@@ -1,0 +1,329 @@
+/* CM Overview Component Styles */
+.cmOverviewContainer {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.summarySection {
+    margin-bottom: 17px;
+}
+
+.summaryTabs {
+    display: flex;
+    gap: 20.45px;
+    padding: 15px 20.455px 5px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    color: #737373;
+    font-family: 'Inter', sans-serif;
+    font-size: 11.455px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.activeTab {
+    color: #000;
+    font-weight: 600;
+}
+
+.section {
+    display: inline-flex;
+    padding: 16.364px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9.818px;
+    border-radius: 6.545px;
+    border: 0.818px solid #FBFEFF;
+    background: #FFF;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+/* Risk Stratification Section */
+.riskStratificationSection {
+    background: #F8FBFC;
+    border: 1px solid #E5E7EB;
+    border-radius: 13.091px;
+    padding: 20px;
+    overflow: hidden;
+}
+
+/* Risk Section within Risk Stratification */
+.riskSection {
+    margin-bottom: 16px;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 6.545px;
+    padding: 0;
+    border-bottom: none;
+    background: transparent;
+    width: 100%;
+}
+
+.sectionTitle {
+    color: #11273D;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.091px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.externalLinkIcon {
+    color: #11273D;
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+    aspect-ratio: 13.91/13.91;
+}
+
+/* Side by Side Layout */
+.sideBySideContainer {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.leftSection,
+.rightSection {
+    display: inline-flex;
+    padding: 16.364px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9.818px;
+    border-radius: 6.545px;
+    border: 0.818px solid #FBFEFF;
+    background: #FFF;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Bottom Side by Side Layout */
+.bottomSideBySideContainer {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.bottomLeftSection {
+    display: inline-flex;
+    padding: 16.364px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9.818px;
+    border-radius: 6.545px;
+    border: 0.818px solid #FBFEFF;
+    background: #FFF;
+    flex: 1;
+    overflow: hidden;
+}
+
+.bottomRightSection {
+    display: inline-flex;
+    padding: 16.364px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9.818px;
+    border-radius: 6.545px;
+    border: 0.818px solid #FBFEFF;
+    background: #FFF;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Right Column Container for stacked sections */
+.rightColumnContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+/* Sections within Risk Stratification */
+.riskStratificationSection .section {
+    margin-bottom: 16px;
+}
+
+/* Risk Stratification Grid */
+.riskGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background: #F8F9FA;
+    justify-items: stretch;
+    align-items: start;
+    width: 80%;
+}
+
+.riskItem {
+    display: inline-flex;
+    height: 100px;
+    padding: 16.364px;
+    flex-direction: column;
+    align-items: center;
+    gap: 9.818px;
+    border-radius: 6.545px;
+    border: 0.818px solid #FBFEFF;
+    background: #FFF;
+    width: 100%;
+    max-width: none;
+}
+
+/* First Risk Item - Special Background */
+.riskItem:first-child {
+    background: #FDF9F9;
+}
+
+.riskLabel {
+    color: #737373;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 10.636px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.riskValue {
+    color: #474747;
+    font-family: 'Inter', sans-serif;
+    font-size: 19.636px;
+    font-weight: 500;
+    line-height: 150%;
+    /* 29.455px */
+    text-align: center;
+}
+
+/* Complex text styling for other risk items */
+.riskValueComplex {
+    color: #474747;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 150%;
+    text-align: center;
+}
+
+.riskValueWithIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.riskValueHigh {
+    color: #474747;
+    font-family: 'Inter', sans-serif;
+    font-size: 19.636px;
+    font-weight: 500;
+    line-height: 150%;
+    /* 29.455px */
+}
+
+.warningIcon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    fill: #A64544;
+}
+
+/* Table Styles */
+.tableContainer {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.tableHeaderRow {
+    border-bottom: 1.636px solid #B5B7BA;
+    background: #EDF4FF;
+    padding: 9.818px;
+    gap: 19.636px;
+}
+
+.tableHeader {
+    padding: 9.818px;
+    text-align: left;
+    color: #737373;
+    font-family: 'Inter', sans-serif;
+    font-size: 8.182px;
+    font-weight: 700;
+    border-bottom: none;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.tableRow {
+    border-bottom: 0.818px solid #E9E9E9;
+}
+
+.tableRow:last-child {
+    border-bottom: 0.818px solid #E9E9E9;
+}
+
+.tableCell {
+    padding: 13.091px 9.818px;
+    align-items: center;
+    gap: 19.636px;
+    border-bottom: 0.818px solid #E9E9E9;
+    background: #FFF;
+    color: #374151;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    vertical-align: top;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .riskGrid {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .sideBySideContainer,
+    .bottomSideBySideContainer {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .riskGrid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .tableContainer {
+        overflow-x: scroll;
+    }
+
+    .table {
+        min-width: 600px;
+    }
+
+    .sectionHeader {
+        padding: 0;
+    }
+
+    .tableHeader,
+    .tableCell {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+}
