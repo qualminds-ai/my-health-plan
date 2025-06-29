@@ -677,3 +677,58 @@
 .statsRow.umMode .statsCard:first-child {
     border-left: 4px solid #007bff;
 }
+
+/* CM Dashboard Layout */
+.cmDashboardLayout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    background: transparent;
+    padding-right: 30px;
+}
+
+.cmLeftContent {
+    flex: 1;
+    min-width: 0;
+    /* Allow flex item to shrink */
+    background: #F6F6F6;
+    /* Same as existing contentContainer background */
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.cmRightContent {
+    max-width: 350px;
+    background: transparent;
+    padding-top: 0;
+    /* Remove top padding to align with left panel */
+}
+
+/* Responsive CM Layout */
+@media (max-width: 1200px) {
+    .cmDashboardLayout {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cmRightContent {
+        flex: 1;
+        max-width: none;
+        padding-top: 0;
+    }
+
+    .cmLeftContent {
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .cmDashboardLayout {
+        gap: 16px;
+    }
+
+    .cmRightContent {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}

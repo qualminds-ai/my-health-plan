@@ -4,8 +4,11 @@ import Header from './Header';
 import StatsCard from './common/StatsCard';
 import TabNavigation from './common/TabNavigation';
 import AuthorizationsTable from './common/AuthorizationsTable';
+import CMTasksTable from './common/CMTasksTable';
+import GroupQueuesChart from './common/GroupQueuesChart';
 import Pagination from './common/Pagination';
 import { CalendarIcon, ClockIcon, BellIcon, ExpandIcon, RefreshIcon } from './common/Icons';
+import { getCMData } from '../constants/cmData';
 import apiService from '../services/apiService';
 import styles from './Dashboard.module.css';
 
@@ -37,6 +40,8 @@ const Dashboard = ({
     start_this_week_count: 0
   });
   const [authorizations, setAuthorizations] = useState([]);
+  const [cmTasks, setCmTasks] = useState([]);
+  const [groupQueues, setGroupQueues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('My Tasks');
@@ -47,8 +52,35 @@ const Dashboard = ({
 
       console.log('🔄 Fetching dashboard data...');
       console.log('Current scenarios:', scenarios);
+      console.log('Current active mode:', activeMode);
       console.log('Has sepsis scenario:', scenarios.includes('sepsis'));
 
+      // Handle CM Dashboard with static data
+      if (activeMode === 'CM') {
+        // Get current scenario from localStorage
+        const userScenarios = JSON.parse(localStorage.getItem('userScenarios') || '[]');
+        const currentScenario = userScenarios.length > 0 ? userScenarios[0] : 'default';
+
+        // Load CM static data
+        const cmStats = getCMData('stats', currentScenario);
+        const cmTasksData = getCMData('tasks', currentScenario);
+        const cmQueuesData = getCMData('queues', currentScenario);
+
+        setDashboardStats({
+          due_today_count: cmStats.due_today_count,
+          high_priority_count: cmStats.overdue_count,
+          reminders_count: cmStats.reminder_for_today_count,
+          start_this_week_count: cmStats.start_this_week_count
+        });
+        setCmTasks(cmTasksData);
+        setGroupQueues(cmQueuesData);
+        setAuthorizations([]); // CM doesn't use authorizations
+
+        console.log('📊 CM Dashboard data loaded:', { cmStats, cmTasksData, cmQueuesData });
+        return;
+      }
+
+      // Handle UM/SNF Dashboard with API data
       const statsResponse = await apiService.get('/api/dashboard/stats');
       console.log('📊 Original stats response:', statsResponse);
 
@@ -69,6 +101,8 @@ const Dashboard = ({
       console.log('🏥 SNF modified authorizations:', modifiedAuthorizations.slice(0, 3));
 
       setAuthorizations(modifiedAuthorizations);
+      setCmTasks([]); // Clear CM data for non-CM modes
+      setGroupQueues([]); // Clear CM data for non-CM modes
 
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -76,14 +110,14 @@ const Dashboard = ({
     } finally {
       setLoading(false);
     }
-  }, [applySepsisModifications, applySNFModifications, getSepsisModifiedStats, scenarios]);
+  }, [applySepsisModifications, applySNFModifications, getSepsisModifiedStats, scenarios, activeMode]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (user && token) {
       fetchDashboardData();
     }
-  }, [user, scenarios, fetchDashboardData]); // Re-fetch when scenarios change
+  }, [user, scenarios, activeMode, fetchDashboardData]); // Re-fetch when scenarios or mode change
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -108,27 +142,81 @@ const Dashboard = ({
     });
   };
 
-  const handleRowClick = (authorization) => {
+  const handleRowClick = (item) => {
     if (onMemberClick) {
-      const memberData = {
-        id: authorization.member_id || authorization.id,
-        name: authorization.member_name || 'Robert Abbott',
-        memberNumber: authorization.member_number || 'M1000020000',
-        authorizationNumber: authorization.authorization_number,
-        status: authorization.status,
-        priority: authorization.priority,
-        provider: authorization.provider_name,
-        diagnosis: authorization.diagnosis_code,
-        requestDate: authorization.received_date,
-        admissionDate: authorization.admission_date
-      };
-      onMemberClick(memberData);
+      if (activeMode === 'CM') {
+        // Handle CM task click
+        const memberData = {
+          id: item.member_id || item.id,
+          name: item.member_name || 'Unknown Member',
+          memberNumber: item.member_number || `MEM${String(item.member_id || item.id).padStart(3, '0')}`,
+          taskType: item.type,
+          activity: item.activity,
+          priority: item.priority,
+          diagnosis: item.diagnosis,
+          pos: item.pos,
+          dueDate: item.due_date,
+          status: item.status,
+          navigateToOverview: true // Flag to indicate navigation should go to Overview tab
+        };
+        onMemberClick(memberData);
+      } else {
+        // Handle authorization click
+        const memberData = {
+          id: item.member_id || item.id,
+          name: item.member_name || 'Robert Abbott',
+          memberNumber: item.member_number || 'M1000020000',
+          authorizationNumber: item.authorization_number,
+          status: item.status,
+          priority: item.priority,
+          provider: item.provider_name,
+          diagnosis: item.diagnosis_code,
+          requestDate: item.received_date,
+          admissionDate: item.admission_date
+        };
+        onMemberClick(memberData);
+      }
     }
   };
 
   // Stats cards configuration - mode-dependent
   const getStatsCards = () => {
-    // Sepsis scenario values
+    // CM mode has different stats structure
+    if (activeMode === 'CM') {
+      return [
+        {
+          title: 'Due Today',
+          value: dashboardStats.due_today_count || 24,
+          label: 'Due Today',
+          iconSvg: <CalendarIcon />,
+          isPrimary: true,
+          variant: 'primary'
+        },
+        {
+          title: 'Overdue',
+          value: dashboardStats.high_priority_count || 11,
+          label: 'Overdue',
+          iconSvg: <ClockIcon />,
+          variant: 'secondary'
+        },
+        {
+          title: 'Reminder for Today',
+          value: dashboardStats.reminders_count || 5,
+          label: 'Reminder for Today',
+          iconSvg: <BellIcon />,
+          variant: 'tertiary'
+        },
+        {
+          title: 'Start this Week',
+          value: dashboardStats.start_this_week_count || 3,
+          label: 'Start this Week',
+          iconSvg: <CalendarIcon />,
+          variant: 'tertiary'
+        }
+      ];
+    }
+
+    // Sepsis scenario values for UM mode
     const sepsisStats = {
       due_today_count: 48,
       high_priority_count: 5,
@@ -189,9 +277,6 @@ const Dashboard = ({
     if (activeMode === 'UM-SNF') {
       baseCards[0].title = 'SNF Authorizations';
       baseCards[0].label = 'Skilled Nursing';
-    } else if (activeMode === 'CM') {
-      baseCards[0].title = 'Cases to Review';
-      baseCards[0].label = 'Case Management';
     }
 
     return baseCards;
@@ -259,105 +344,163 @@ const Dashboard = ({
         </div>
 
         {/* Main Content Container */}
-        <div className={styles.contentContainer}>
-          {/* Stats Cards and Section Title Container */}
-          <div className={styles.statsContainer}>
-            {/* Stats Cards Row */}
-            <div className={styles.statsRow}>
-              {statsCards.map((card) => (
-                <StatsCard
-                  key={card.title}
-                  title={card.title}
-                  value={card.value}
-                  label={card.label}
-                  iconSvg={card.iconSvg}
-                  isPrimary={card.isPrimary}
-                  variant={card.variant}
+        {activeMode === 'CM' ? (
+          // CM Dashboard Layout - No background wrapper, direct flex layout
+          <div className={styles.cmDashboardLayout}>
+            {/* Left Side - Stats and Table with Background */}
+            <div className={styles.cmLeftContent}>
+              {/* Stats Cards and Section Title Container */}
+              <div className={styles.statsContainer}>
+                {/* Stats Cards Row */}
+                <div className={styles.statsRow}>
+                  {statsCards.map((card) => (
+                    <StatsCard
+                      key={card.title}
+                      title={card.title}
+                      value={card.value}
+                      label={card.label}
+                      iconSvg={card.iconSvg}
+                      isPrimary={card.isPrimary}
+                      variant={card.variant}
+                    />
+                  ))}
+                </div>
+
+                {/* Section Title */}
+                <div className={styles.sectionTitle}>
+                  My Tasks - Due Today ({dashboardStats.due_today_count || 24})
+                  <ExpandIcon />
+                </div>
+              </div>
+
+              {/* Table Section */}
+              <div className={styles.tableSection}>
+                {/* Last Updated */}
+                <div className={styles.lastUpdated}>
+                  <span className={styles.lastUpdatedText}>Last Updated: 1 min ago</span>
+                  <RefreshIcon />
+                </div>
+
+                {/* CM Tasks Table */}
+                <CMTasksTable
+                  tasks={cmTasks}
+                  onRowClick={handleRowClick}
                 />
-              ))}
-            </div>
 
-            {/* Section Title */}
-            <div className={styles.sectionTitle}>
-              Inpatient Tasks - Due Today ({scenarios.includes('sepsis') && activeMode === 'UM' ? 48 : (dashboardStats.due_today_count || 0)})
-              <ExpandIcon />
-            </div>
-
-            {/* Sepsis Scenario Control */}
-            {user?.email === 'admin@myhealthplan.com' && (
-              <div className={styles.scenarioControls}>
-                <button
-                  className={`${styles.scenarioButton} ${scenarios.includes('sepsis') ? styles.scenarioActive : ''}`}
-                  onClick={() => {
-                    console.log('🎭 Sepsis scenario toggle clicked!');
-                    console.log('Current scenarios before toggle:', scenarios);
-                    console.log('Current user:', user);
-                    toggleScenario('sepsis');
-                  }}
-                >
-                  {scenarios.includes('sepsis') ? '🚨 Sepsis Active' : '⚕️ Trigger Sepsis'}
-                </button>
-                <span className={styles.scenarioHelp}>
-                  Admin only: Toggle Robert Abbott sepsis scenario
-                </span>
-                {/* Debug info */}
-                <div style={{ fontSize: '10px', color: '#666', marginTop: '4px' }}>
-                  Debug: User email: {user?.email}, Scenarios: {JSON.stringify(scenarios)}
-                </div>
+                {/* Pagination */}
+                <Pagination />
               </div>
-            )}
-          </div>
-
-          {/* Table Section */}
-          <div className={styles.tableSection}>
-            {/* Last Updated */}
-            <div className={styles.lastUpdated}>
-              <span className={styles.lastUpdatedText}>Last Updated: 1 min ago</span>
-              <RefreshIcon />
             </div>
 
-            {/* Authorizations Table */}
-            <AuthorizationsTable
-              authorizations={authorizations}
-              onRowClick={handleRowClick}
-              formatDate={formatDate}
-              formatDateTime={formatDateTime}
-              userMode={activeMode}
-              scenarios={scenarios}
-              shouldHideArrow={shouldHideArrow ? shouldHideArrow() : false}
-              hasScenario={hasScenario}
-            />
-
-            {/* Pagination */}
-            <Pagination />
+            {/* Right Side - Group Queues Chart */}
+            <div className={styles.cmRightContent}>
+              <GroupQueuesChart
+                queuesData={groupQueues}
+                includeFilter={{ overdue: true, dueToday: true, all: false }}
+              />
+            </div>
           </div>
+        ) : (
+          // UM/SNF Dashboard Layout - Original background container
+          <div className={styles.contentContainer}>
+            {/* Stats Cards and Section Title Container */}
+            <div className={styles.statsContainer}>
+              {/* Stats Cards Row */}
+              <div className={styles.statsRow}>
+                {statsCards.map((card) => (
+                  <StatsCard
+                    key={card.title}
+                    title={card.title}
+                    value={card.value}
+                    label={card.label}
+                    iconSvg={card.iconSvg}
+                    isPrimary={card.isPrimary}
+                    variant={card.variant}
+                  />
+                ))}
+              </div>
 
-          {/* Empty State */}
-          {authorizations.length === 0 && (
-            <div className={styles.emptyState}>
-              <svg className={styles.emptyIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              {/* Section Title */}
+              <div className={styles.sectionTitle}>
+                Inpatient Tasks - Due Today ({scenarios.includes('sepsis') && activeMode === 'UM' ? 48 : (dashboardStats.due_today_count || 0)})
+                <ExpandIcon />
+              </div>
+
+              {/* Sepsis Scenario Control */}
+              {user?.email === 'admin@myhealthplan.com' && (
+                <div className={styles.scenarioControls}>
+                  <button
+                    className={`${styles.scenarioButton} ${scenarios.includes('sepsis') ? styles.scenarioActive : ''}`}
+                    onClick={() => {
+                      console.log('🎭 Sepsis scenario toggle clicked!');
+                      console.log('Current scenarios before toggle:', scenarios);
+                      console.log('Current user:', user);
+                      toggleScenario('sepsis');
+                    }}
+                  >
+                    {scenarios.includes('sepsis') ? '🚨 Sepsis Active' : '⚕️ Trigger Sepsis'}
+                  </button>
+                  <span className={styles.scenarioHelp}>
+                    Admin only: Toggle Robert Abbott sepsis scenario
+                  </span>
+                  {/* Debug info */}
+                  <div style={{ fontSize: '10px', color: '#666', marginTop: '4px' }}>
+                    Debug: User email: {user?.email}, Scenarios: {JSON.stringify(scenarios)}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Table Section */}
+            <div className={styles.tableSection}>
+              {/* Last Updated */}
+              <div className={styles.lastUpdated}>
+                <span className={styles.lastUpdatedText}>Last Updated: 1 min ago</span>
+                <RefreshIcon />
+              </div>
+
+              {/* Authorizations Table */}
+              <AuthorizationsTable
+                authorizations={authorizations}
+                onRowClick={handleRowClick}
+                formatDate={formatDate}
+                formatDateTime={formatDateTime}
+                userMode={activeMode}
+                scenarios={scenarios}
+                shouldHideArrow={shouldHideArrow ? shouldHideArrow() : false}
+                hasScenario={hasScenario}
+              />
+
+              {/* Pagination */}
+              <Pagination />
+            </div>
+          </div>)}
+
+        {/* Empty State */}
+        {authorizations.length === 0 && activeMode !== 'CM' && (
+          <div className={styles.emptyState}>
+            <svg className={styles.emptyIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3 className={styles.emptyTitle}>No authorizations</h3>
+            <p className={styles.emptyText}>Get started by creating a new authorization.</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className={styles.errorState}>
+            <div className={styles.errorContainer}>
+              <svg className={styles.errorIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <h3 className={styles.emptyTitle}>No authorizations</h3>
-              <p className={styles.emptyText}>Get started by creating a new authorization.</p>
-            </div>
-          )}
-
-          {/* Error State */}
-          {error && (
-            <div className={styles.errorState}>
-              <div className={styles.errorContainer}>
-                <svg className={styles.errorIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <div className={styles.errorContent}>
-                  <h3 className={styles.errorTitle}>Error loading dashboard</h3>
-                  <p className={styles.errorMessage}>{error}</p>
-                </div>
+              <div className={styles.errorContent}>
+                <h3 className={styles.errorTitle}>Error loading dashboard</h3>
+                <p className={styles.errorMessage}>{error}</p>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </main>
     </div>
   );

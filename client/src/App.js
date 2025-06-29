@@ -175,7 +175,12 @@ function App() {
 
   const handleMemberClick = (memberData) => {
     if (memberData?.memberNumber) {
-      navigate(`/member/${memberData.memberNumber}`);
+      // If coming from CM dashboard, navigate to Overview tab
+      if (memberData.navigateToOverview) {
+        navigate(`/member/${memberData.memberNumber}?tab=Overview`);
+      } else {
+        navigate(`/member/${memberData.memberNumber}`);
+      }
     } else {
       console.error('Member data does not have a memberNumber property:', memberData);
     }
