@@ -458,8 +458,8 @@
     width: 22.353px;
     height: 22.353px;
     padding: 2.794px;
-    border-radius: 2.794px;
-    border: 0.699px solid #737373;
+    border-radius: 1.999px;
+    border: 0.5px solid #DFE3E8;
     background: #FFF;
     cursor: pointer;
     display: flex;
@@ -479,6 +479,11 @@
 
 .paginationButton.active {
     color: #737373;
+}
+
+.paginationEllipsis {
+    background: #fff !important;
+    opacity: 1 !important;
 }
 
 .loadingContainer {

@@ -94,7 +94,7 @@ const Pagination = ({
                 {/* Ellipsis */}
                 <button
                     id="pagination-ellipsis"
-                    className={styles.paginationButton}
+                    className={`${styles.paginationButton} ${styles.paginationEllipsis}`}
                     disabled
                 >
                     ...

@@ -35,6 +35,7 @@ const Member = ({
 }) => {
   const topRef = useRef(null);
   const authContentRef = useRef(null);
+  const animationTimeoutsRef = useRef([]);
 
   // Listen for user/persona changes and apply any necessary data modifications
   const [modifiedMemberData, setModifiedMemberData] = useState(propMemberData);
@@ -235,6 +236,34 @@ const Member = ({
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, [tabs, authTabs]);
 
+  // Handle Clinical Review Step 2 animation whenever step changes to 2
+  useEffect(() => {
+    // Clear any existing timeouts
+    animationTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    animationTimeoutsRef.current = [];
+
+    if (activeAuthTab === 'Clinical Review' && clinicalReviewStep === 2) {
+      // Reset and animate clinical indicators for step 2
+      setShowClinicalIndicators([false, false, false]);
+
+      // Animate indicators one by one with staggered timing
+      animationTimeoutsRef.current = [
+        setTimeout(() => setShowClinicalIndicators([true, false, false]), 500),
+        setTimeout(() => setShowClinicalIndicators([true, true, false]), 1200),
+        setTimeout(() => setShowClinicalIndicators([true, true, true]), 1900)
+      ];
+
+      // Cleanup function to clear timeouts if component unmounts or step changes
+      return () => {
+        animationTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+        animationTimeoutsRef.current = [];
+      };
+    } else {
+      // Reset indicators when not in step 2
+      setShowClinicalIndicators([false, false, false]);
+    }
+  }, [clinicalReviewStep, activeAuthTab]);
+
   // Enhanced tab change handler
   const handleTabChange = (newTab) => {
     setActiveTab(newTab);
@@ -367,15 +396,6 @@ const Member = ({
       const nextStep = clinicalReviewStep + 1;
       setClinicalReviewStep(nextStep);
       updateHash(activeTab, activeAuthTab, activeRequestTab, nextStep);
-
-      // Reset indicators for step 2 animation
-      if (clinicalReviewStep === 1) {
-        setShowClinicalIndicators([false, false, false]);
-        // Animate indicators one by one with slower timing and initial delay
-        setTimeout(() => setShowClinicalIndicators([true, false, false]), 500);
-        setTimeout(() => setShowClinicalIndicators([true, true, false]), 1200);
-        setTimeout(() => setShowClinicalIndicators([true, true, true]), 1900);
-      }
     }
   };
 
