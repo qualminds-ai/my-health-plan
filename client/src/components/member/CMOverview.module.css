@@ -5,6 +5,24 @@
     padding: 0;
 }
 
+/* Left Column Container for stacked sections */
+.leftColumnContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    height: 100%;
+}
+
+/* Right Column Container for stacked sections */
+.rightColumnContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    height: 100%;
+}
+
 .summarySection {
     margin-bottom: 17px;
 }
@@ -89,6 +107,8 @@
     display: flex;
     gap: 16px;
     margin-bottom: 16px;
+    align-items: stretch;
+    width: 90%;
 }
 
 .leftSection,
@@ -136,14 +156,6 @@
     background: #FFF;
     flex: 1;
     overflow: hidden;
-}
-
-/* Right Column Container for stacked sections */
-.rightColumnContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    flex: 1;
 }
 
 /* Sections within Risk Stratification */
@@ -244,6 +256,7 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
+    margin-bottom: 10px;
 }
 
 .tableHeaderRow {
@@ -279,12 +292,78 @@
     gap: 19.636px;
     border-bottom: 0.818px solid #E9E9E9;
     background: #FFF;
-    color: #374151;
+    color: #737373;
     font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
+    font-size: 8.182px;
+    font-style: normal;
+    font-weight: 500;
     vertical-align: top;
     line-height: 1.4;
+}
+
+/* Conditions Section - Equal Table Sizes */
+.leftSection .table {
+    table-layout: fixed;
+}
+
+.leftSection .table:first-of-type th:nth-child(1),
+.leftSection .table:last-of-type th:nth-child(1) {
+    width: 40%;
+}
+
+.leftSection .table:first-of-type th:nth-child(2),
+.leftSection .table:last-of-type th:nth-child(2) {
+    width: 30%;
+}
+
+.leftSection .table:first-of-type th:nth-child(3),
+.leftSection .table:last-of-type th:nth-child(3) {
+    width: 30%;
+}
+
+.leftSection .table:first-of-type td:nth-child(1),
+.leftSection .table:last-of-type td:nth-child(1) {
+    width: 40%;
+}
+
+.leftSection .table:first-of-type td:nth-child(2),
+.leftSection .table:last-of-type td:nth-child(2) {
+    width: 30%;
+}
+
+.leftSection .table:first-of-type td:nth-child(3),
+.leftSection .table:last-of-type td:nth-child(3) {
+    width: 30%;
+}
+
+/* Social Determinants Section - Flexible Table Layout */
+.leftColumnContainer .leftSection:last-child .table {
+    table-layout: auto;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.leftColumnContainer .leftSection:last-child .table th,
+.leftColumnContainer .leftSection:last-child .table td {
+    width: auto !important;
+}
+
+.leftColumnContainer .leftSection:last-child .tableContainer {
+    overflow-x: auto;
+}
+
+/* Remove margin from last section to eliminate whitespace */
+.leftColumnContainer .leftSection:last-child {
+    margin-bottom: 0;
+}
+
+/* Equal height columns and remove overflow */
+.rightSection {
+    overflow: visible;
+}
+
+.rightSection .tableContainer {
+    overflow: visible;
 }
 
 /* Responsive Design */
@@ -292,13 +371,12 @@
     .riskGrid {
         grid-template-columns: 1fr 1fr;
         gap: 16px;
+
     }
 }
 
 @media (max-width: 768px) {
-
-    .sideBySideContainer,
-    .bottomSideBySideContainer {
+    .sideBySideContainer {
         flex-direction: column;
         gap: 16px;
     }
