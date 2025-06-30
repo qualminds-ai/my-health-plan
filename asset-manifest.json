@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.f8f956a9.css",
-    "main.js": "/static/js/main.92784a2c.js",
+    "main.css": "/static/css/main.2230e5da.css",
+    "main.js": "/static/js/main.e2b30406.js",
     "static/js/453.419a5d54.chunk.js": "/static/js/453.419a5d54.chunk.js",
     "static/media/background-image.jpg": "/static/media/background-image.a20d352173277356888d.jpg",
     "static/media/watch-icon.png": "/static/media/watch-icon.7a19a8563def4e1b445a.png",
@@ -26,12 +26,12 @@
     "static/media/carat-right.svg": "/static/media/carat-right.eec6e73f4f96b7c405f70e096e309b39.svg",
     "static/media/left-arrow-triangle.svg": "/static/media/left-arrow-triangle.59d0645b5aa01fb7ae4bd5700500bce4.svg",
     "static/media/Vector-right.svg": "/static/media/Vector-right.9857478a1f491461998f13646926a0fd.svg",
-    "main.f8f956a9.css.map": "/static/css/main.f8f956a9.css.map",
-    "main.92784a2c.js.map": "/static/js/main.92784a2c.js.map",
+    "main.2230e5da.css.map": "/static/css/main.2230e5da.css.map",
+    "main.e2b30406.js.map": "/static/js/main.e2b30406.js.map",
     "453.419a5d54.chunk.js.map": "/static/js/453.419a5d54.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f8f956a9.css",
-    "static/js/main.92784a2c.js"
+    "static/css/main.2230e5da.css",
+    "static/js/main.e2b30406.js"
   ]
 }
