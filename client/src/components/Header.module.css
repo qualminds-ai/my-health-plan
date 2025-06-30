@@ -148,6 +148,22 @@
     font-family: 'Inter', sans-serif;
 }
 
+.userMenuVisible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition: all 0.15s ease;
+}
+
+.userMenuHidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: all 0.15s ease;
+}
+
 .menuSection {
     padding: 8px 0;
 }

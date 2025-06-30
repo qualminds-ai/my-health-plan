@@ -4,25 +4,30 @@ This file provides context and coding guidelines for GitHub Copilot when working
 
 ## Project Overview
 
-MyHealthPlan is a **healthcare plan management MVP (Minimum Viable Product) demo application** with:
-- **Purpose**: Proof-of-concept for healthcare authorization management
-- **Scope**: Core features only - authentication, dashboard, member lookup, authorization tracking
-- **Target**: Demo/prototype to validate concept and gather feedback
-- **Frontend**: React with Bootstrap 5, functional components, hooks
-- **Backend**: Node.js/Express with PostgreSQL 
-- **Authentication**: JWT-based with bcrypt password hashing
-- **Database**: Custom SQL-based migration system (no ORM)
-- **Architecture**: Clean separation of concerns, MVC pattern
+MyHealthPlan is a **comprehensive healthcare authorization management MVP** featuring advanced clinical workflows:
+- **Purpose**: Sophisticated proof-of-concept for healthcare authorization management with clinical review systems
+- **Scope**: Advanced features - multi-step clinical review, user personas, scenario management, authorization workflows
+- **Target**: Enterprise-ready demo with sophisticated healthcare workflows for stakeholder validation
+- **Frontend**: React 19+ with Tailwind CSS + CSS Modules, functional components, advanced hooks
+- **Backend**: Node.js/Express with PostgreSQL and comprehensive API layer
+- **Authentication**: JWT-based with bcrypt, persona switching, role-based access
+- **Database**: Custom SQL-based migration system with complex healthcare data models
+- **Architecture**: Clean separation of concerns, MVC pattern, modular component architecture
 
 ## Core Technologies & Versions
 
 - **Node.js**: v16+
-- **React**: Latest with hooks and functional components
-- **PostgreSQL**: Latest with connection pooling
+- **React**: 19+ with hooks, functional components, and latest features
+- **PostgreSQL**: Latest with connection pooling and advanced indexing
 - **Express**: v4.18+
 - **JWT**: jsonwebtoken v9.0+
 - **bcrypt**: v5.1+ (10 salt rounds)
-- **Bootstrap**: v5 for styling
+- **Tailwind CSS**: v3.4+ for utility-first styling
+- **CSS Modules**: Scoped component styling with .module.css files
+- **CRACO**: Create React App Configuration Override for Tailwind integration
+- **React Router**: v7.6+ with HashRouter for deep linking
+- **Axios**: v1.9+ for API communication
+- **PropTypes**: v15.8+ for component prop validation
 
 ## Project Structure Conventions
 
@@ -30,10 +35,22 @@ MyHealthPlan is a **healthcare plan management MVP (Minimum Viable Product) demo
 my-health-plan/
 ├── client/src/
 │   ├── components/     # React functional components
-│   ├── services/       # API service layer
-│   ├── hooks/          # Custom React hooks
-│   ├── constants/      # Application constants
-│   └── utils/          # Helper functions
+│   │   ├── common/     # Reusable components (ModeSwitcher, StatsCard, etc.)
+│   │   ├── member/     # Member-specific components with authorization workflows
+│   │   │   ├── authorization/  # Multi-step clinical review system
+│   │   │   │   ├── clinical-review-steps/  # 4-step clinical review process
+│   │   │   │   └── AuthorizationWorkflowTabs.js
+│   │   │   ├── CMAlert.js & CMAlert.module.css
+│   │   │   ├── MemberHeader.js & MemberHeader.module.css
+│   │   │   └── MemberTabs.js & MemberTabs.module.css
+│   │   ├── guards/     # Route protection components
+│   │   └── pages/      # Page-level components
+│   ├── services/       # API service layer (apiService, authService, memberService)
+│   ├── hooks/          # Custom React hooks (useAuth, useUserMode, useMemberActions)
+│   ├── constants/      # Application constants and CM data
+│   ├── utils/          # Helper functions and UI utilities
+│   ├── assets/         # Static assets organized by feature
+│   └── types/          # TypeScript-style prop definitions
 └── server/
     ├── routes/         # Express routes (contains route handlers)
     ├── models/         # Database models (BaseModel pattern)
@@ -66,12 +83,13 @@ my-health-plan/
 - **Actionable Item IDs**: For every actionable item (buttons, links, rows, etc.), always add a unique and descriptive `id` attribute, following the existing project conventions. This improves testability and maintainability.
 
 ### Frontend (React) Guidelines
-- Use functional components with hooks; avoid complex state management.
-- Use Bootstrap 5 classes extensively; keep custom CSS minimal.
-- Use the service layer (`apiService.js`, `authService.js`) for API calls.
-- Focus on working functionality over pixel-perfect design.
-- Display user-friendly error messages with fallbacks.
-- Use the `useAuth` hook for auth state management.
+- Use functional components with hooks; focus on modular component architecture.
+- Use Tailwind CSS classes extensively with CSS Modules for component-specific styles.
+- Use the service layer (`apiService.js`, `authService.js`, `memberService.js`) for API calls.
+- Implement advanced state management with custom hooks (useAuth, useUserMode, useMemberActions).
+- Create focused components for complex workflows (clinical review steps, authorization management).
+- Use deep linking with HashRouter for bookmarkable application states.
+- Implement user personas and scenario-based UI modifications.
 
 ### Backend (Node.js/Express) Guidelines
 - Use simple routes with direct database queries; avoid over-abstraction.
@@ -100,6 +118,26 @@ my-health-plan/
   - `maria.hartsell@myhealthplan.com` (Admin)
   - `john.doe@myhealthplan.com` (User)
   - `jane.smith@myhealthplan.com` (User)
+
+## Advanced Features
+
+### Clinical Review System
+- **Multi-step workflow**: 4-phase clinical review process (Guidelines Search, Clinical Indications, Care Planning, Goal Length of Stay)
+- **Interactive components**: ClinicalReviewStep1-4 components with state management
+- **Animation system**: Progressive reveal of clinical indicators with smooth transitions
+- **Deep linking**: Hash-based URLs for bookmarkable authorization states
+
+### User Management
+- **User personas**: Multiple user contexts with role-based UI modifications
+- **User modes**: UM (Utilization Management), UM-SNF (Skilled Nursing Facility), CM (Case Management)
+- **Scenario management**: Dynamic content based on active clinical scenarios (sepsis workflow)
+- **State persistence**: User preferences and modes saved across sessions
+
+### Authorization Workflow
+- **Multi-tab interface**: Request Submitted, Clinical Review, Closed authorization states
+- **Document management**: Comprehensive attachment system with file handling
+- **Real-time updates**: Live scenario-based data modifications
+- **Workflow navigation**: Previous/Next step controls with state validation
 
 ## Database Migration System
 
@@ -182,10 +220,12 @@ class ExampleModel extends BaseModel {
 ### React Component Pattern
 ```javascript
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useAuth } from '../hooks/useAuth';
 import apiService from '../services/apiService';
+import styles from './Component.module.css';
 
-const ExampleComponent = () => {
+const ExampleComponent = ({ memberData, onUpdate }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const { user } = useAuth();
@@ -205,11 +245,24 @@ const ExampleComponent = () => {
     }, []);
 
     return (
-        <div className="container-fluid">
+        <div className={styles.container}>
+            <div className="flex items-center justify-between mb-4">
+                {/* Tailwind + CSS Modules hybrid approach */}
+                <h2 className={`${styles.title} text-lg font-semibold`}>
+                    {memberData.name}
+                </h2>
+            </div>
             {/* Component content */}
         </div>
     );
 };
+
+ExampleComponent.propTypes = {
+    memberData: PropTypes.object.isRequired,
+    onUpdate: PropTypes.func
+};
+
+export default ExampleComponent;
 ```
 
 ### Express Route Pattern
@@ -245,29 +298,12 @@ router.get('/endpoint', auth, async (req, res) => {
 - Ensure error states are user-friendly.
 
 ## Security Considerations
-
-- **Input Validation**: Validate and sanitize all user inputs
-- **SQL Injection**: Use parameterized queries only
-- **XSS Prevention**: Escape HTML content
-- **CORS**: Configure proper CORS policies
-- **Rate Limiting**: Implement rate limiting for API endpoints
-- **Environment Variables**: Never commit secrets to version control
-
-## Security Considerations
 - Input validation, SQL injection prevention, and XSS protection.
 - Use fixed demo passwords and clear user instructions.
 - Separate development and demo environments.
 - Configure CORS properly for demo hosting.
 - Use JWT tokens with reasonable expiration times.
 - Use demo data only; do not use real sensitive information.
-
-## Performance Guidelines
-
-- **Database**: Use indexes for frequently queried columns
-- **Queries**: Avoid N+1 query problems
-- **Caching**: Implement caching where appropriate
-- **Bundle Size**: Keep client bundle size optimized
-- **Connection Pooling**: Use connection pooling for database
 
 ## Performance Guidelines
 - Optimize for smooth demo experience.
@@ -285,12 +321,14 @@ router.get('/endpoint', auth, async (req, res) => {
 - Set up error tracking and monitoring.
 
 ## Development Workflow
-1. Focus on user-visible functionality first.
-2. Create database migrations only if needed for core features.
-3. Implement backend API endpoints with basic validation.
-4. Create/update React components with Bootstrap styling.
-5. Add basic error handling and user feedback.
-6. Test core user workflows (login → dashboard → member lookup).
+1. Focus on sophisticated user workflows and clinical features.
+2. Create database migrations for healthcare data model enhancements.
+3. Implement comprehensive API endpoints with advanced validation.
+4. Create modular React components with CSS Modules and Tailwind styling.
+5. Add comprehensive error handling and user feedback systems.
+6. Test complex user workflows (login → dashboard → member lookup → clinical review).
+7. Implement user persona switching and scenario management.
+8. Test multi-step clinical review processes and authorization workflows.
 
 ## Common Issues & Solutions
 
@@ -303,9 +341,43 @@ router.get('/endpoint', auth, async (req, res) => {
 ## File Naming Conventions
 
 - **React Components**: PascalCase (`Dashboard.js`, `LoginForm.js`)
+- **CSS Modules**: Component.module.css (`Dashboard.module.css`, `Member.module.css`)
 - **Services/Utilities**: camelCase (`apiService.js`, `authHelper.js`)
 - **Database Files**: snake_case (`20241217000000_initial_schema.sql`)
 - **Constants**: UPPER_SNAKE_CASE for values, camelCase for files
+
+## Styling Guidelines
+
+### CSS Modules + Tailwind Hybrid Approach
+```css
+/* Component.module.css */
+.container {
+  /* Component-specific styles */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.title {
+  /* Use CSS Modules for complex animations and component-specific styling */
+  transition: all 0.3s ease;
+  color: var(--primary-color);
+}
+
+.button {
+  /* Combine with Tailwind for responsive design */
+  @apply px-4 py-2 rounded-lg font-medium;
+  background-color: #3b82f6;
+}
+```
+
+```javascript
+// In component
+<div className={styles.container}>
+  <h2 className={`${styles.title} text-lg font-semibold`}>Title</h2>
+  <button className={`${styles.button} hover:bg-blue-600`}>
+    Action
+  </button>
+</div>
+```
 
 ## Code Quality Standards
 
@@ -331,6 +403,11 @@ router.get('/endpoint', auth, async (req, res) => {
 - **status_types**: Authorization status tracking
 - **dashboard_stats**: Cached dashboard statistics
 
+### Support Tables
+- **authorization_documents**: Document attachments for authorizations
+- **authorization_notes**: Clinical notes and review comments
+- **schema_migrations**: Database version control and migration tracking
+
 ### Key Relationships
 - Members have multiple authorizations
 - Authorizations link to providers, diagnoses, and DRG codes
@@ -339,4 +416,4 @@ router.get('/endpoint', auth, async (req, res) => {
 
 ---
 
-*This file provides comprehensive guidance for GitHub Copilot when working on MyHealthPlan. Follow these conventions to maintain code quality and consistency across the project. Remember: this is an MVP - prioritize working features and demo readiness over production perfection.*
+*This file provides comprehensive guidance for GitHub Copilot when working on MyHealthPlan. Follow these conventions to maintain code quality and consistency across the project. This is an enterprise-ready MVP with sophisticated healthcare workflows - prioritize working clinical features and maintain professional code standards.*

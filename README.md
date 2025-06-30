@@ -1,6 +1,6 @@
-# MyHealthPlan - Demo Web Application
+# MyHealthPlan Application
 
-A streamlined healthcare plan management demo with modern UI and developer-friendly workflow.
+A comprehensive healthcare authorization management MVP with advanced clinical review features, user personas, and scenario-based workflows.
 
 ## 🚀 Quick Start
 
@@ -20,18 +20,62 @@ npm start              # Start both frontend & backend (auto-setup database)
 - Backend: http://localhost:5000/api/health
 
 ## Tech Stack
-- **Frontend**: React + Bootstrap 5
+- **Frontend**: React 19+ with Tailwind CSS & CSS Modules
 - **Backend**: Node.js + Express
-- **Database**: PostgreSQL
+- **Database**: PostgreSQL with custom migration system
 - **Auth**: JWT + bcrypt
+- **Build Tools**: Create React App with CRACO for Tailwind integration
 
 ## Demo Login
 All users use the password: **password123**
 
+### Available Personas
 - **admin@myhealthplan.com** (System Administrator - Admin)
 - **maria.hartsell@myhealthplan.com** (Maria Hartsell - Admin)  
 - **john.doe@myhealthplan.com** (John Doe - User)
 - **jane.smith@myhealthplan.com** (Jane Smith - User)
+
+### User Modes & Scenarios
+The application supports multiple user modes and scenarios for comprehensive testing:
+
+**User Modes:**
+- **UM** (Utilization Management): Standard authorization reviews
+- **UM-SNF** (Skilled Nursing Facility): Specialized SNF authorization workflows
+- **CM** (Case Management): High-priority case management tasks
+
+**Available Scenarios:**
+- **Sepsis Scenario**: Simulates urgent sepsis case workflows with:
+  - Modified dashboard statistics
+  - Special authorization routing (Robert Abbott case)
+  - Clinical review modifications
+  - Concurrent review requirements
+
+## ✨ New Features & Capabilities
+
+### Advanced Clinical Review System
+- **Multi-step clinical review workflow** with 4 distinct phases:
+  1. **Guidelines Search & Selection**: Interactive medical guideline selection
+  2. **Clinical Indications**: Animated clinical criteria display  
+  3. **Care Planning**: Inpatient admission criteria and alternatives
+  4. **Goal Length of Stay**: Evidence-based stay duration guidelines
+
+### Interactive Authorization Management
+- **Hash-based deep linking**: Direct navigation to specific authorization states
+- **Dynamic authorization states**: Request Submitted, Clinical Review, Closed
+- **Real-time status updates**: Live scenario-based modifications
+- **Document attachments**: Comprehensive attachment management system
+
+### User Persona System
+- **Multiple user personas**: Switch between different user contexts
+- **Role-based UI modifications**: Different views for different roles
+- **Scenario-based data**: Dynamic content based on active scenarios
+- **Persistent state management**: User preferences saved across sessions
+
+### Enhanced Member Management
+- **Comprehensive member profiles**: Complete demographic and clinical data
+- **Multi-tab interface**: Overview, Eligibility, Care Plans, Authorizations, etc.
+- **Real-time scenario integration**: Member data adapts to active scenarios
+- **Responsive design**: Optimized for desktop and mobile workflows
 
 ## Development Features
 - ✅ **Auto-reload**: Both frontend and backend restart on file changes
@@ -41,6 +85,9 @@ All users use the password: **password123**
 - ✅ **Health check**: `/api/health` endpoint with DB connectivity test
 - ✅ **Cross-platform**: Works on Windows, macOS, Linux
 - ✅ **Single command**: Everything starts with `npm start`
+- ✅ **Component modularity**: Well-organized React component architecture
+- ✅ **CSS Modules**: Scoped styling with CSS Modules and Tailwind CSS
+- ✅ **Development tooling**: ESLint, Prettier, and VS Code integration
 
 ## Database Migration System
 
@@ -126,11 +173,6 @@ Migrations run **automatically** in GitHub Actions:
 - ✅ Transaction safety
 - ✅ No manual intervention needed
 
-### Troubleshooting
-- **Connection issues**: Ensure PostgreSQL is running
-- **Permission errors**: Check database user privileges  
-- **Migration conflicts**: Use `npm run db:status` to check state
-
 ## Environment Setup
 Create `server/.env` with your database credentials:
 ```
@@ -162,23 +204,68 @@ client/
 ├── public/               # Static assets
 ├── src/
 │   ├── components/       # React components
-│   │   ├── Dashboard.js
-│   │   ├── Header.js
-│   │   ├── Login.js
-│   │   └── Member.js
+│   │   ├── Dashboard.js & Dashboard.module.css
+│   │   ├── Header.js & Header.module.css  
+│   │   ├── Login.js & Login.module.css
+│   │   ├── Member.js & Member.module.css
+│   │   ├── common/       # Reusable components
+│   │   │   ├── AuthorizationsTable.js
+│   │   │   ├── CMTasksTable.js
+│   │   │   ├── GroupQueuesChart.js
+│   │   │   ├── ModeSwitcher.js & ModeSwitcher.module.css
+│   │   │   ├── Pagination.js
+│   │   │   ├── StatsCard.js
+│   │   │   └── TabNavigation.js
+│   │   ├── guards/       # Route guards
+│   │   ├── member/       # Member-specific components
+│   │   │   ├── authorization/  # Authorization workflow
+│   │   │   │   ├── clinical-review-steps/
+│   │   │   │   │   ├── ClinicalReviewStep1.js
+│   │   │   │   │   ├── ClinicalReviewStep2.js  
+│   │   │   │   │   ├── ClinicalReviewStep3.js
+│   │   │   │   │   └── ClinicalReviewStep4.js
+│   │   │   │   ├── AuthorizationAttachments.js
+│   │   │   │   ├── AuthorizationClinicalReview.js
+│   │   │   │   ├── AuthorizationClosed.js
+│   │   │   │   ├── AuthorizationRequestSubmitted.js
+│   │   │   │   ├── AuthorizationSummary.js
+│   │   │   │   └── AuthorizationWorkflowTabs.js
+│   │   │   ├── CMAlert.js & CMAlert.module.css
+│   │   │   ├── CMOverview.js & CMOverview.module.css
+│   │   │   ├── MemberHeader.js & MemberHeader.module.css
+│   │   │   ├── MemberInfoBar.js
+│   │   │   ├── MemberTabs.js & MemberTabs.module.css
+│   │   │   └── shared/    # Shared member components
+│   │   └── pages/        # Page-level components  
 │   ├── constants/        # Application constants
-│   │   └── index.js
+│   │   ├── index.js      # Main constants
+│   │   └── cmData.js     # Case management data
 │   ├── hooks/           # Custom React hooks
-│   │   └── useAuth.js
+│   │   ├── useAuth.js   # Authentication logic
+│   │   ├── useMemberActions.js  # Member actions
+│   │   └── useUserMode.js       # User mode & scenario management
 │   ├── services/        # API service layer
 │   │   ├── apiService.js
 │   │   ├── authService.js
 │   │   └── memberService.js
+│   ├── types/           # TypeScript-style prop definitions
+│   │   └── index.js
 │   ├── utils/           # Utility functions
-│   │   └── helpers.js
+│   │   ├── helpers.js
+│   │   └── memberUI.js
+│   ├── assets/          # Static assets organized by feature
+│   │   ├── authorizations/
+│   │   ├── dashboard/
+│   │   ├── header/
+│   │   ├── icons/
+│   │   └── login/
 │   ├── App.js           # Main App component
-│   ├── App.css          # Application styles
-│   └── index.js         # Application entry point
+│   ├── App.css          # Global styles
+│   ├── index.js         # Application entry point
+│   └── index.css        # Base styles with Tailwind imports
+├── craco.config.js      # CRACO configuration for Tailwind
+├── tailwind.config.js   # Tailwind CSS configuration
+├── postcss.config.js    # PostCSS configuration
 └── package.json         # Client dependencies
 ```
 
@@ -215,20 +302,30 @@ server/
 ## 🏗️ Architecture & Features
 
 ### Frontend (React)
-- **Modern React**: Uses hooks, functional components
-- **Service Layer**: Centralized API calls with error handling
-- **Authentication**: JWT-based authentication with auto-refresh
-- **Constants**: Centralized configuration and constants
-- **Utilities**: Common helper functions
-- **Responsive Design**: Bootstrap-based responsive UI
+- **Modern React**: React 19+ with hooks, functional components, and latest features
+- **Styling**: Tailwind CSS + CSS Modules for scoped component styles
+- **Service Layer**: Centralized API calls with comprehensive error handling
+- **Authentication**: JWT-based authentication with auto-refresh and persona switching
+- **State Management**: Custom hooks for complex state (useAuth, useUserMode, useMemberActions)
+- **Deep Linking**: Hash-based routing for bookmarkable authorization states
+- **Responsive Design**: Mobile-first design with Tailwind CSS utilities
+- **Component Architecture**: Modular components with clear separation of concerns
+
+### Advanced Features
+- **User Mode System**: Support for UM, UM-SNF, and CM user types
+- **Scenario Management**: Dynamic content based on active clinical scenarios
+- **Clinical Review Workflow**: Multi-step authorization review process
+- **Animation System**: Smooth transitions and progressive UI reveals
+- **Real-time Updates**: Live data modifications based on user context
 
 ### Backend (Node.js/Express)
-- **MVC Architecture**: Organized controllers, models, and routes
-- **Database Layer**: PostgreSQL with connection pooling
-- **Authentication**: JWT tokens with refresh capability
-- **Error Handling**: Centralized error handling middleware
-- **Security**: Input validation, rate limiting, CORS
-- **Modular Design**: Reusable models and utilities
+- **MVC Architecture**: Clean separation with organized controllers, models, and routes
+- **Database Layer**: PostgreSQL with connection pooling and custom migration system
+- **Authentication**: JWT tokens with refresh capability and role-based access
+- **Error Handling**: Centralized error handling middleware with detailed logging
+- **Security**: Input validation, rate limiting, CORS, parameterized queries
+- **Modular Design**: Reusable models with BaseModel pattern and utilities
+- **Health Monitoring**: Comprehensive health check endpoints with database connectivity
 
 ## 🔧 Available Scripts
 
@@ -294,53 +391,125 @@ npm run lint:fix             # Fix ESLint issues
 - Database connection via DATABASE_URL
 - JWT secrets properly configured
 - CORS origins restricted
+- Railway deployment ready with railway.json
 
 ## 🔒 Security Features
-- Passwords hashed with bcrypt (12 rounds)
-- JWT tokens with expiration
+- Passwords hashed with bcrypt (10 salt rounds)
+- JWT tokens with 24h expiration
 - Input validation and sanitization
-- CORS properly configured
+- CORS properly configured  
 - Rate limiting on API endpoints
 - Environment variables for sensitive data
+- Parameterized queries for SQL injection prevention
 
 ## 🗄️ Database Schema
-- **Users table** for authentication
-- **Members table** for healthcare member data
-- **Authorizations table** for healthcare authorizations
-- Proper foreign key relationships
-- Indexes for performance optimization
+
+### Core Business Tables
+- **users**: Authentication and user management with role-based access
+- **members**: Healthcare plan members with comprehensive demographics
+- **authorizations**: Healthcare authorization requests (main business entity)
+- **providers**: Healthcare providers and facilities with contract management
+- **diagnoses**: Medical diagnoses with ICD-10 codes and categories
+- **drg_codes**: Diagnosis-Related Group codes for billing and classification
+
+### Reference Tables
+- **priority_levels**: Authorization priority levels (High, Medium, Low)
+- **review_types**: Types of review processes (Initial, Concurrent, etc.)
+- **status_types**: Authorization status tracking workflow
+- **dashboard_stats**: Cached dashboard statistics for performance
+
+### Support Tables
+- **authorization_documents**: Document attachments for authorizations
+- **authorization_notes**: Clinical notes and review comments
+- **schema_migrations**: Database version control and migration tracking
+
+### Key Relationships & Indexes
+- Members have multiple authorizations with foreign key constraints
+- Authorizations link to providers, diagnoses, and DRG codes
+- Comprehensive indexing for dashboard query optimization
+- Database views for complex authorization summaries
 
 ## 🚀 API Endpoints
-- `POST /api/auth/login` - User authentication
-- `POST /api/auth/logout` - User logout
-- `GET /api/dashboard/stats` - Dashboard statistics
-- `GET /api/dashboard/authorizations` - List authorizations
-- `GET /api/dashboard/member/:id` - Get member details
-- `GET /api/health` - Health check with database connectivity
 
-## 🧪 Testing
-- Unit tests for React components
-- API endpoint testing
-- Database model testing
-- Integration tests for full workflows
+### Authentication
+- `POST /api/auth/login` - User authentication with persona selection
+- `POST /api/auth/logout` - User logout with session cleanup
+- `GET /api/auth/me` - Get current user profile and permissions
+
+### Dashboard
+- `GET /api/dashboard/stats` - Dashboard statistics with scenario modifications
+- `GET /api/dashboard/authorizations` - List authorizations with filtering
+- `GET /api/dashboard/member/:memberNumber` - Get member details
+
+### Member Management  
+- `GET /api/dashboard/member/:memberNumber` - Comprehensive member profile
+- `PUT /api/dashboard/member/:memberNumber` - Update member information
+
+### Health & Monitoring
+- `GET /api/health` - Health check with database connectivity test
+
+### Response Format
+All API responses follow a consistent format:
+```javascript
+// Success Response
+{
+  success: true,
+  data: {...},
+  message: "Operation completed successfully"
+}
+
+// Error Response  
+{
+  success: false,
+  error: "Error message",
+  details: {...}
+}
+```
+
+## 🧪 Testing & Quality
+- **Manual Testing**: Focus on core user workflows and edge cases
+- **Component Testing**: Individual component functionality verification
+- **API Testing**: Backend endpoint validation and error handling
+- **Integration Testing**: Full workflow testing from UI to database
+- **Cross-browser Testing**: Chrome, Firefox, Safari, Edge compatibility
+- **Responsive Testing**: Mobile, tablet, and desktop layouts
+- **Security Testing**: Authentication flows and data protection
+- **Performance Testing**: Load times and query optimization
 
 ## 🚢 Deployment
-- **Frontend:** Optimized build for static hosting
-- **Backend:** Node.js server with PM2 process management
-- **Database:** PostgreSQL with connection pooling
-- **Environment:** Docker containers for consistency
+
+### Frontend
+- **Build Process**: Optimized production build with code splitting
+- **Static Hosting**: Ready for Vercel, Netlify, or Railway deployment
+- **Environment**: Configurable API endpoints for different environments
+
+### Backend  
+- **Process Management**: PM2 ready for production scaling
+- **Database**: PostgreSQL with connection pooling and migrations
+- **Monitoring**: Health endpoints and structured logging
+- **Containerization**: Docker-ready configuration
+
+### Railway Deployment
+- **Configuration**: Pre-configured railway.json for one-click deployment
+- **Database**: Automated PostgreSQL provisioning and migration
+- **Environment**: Production-ready environment variable management
 
 ## Development Workflow
-1. Edit files in `client/` or `server/`
-2. Changes auto-reload instantly
-3. Check http://localhost:5000/api/health for backend status
-4. Use browser dev tools for frontend debugging
+1. **Feature Development**: Edit files in `client/` or `server/` directories
+2. **Auto-reload**: Changes trigger instant recompilation and browser refresh
+3. **Health Monitoring**: Check http://localhost:5000/api/health for backend status
+4. **Debugging**: Use browser dev tools for frontend, VS Code debugger for backend
+5. **Database Changes**: Use migration system for schema modifications
+6. **Component Development**: Create modular components with CSS Modules
+7. **State Management**: Use custom hooks for complex application state
 
 ## Troubleshooting
 
 **Database connection issues?**
 - Ensure PostgreSQL is running
 - Check credentials in `server/.env`
+- Check database user privileges
+- Use `npm run db:status` to check migration state
 - Try: `npm run db:setup`
 
 **Port conflicts?**
@@ -351,6 +520,20 @@ npm run lint:fix             # Fix ESLint issues
 - Save files (Ctrl+S)
 - Check terminal for errors
 - Restart: Ctrl+C then `npm start`
+
+**CSS/Styling issues?**
+- Check Tailwind CSS configuration in `tailwind.config.js`
+- Verify PostCSS setup in `postcss.config.js`
+- Ensure CSS Modules are properly imported
+
+**Authorization workflow issues?**
+- Check hash-based routing parameters
+- Verify user mode and scenario state
+- Use browser dev tools to inspect component state
+
+**Migration conflicts?**
+- Use `npm run db:status` to check state
+- Check SQL syntax and database permissions
 
 ## Password Management
 
@@ -373,4 +556,4 @@ npm run passwords:generate   # Regenerate password hashes if needed
 - After modifying the user list in the script
 
 ---
-Created: June 2025 | Optimized for developer experience
+**Created**: December 2024 | **Updated**: June 30, 2025 | Optimized for enterprise healthcare workflows and developer experience

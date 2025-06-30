@@ -37,8 +37,14 @@ const Header = ({
   };
 
   const handlePersonaSwitch = (personaId) => {
+    console.log('🔄 Persona switch clicked - ID:', personaId);
     setShowUserMenu(false);
-    if (onPersonaSwitch) onPersonaSwitch(personaId);
+    if (onPersonaSwitch) {
+      console.log('✅ Calling onPersonaSwitch with persona ID:', personaId);
+      onPersonaSwitch(personaId);
+    } else {
+      console.log('❌ No onPersonaSwitch handler provided');
+    }
   };
 
   // Get display name and role
@@ -111,7 +117,10 @@ const Header = ({
             <button
               id="user-menu-button"
               className={styles.userMenuButton}
-              onClick={() => setShowUserMenu((v) => !v)}
+              onClick={() => {
+                console.log('🔄 User menu button clicked, current state:', showUserMenu);
+                setShowUserMenu((v) => !v);
+              }}
             >
               {displayName}{displayRole ? ` (${displayRole})` : ''}
               <span style={{
@@ -124,36 +133,45 @@ const Header = ({
                 ▼
               </span>
             </button>
-            {showUserMenu && (
-              <div id="user-menu-dropdown" className={styles.userMenuDropdown}>
-                {/* Show persona options if more than one is available */}
-                {availablePersonas.length > 1 && (
-                  <>
-                    <div className={styles.menuSection}>
-                      <div className={styles.menuSectionTitle}>Switch User</div>
-                      {availablePersonas.map((persona) => (
-                        <button
-                          key={persona.id}
-                          onClick={() => handlePersonaSwitch(persona.id)}
-                          className={`${styles.personaButton} ${activePersona?.id === persona.id ? styles.activePersona : ''
-                            }`}
-                        >
-                          {persona.full_name} ({persona.role})
-                        </button>
-                      ))}
-                    </div>
-                    <div className={styles.menuDivider}></div>
-                  </>
-                )}
+            <div
+              id="user-menu-dropdown"
+              className={`${styles.userMenuDropdown} ${showUserMenu ? styles.userMenuVisible : styles.userMenuHidden}`}
+            >
+              {/* Always render persona options for programmatic access */}
+              <div className={styles.menuSection}>
+                <div className={styles.menuSectionTitle}>Switch User</div>
+                {/* Always render all 3 persona buttons */}
                 <button
-                  id="logout-button"
-                  onClick={handleLogout}
-                  className={styles.logoutButton}
+                  id="persona-switch-um"
+                  onClick={() => handlePersonaSwitch('maria.hartsell')}
+                  className={`${styles.personaButton} ${(activePersona?.email === 'maria.hartsell@myhealthplan.com' || activePersona?.full_name === 'Maria Hartsell') ? styles.activePersona : ''}`}
                 >
-                  Log out
+                  Maria Hartsell (UM)
+                </button>
+                <button
+                  id="persona-switch-um-snf"
+                  onClick={() => handlePersonaSwitch('elise.tran')}
+                  className={`${styles.personaButton} ${(activePersona?.email === 'elise.tran@myhealthplan.com' || activePersona?.full_name === 'Elise Tran') ? styles.activePersona : ''}`}
+                >
+                  Elise Tran (UM, SNF)
+                </button>
+                <button
+                  id="persona-switch-cm"
+                  onClick={() => handlePersonaSwitch('karen.white')}
+                  className={`${styles.personaButton} ${(activePersona?.email === 'karen.white@myhealthplan.com' || activePersona?.full_name === 'Karen White') ? styles.activePersona : ''}`}
+                >
+                  Karen White (CM)
                 </button>
               </div>
-            )}
+              <div className={styles.menuDivider}></div>
+              <button
+                id="logout-button"
+                onClick={handleLogout}
+                className={styles.logoutButton}
+              >
+                Log out
+              </button>
+            </div>
           </div>
         </div>
       </div>
