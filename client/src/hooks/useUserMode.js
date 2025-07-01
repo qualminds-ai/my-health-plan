@@ -236,7 +236,7 @@ export const useUserMode = (initialUser) => {
     useEffect(() => {
         // Wait for both user and persona to be initialized, but only run once per user change
         if (initialUser) {
-            // Add a small delay to ensure persona is set first
+            // Add a small delay to ensure persona is set first and prevent flickering
             const initializeMode = () => {
                 const savedMode = localStorage.getItem(STORAGE_KEYS.USER_MODE);
                 const savedScenarios = localStorage.getItem(STORAGE_KEYS.USER_SCENARIOS);
@@ -299,6 +299,9 @@ export const useUserMode = (initialUser) => {
                         }
                     });
                 }
+
+                // Set loading to false after initialization to prevent flickering
+                setLoading(false);
             };
 
             // If activePersona is set, initialize immediately
@@ -306,7 +309,7 @@ export const useUserMode = (initialUser) => {
             if (activePersona) {
                 initializeMode();
             } else {
-                setTimeout(initializeMode, 100);
+                setTimeout(initializeMode, 150);
             }
         }
         // Only run this effect when user changes, but make it more stable

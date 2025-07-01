@@ -62,8 +62,11 @@ export const useAuth = () => {
             // Only clear auth data, preserve user mode/scenario data
             clearAuthData(false);
         } finally {
-            setLoading(false);
-            console.log('🔑 Auth initialization complete');
+            // Add small delay to prevent flickering during state initialization
+            setTimeout(() => {
+                setLoading(false);
+                console.log('🔑 Auth initialization complete');
+            }, 50);
         }
     }, [clearAuthData]);
 
@@ -79,15 +82,23 @@ export const useAuth = () => {
             const response = await authService.login(credentials);
 
             if (response.token && response.user) {
+                // Set state synchronously to avoid flickering
                 setToken(response.token);
                 setBaseUser(response.user);
 
+                // Save to localStorage
                 localStorage.setItem(STORAGE_KEYS.TOKEN, response.token);
                 localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.user));
 
-                // Redirect to intended page or dashboard
-                const from = location.state?.from?.pathname || ROUTES.DASHBOARD;
-                navigate(from, { replace: true });
+                console.log('🔑 Login successful, user authenticated');
+
+                // Use setTimeout to ensure state is set before navigation
+                setTimeout(() => {
+                    // Redirect to intended page or dashboard
+                    const from = location.state?.from?.pathname || ROUTES.DASHBOARD;
+                    navigate(from, { replace: true });
+                    setLoading(false);
+                }, 100);
 
                 return response;
             } else {
@@ -96,9 +107,8 @@ export const useAuth = () => {
         } catch (error) {
             const errorMessage = error.message || MESSAGES.NETWORK_ERROR;
             setError(errorMessage);
-            throw error;
-        } finally {
             setLoading(false);
+            throw error;
         }
     };
 

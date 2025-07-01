@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Member from './components/Member';
+import ProtectedRoute from './components/guards/ProtectedRoute';
+import PublicRoute from './components/guards/PublicRoute';
 import memberService from './services/memberService';
 import { useAuth } from './hooks/useAuth';
 import { ROUTES } from './constants';
@@ -31,60 +33,87 @@ const MemberPage = ({
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const fetchMemberData = useCallback(async () => {
+  // Use refs to prevent multiple API calls
+  const lastFetchKeyRef = useRef('');
+  const isFetchingRef = useRef(false);
+
+  useEffect(() => {
     if (!memberNumber) {
       setError('Member number not provided in URL.');
       setLoading(false);
       return;
     }
 
-    try {
-      setLoading(true);
-      setError(null);
-
-      console.log('🔄 Fetching member data...');
-      console.log('Current user:', user);
-      console.log('Current activePersona:', activePersona);
-      console.log('Current scenarios:', scenarios);
-
-      const data = await memberService.getMemberByNumber(memberNumber);
-
-      if (data) {
-        // Apply persona/scenario-specific member data modifications if needed
-        let modifiedData = data;
-
-        // Apply sepsis modifications if scenario is active and user is appropriate
-        if (getMemberSepsisInfo && scenarios.includes('sepsis')) {
-          const sepsisInfo = getMemberSepsisInfo(data.memberNumber || memberNumber);
-          if (sepsisInfo) {
-            modifiedData = {
-              ...data,
-              ...sepsisInfo,
-              originalData: data // Keep original for reference
-            };
-            console.log('🦠 Applied sepsis modifications to member data:', sepsisInfo);
-          }
-        }
-
-        setMemberData(modifiedData);
-        console.log('👤 Member data loaded successfully');
-      } else {
-        setError('Member not found.');
-      }
-    } catch (err) {
-      console.error('Error fetching member data:', err);
-      setError(err.message || 'Failed to load member data.');
-    } finally {
-      setLoading(false);
-    }
-  }, [memberNumber, user, activePersona, scenarios, getMemberSepsisInfo]);
-
-  useEffect(() => {
     const token = localStorage.getItem('token');
-    if (user && token) {
-      fetchMemberData();
+    if (!user || !token) {
+      console.log('⚠️ User or token not available, skipping member data fetch');
+      setLoading(false);
+      return;
     }
-  }, [user, scenarios, activePersona, fetchMemberData]); // Re-fetch when persona/scenarios change
+
+    // Create a unique key for this fetch combination
+    const fetchKey = `${memberNumber}-${user.email}-${activePersona?.id || ''}-${scenarios.join(',')}`;
+
+    // Only fetch if this combination hasn't been fetched yet and not currently fetching
+    if (fetchKey !== lastFetchKeyRef.current && !isFetchingRef.current) {
+      console.log('🔄 Member fetch triggered by key change:', fetchKey);
+      lastFetchKeyRef.current = fetchKey;
+      isFetchingRef.current = true;
+
+      const fetchMemberData = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+
+          console.log('🔄 Fetching member data...');
+          console.log('Current user:', user);
+          console.log('Current activePersona:', activePersona);
+          console.log('Current scenarios:', scenarios);
+
+          const data = await memberService.getMemberByNumber(memberNumber);
+
+          if (data) {
+            setMemberData(data);
+            console.log('👤 Member data loaded successfully');
+          } else {
+            setError('Member not found.');
+          }
+        } catch (err) {
+          console.error('Error fetching member data:', err);
+          setError(err.message || 'Failed to load member data.');
+        } finally {
+          setLoading(false);
+          isFetchingRef.current = false;
+        }
+      };
+
+      fetchMemberData();
+    } else {
+      console.log('✅ Member data already fetched for this combination or currently fetching, skipping');
+    }
+  }, [memberNumber, user, activePersona, scenarios]);
+
+  // Apply scenario modifications after data is loaded
+  const displayMemberData = React.useMemo(() => {
+    if (!memberData) return null;
+
+    let modifiedData = memberData;
+
+    // Apply sepsis modifications if scenario is active and user is appropriate
+    if (getMemberSepsisInfo && scenarios.includes('sepsis')) {
+      const sepsisInfo = getMemberSepsisInfo(memberData.memberNumber || memberNumber);
+      if (sepsisInfo) {
+        modifiedData = {
+          ...memberData,
+          ...sepsisInfo,
+          originalData: memberData // Keep original for reference
+        };
+        console.log('🦠 Applied sepsis modifications to member data:', sepsisInfo);
+      }
+    }
+
+    return modifiedData;
+  }, [memberData, getMemberSepsisInfo, scenarios, memberNumber]);
 
   if (loading) {
     return (
@@ -113,7 +142,7 @@ const MemberPage = ({
   return (
     <Member
       user={user}
-      memberData={memberData}
+      memberData={displayMemberData}
       onLogout={onLogout}
       onBack={() => navigate(ROUTES.DASHBOARD)}
       onNavigate={onNavigate}
@@ -197,11 +226,15 @@ function App() {
     }
   };
 
+  // Show loading screen while authentication state is being determined
   if (auth.loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" aria-label="Loading">
-          <span className="sr-only">Loading...</span>
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <div className="flex flex-col items-center space-y-3">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" aria-label="Loading">
+            <span className="sr-only">Loading...</span>
+          </div>
+          <p className="text-gray-600 font-medium">Initializing application...</p>
         </div>
       </div>
     );
@@ -210,112 +243,133 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path={ROUTES.LOGIN} element={<Login onLogin={handleLogin} />} />
-        {auth.isAuthenticated() ? (
-          <>
-            <Route path="/" element={<Dashboard
-              user={auth.user}
-              onLogout={handleLogout}
-              onMemberClick={handleMemberClick}
-              onNavigate={handleNavigation}
-              // Pass user mode props
-              activeMode={auth.activeMode}
-              scenarios={auth.scenarios}
-              availableModes={auth.availableModes}
-              switchUserMode={auth.switchUserMode}
-              toggleScenario={auth.toggleScenario}
-              // Pass persona props
-              availablePersonas={auth.availablePersonas}
-              activePersona={auth.activePersona}
-              onPersonaSwitch={auth.switchPersona}
-              // Pass sepsis scenario functions
-              applySepsisModifications={auth.applySepsisModifications}
-              getSepsisModifiedStats={auth.getSepsisModifiedStats}
-              shouldHideArrow={auth.shouldHideArrow}
-              hasScenario={auth.hasScenario}
-              // Pass SNF user functions
-              applySNFModifications={auth.applySNFModifications}
-            />} />
-            <Route
-              path={ROUTES.DASHBOARD}
-              element={
-                <Dashboard
-                  user={auth.user}
-                  onLogout={handleLogout}
-                  onMemberClick={handleMemberClick}
-                  onNavigate={handleNavigation}
-                  // Pass user mode props
-                  activeMode={auth.activeMode}
-                  scenarios={auth.scenarios}
-                  availableModes={auth.availableModes}
-                  switchUserMode={auth.switchUserMode}
-                  toggleScenario={auth.toggleScenario}
-                  // Pass persona props
-                  availablePersonas={auth.availablePersonas}
-                  activePersona={auth.activePersona}
-                  onPersonaSwitch={auth.switchPersona}
-                  // Pass sepsis scenario functions
-                  applySepsisModifications={auth.applySepsisModifications}
-                  getSepsisModifiedStats={auth.getSepsisModifiedStats}
-                  shouldHideArrow={auth.shouldHideArrow}
-                  hasScenario={auth.hasScenario}
-                  // Pass SNF user functions
-                  applySNFModifications={auth.applySNFModifications}
-                />
-              }
-            />
-            <Route
-              path="/member/:memberNumber"
-              element={
-                <MemberPage
-                  user={auth.user}
-                  onLogout={handleLogout}
-                  onNavigate={handleNavigation}
-                  // Pass user mode props
-                  activeMode={auth.activeMode}
-                  scenarios={auth.scenarios}
-                  // Pass persona props
-                  availablePersonas={auth.availablePersonas}
-                  activePersona={auth.activePersona}
-                  onPersonaSwitch={auth.switchPersona}
-                  // Pass sepsis scenario functions
-                  getMemberSepsisInfo={auth.getMemberSepsisInfo}
-                  hasScenario={auth.hasScenario}
-                />
-              }
-            />
-            <Route
-              path="*"
-              element={
-                <Dashboard
-                  user={auth.user}
-                  onLogout={handleLogout}
-                  onMemberClick={handleMemberClick}
-                  onNavigate={handleNavigation}
-                  // Pass user mode props
-                  activeMode={auth.activeMode}
-                  scenarios={auth.scenarios}
-                  availableModes={auth.availableModes}
-                  switchUserMode={auth.switchUserMode}
-                  toggleScenario={auth.toggleScenario}
-                  // Pass persona props
-                  availablePersonas={auth.availablePersonas}
-                  activePersona={auth.activePersona}
-                  onPersonaSwitch={auth.switchPersona}
-                  // Pass sepsis scenario functions
-                  applySepsisModifications={auth.applySepsisModifications}
-                  getSepsisModifiedStats={auth.getSepsisModifiedStats}
-                  shouldHideArrow={auth.shouldHideArrow}
-                  hasScenario={auth.hasScenario}
-                  // Pass SNF user functions
-                  applySNFModifications={auth.applySNFModifications}
-                />
-              }
-            />
-          </>
-        ) : (
-          <Route path="*" element={<Login onLogin={handleLogin} />} />
-        )}
+        {/* Public Routes - Login */}
+        <Route
+          path={ROUTES.LOGIN}
+          element={
+            <PublicRoute isAuthenticated={auth.isAuthenticated()} loading={auth.loading}>
+              <Login onLogin={handleLogin} />
+            </PublicRoute>
+          }
+        />
+
+        {/* Protected Routes */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute isAuthenticated={auth.isAuthenticated()} loading={auth.loading}>
+              <Dashboard
+                user={auth.user}
+                onLogout={handleLogout}
+                onMemberClick={handleMemberClick}
+                onNavigate={handleNavigation}
+                // Pass user mode props
+                activeMode={auth.activeMode}
+                scenarios={auth.scenarios}
+                availableModes={auth.availableModes}
+                switchUserMode={auth.switchUserMode}
+                toggleScenario={auth.toggleScenario}
+                // Pass persona props
+                availablePersonas={auth.availablePersonas}
+                activePersona={auth.activePersona}
+                onPersonaSwitch={auth.switchPersona}
+                // Pass sepsis scenario functions
+                applySepsisModifications={auth.applySepsisModifications}
+                getSepsisModifiedStats={auth.getSepsisModifiedStats}
+                shouldHideArrow={auth.shouldHideArrow}
+                hasScenario={auth.hasScenario}
+                // Pass SNF user functions
+                applySNFModifications={auth.applySNFModifications}
+              />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path={ROUTES.DASHBOARD}
+          element={
+            <ProtectedRoute isAuthenticated={auth.isAuthenticated()} loading={auth.loading}>
+              <Dashboard
+                user={auth.user}
+                onLogout={handleLogout}
+                onMemberClick={handleMemberClick}
+                onNavigate={handleNavigation}
+                // Pass user mode props
+                activeMode={auth.activeMode}
+                scenarios={auth.scenarios}
+                availableModes={auth.availableModes}
+                switchUserMode={auth.switchUserMode}
+                toggleScenario={auth.toggleScenario}
+                // Pass persona props
+                availablePersonas={auth.availablePersonas}
+                activePersona={auth.activePersona}
+                onPersonaSwitch={auth.switchPersona}
+                // Pass sepsis scenario functions
+                applySepsisModifications={auth.applySepsisModifications}
+                getSepsisModifiedStats={auth.getSepsisModifiedStats}
+                shouldHideArrow={auth.shouldHideArrow}
+                hasScenario={auth.hasScenario}
+                // Pass SNF user functions
+                applySNFModifications={auth.applySNFModifications}
+              />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/member/:memberNumber"
+          element={
+            <ProtectedRoute isAuthenticated={auth.isAuthenticated()} loading={auth.loading}>
+              <MemberPage
+                user={auth.user}
+                onLogout={handleLogout}
+                onNavigate={handleNavigation}
+                // Pass user mode props
+                activeMode={auth.activeMode}
+                scenarios={auth.scenarios}
+                // Pass persona props
+                availablePersonas={auth.availablePersonas}
+                activePersona={auth.activePersona}
+                onPersonaSwitch={auth.switchPersona}
+                // Pass sepsis scenario functions
+                getMemberSepsisInfo={auth.getMemberSepsisInfo}
+                hasScenario={auth.hasScenario}
+              />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Fallback route for unknown paths */}
+        <Route
+          path="*"
+          element={
+            <ProtectedRoute isAuthenticated={auth.isAuthenticated()} loading={auth.loading}>
+              <Dashboard
+                user={auth.user}
+                onLogout={handleLogout}
+                onMemberClick={handleMemberClick}
+                onNavigate={handleNavigation}
+                // Pass user mode props
+                activeMode={auth.activeMode}
+                scenarios={auth.scenarios}
+                availableModes={auth.availableModes}
+                switchUserMode={auth.switchUserMode}
+                toggleScenario={auth.toggleScenario}
+                // Pass persona props
+                availablePersonas={auth.availablePersonas}
+                activePersona={auth.activePersona}
+                onPersonaSwitch={auth.switchPersona}
+                // Pass sepsis scenario functions
+                applySepsisModifications={auth.applySepsisModifications}
+                getSepsisModifiedStats={auth.getSepsisModifiedStats}
+                shouldHideArrow={auth.shouldHideArrow}
+                hasScenario={auth.hasScenario}
+                // Pass SNF user functions
+                applySNFModifications={auth.applySNFModifications}
+              />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Header from './Header';
 import StatsCard from './common/StatsCard';
@@ -46,78 +46,108 @@ const Dashboard = ({
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('My Tasks');
 
-  const fetchDashboardData = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      console.log('🔄 Fetching dashboard data...');
-      console.log('Current scenarios:', scenarios);
-      console.log('Current active mode:', activeMode);
-      console.log('Has sepsis scenario:', scenarios.includes('sepsis'));
-
-      // Handle CM Dashboard with static data
-      if (activeMode === 'CM') {
-        // Get current scenario from localStorage
-        const userScenarios = JSON.parse(localStorage.getItem('userScenarios') || '[]');
-        const currentScenario = userScenarios.length > 0 ? userScenarios[0] : 'default';
-
-        // Load CM static data
-        const cmStats = getCMData('stats', currentScenario);
-        const cmTasksData = getCMData('tasks', currentScenario);
-        const cmQueuesData = getCMData('queues', currentScenario);
-
-        setDashboardStats({
-          due_today_count: cmStats.due_today_count,
-          high_priority_count: cmStats.overdue_count,
-          reminders_count: cmStats.reminder_for_today_count,
-          start_this_week_count: cmStats.start_this_week_count
-        });
-        setCmTasks(cmTasksData);
-        setGroupQueues(cmQueuesData);
-        setAuthorizations([]); // CM doesn't use authorizations
-
-        console.log('📊 CM Dashboard data loaded:', { cmStats, cmTasksData, cmQueuesData });
-        return;
-      }
-
-      // Handle UM/SNF Dashboard with API data
-      const statsResponse = await apiService.get('/api/dashboard/stats');
-      console.log('📊 Original stats response:', statsResponse);
-
-      // Apply sepsis modifications to stats if scenario is active
-      const modifiedStats = getSepsisModifiedStats ? getSepsisModifiedStats(statsResponse) : statsResponse;
-      console.log('📊 Modified stats:', modifiedStats);
-      setDashboardStats(modifiedStats);
-
-      const authResponse = await apiService.get('/api/dashboard/authorizations?limit=50');
-      console.log('📋 Original authorizations response:', authResponse.data.slice(0, 3));
-
-      // Apply sepsis modifications to authorizations if scenario is active
-      let modifiedAuthorizations = applySepsisModifications ? applySepsisModifications(authResponse.data) : authResponse.data;
-      console.log('📋 Sepsis modified authorizations:', modifiedAuthorizations.slice(0, 3));
-
-      // Apply SNF modifications to authorizations if user is in SNF mode
-      modifiedAuthorizations = applySNFModifications ? applySNFModifications(modifiedAuthorizations) : modifiedAuthorizations;
-      console.log('🏥 SNF modified authorizations:', modifiedAuthorizations.slice(0, 3));
-
-      setAuthorizations(modifiedAuthorizations);
-      setCmTasks([]); // Clear CM data for non-CM modes
-      setGroupQueues([]); // Clear CM data for non-CM modes
-
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-      setError('Failed to load dashboard data');
-    } finally {
-      setLoading(false);
-    }
-  }, [applySepsisModifications, applySNFModifications, getSepsisModifiedStats, scenarios, activeMode]);
+  // Use refs to track fetch state without causing re-renders
+  const lastFetchKeyRef = useRef('');
+  const isFetchingRef = useRef(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (user && token) {
-      fetchDashboardData();
+    if (!user?.email || !token) {
+      console.log('⚠️ User or token not available, skipping data fetch');
+      setLoading(false);
+      return;
     }
-  }, [user, scenarios, activeMode, fetchDashboardData]); // Re-fetch when scenarios or mode change
+
+    // Create a unique key for this fetch combination
+    const fetchKey = `${user.email}-${activeMode}-${scenarios.join(',')}`;
+
+    // Only fetch if this combination hasn't been fetched yet and not currently fetching
+    if (fetchKey !== lastFetchKeyRef.current && !isFetchingRef.current) {
+      console.log('🔄 Dashboard fetch triggered by key change:', fetchKey);
+      lastFetchKeyRef.current = fetchKey;
+      isFetchingRef.current = true;
+
+      // Inline fetch logic to avoid dependency issues
+      const performFetch = async () => {
+        // Don't fetch if user is not available
+        if (!user?.email) {
+          console.log('⚠️ User not available, skipping dashboard data fetch');
+          return;
+        }
+
+        try {
+          setLoading(true);
+          setError(null);
+
+          console.log('🔄 Fetching dashboard data...');
+          console.log('Current scenarios:', scenarios);
+          console.log('Current active mode:', activeMode);
+          console.log('Has sepsis scenario:', scenarios.includes('sepsis'));
+
+          // Handle CM Dashboard with static data
+          if (activeMode === 'CM') {
+            // Get current scenario from localStorage
+            const userScenarios = JSON.parse(localStorage.getItem('userScenarios') || '[]');
+            const currentScenario = userScenarios.length > 0 ? userScenarios[0] : 'default';
+
+            // Load CM static data
+            const cmStats = getCMData('stats', currentScenario);
+            const cmTasksData = getCMData('tasks', currentScenario);
+            const cmQueuesData = getCMData('queues', currentScenario);
+
+            setDashboardStats({
+              due_today_count: cmStats.due_today_count,
+              high_priority_count: cmStats.overdue_count,
+              reminders_count: cmStats.reminder_for_today_count,
+              start_this_week_count: cmStats.start_this_week_count
+            });
+            setCmTasks(cmTasksData);
+            setGroupQueues(cmQueuesData);
+            setAuthorizations([]); // CM doesn't use authorizations
+
+            console.log('📊 CM Dashboard data loaded:', { cmStats, cmTasksData, cmQueuesData });
+            return;
+          }
+
+          // Handle UM/SNF Dashboard with API data
+          const statsResponse = await apiService.get('/api/dashboard/stats');
+          console.log('📊 Original stats response:', statsResponse);
+
+          // Apply sepsis modifications to stats if scenario is active
+          const modifiedStats = getSepsisModifiedStats ? getSepsisModifiedStats(statsResponse) : statsResponse;
+          console.log('📊 Modified stats:', modifiedStats);
+          setDashboardStats(modifiedStats);
+
+          const authResponse = await apiService.get('/api/dashboard/authorizations?limit=50');
+          console.log('📋 Original authorizations response:', authResponse.data.slice(0, 3));
+
+          // Apply sepsis modifications to authorizations if scenario is active
+          let modifiedAuthorizations = applySepsisModifications ? applySepsisModifications(authResponse.data) : authResponse.data;
+          console.log('📋 Sepsis modified authorizations:', modifiedAuthorizations.slice(0, 3));
+
+          // Apply SNF modifications to authorizations if user is in SNF mode
+          modifiedAuthorizations = applySNFModifications ? applySNFModifications(modifiedAuthorizations) : modifiedAuthorizations;
+          console.log('🏥 SNF modified authorizations:', modifiedAuthorizations.slice(0, 3));
+
+          setAuthorizations(modifiedAuthorizations);
+          setCmTasks([]); // UM/SNF doesn't use CM tasks
+          setGroupQueues([]); // UM/SNF doesn't use group queues
+
+          console.log('✅ Dashboard data loaded successfully');
+        } catch (error) {
+          console.error('Error fetching dashboard data:', error);
+          setError('Failed to load dashboard data');
+        } finally {
+          setLoading(false);
+          isFetchingRef.current = false;
+        }
+      };
+
+      performFetch();
+    } else {
+      console.log('✅ Dashboard data already fetched for this combination or currently fetching, skipping');
+    }
+  }, [user?.email, activeMode, scenarios, applySepsisModifications, applySNFModifications, getSepsisModifiedStats]); // Include necessary functions
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

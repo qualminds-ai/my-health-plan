@@ -181,17 +181,19 @@ const Member = ({
         correctHash = `#${pathname}`;
       }
 
-      // Redirect to correct HashRouter format
-      window.location.href = `/${correctHash}`;
-      return; // Exit early, component will remount with correct URL
+      // Use history.replaceState instead of window.location.href to prevent page reload
+      window.history.replaceState(null, '', `/${correctHash}`);
+      return; // Exit early, let component handle the new URL
     }
 
     const hash = window.location.hash;
     const hashParts = hash.split('?');
 
     if (hashParts.length < 2) {
-      // No query parameters, set initial hash with current state
-      updateHash(initialTabState.mainTab, initialTabState.authTab, initialTabState.requestTab, initialTabState.clinicalStep);
+      // No query parameters, set initial hash with current state - but don't cause flickering
+      setTimeout(() => {
+        updateHash(initialTabState.mainTab, initialTabState.authTab, initialTabState.requestTab, initialTabState.clinicalStep);
+      }, 50);
     }
   }, [initialTabState.mainTab, initialTabState.authTab, initialTabState.requestTab, initialTabState.clinicalStep]);
 
