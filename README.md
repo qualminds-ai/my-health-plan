@@ -2,30 +2,31 @@
 
 A comprehensive healthcare authorization management MVP with advanced clinical review features, user personas, and scenario-based workflows.
 
-**🎯 Now running in Static Data Mode - No backend required!**
+**🎯 100% Client-Side Application - No backend required!**
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js (v16+)
-- **No database required** - all data is now static!
+- Node.js (v18+)
+- **No database or server required** - fully static client-side application!
 
 ### Setup & Run (2 commands)
 ```bash
 npm run install:all    # Install dependencies
-npm run client:dev     # Start frontend only (static mode)
+npm start              # Start client application
 ```
 
 **That's it!** 🎉
-- No database setup needed - all data is hardcoded in the client
-- Frontend: http://localhost:3000
 - **100% client-side operation** with realistic demo data
+- Frontend: http://localhost:3000
+- No database, no backend server required
 
 ## Tech Stack
 - **Frontend**: React 19+ with Tailwind CSS & CSS Modules
-- **Data**: Static JSON data with dynamic scenarios
+- **Data**: Static JSON data with dynamic scenarios and user modes
 - **Auth**: Client-side authentication with demo users
 - **Build Tools**: Create React App with CRACO for Tailwind integration
+- **Routing**: React Router with hash-based deep linking
 
 ## Demo Login
 All users use the password: **password123**
@@ -81,127 +82,30 @@ The application supports multiple user modes and scenarios for comprehensive tes
 - **Responsive design**: Optimized for desktop and mobile workflows
 
 ## Development Features
-- ✅ **Auto-reload**: Both frontend and backend restart on file changes
 - ✅ **Hot reload**: React Fast Refresh for instant UI updates
-- ✅ **Auto-setup**: Database automatically created and seeded on first run
-- ✅ **Migration System**: Versioned database schema management
-- ✅ **Health check**: `/api/health` endpoint with DB connectivity test
+- ✅ **Static data**: All healthcare data included as JSON files
+- ✅ **No setup**: No database or backend configuration needed
 - ✅ **Cross-platform**: Works on Windows, macOS, Linux
 - ✅ **Single command**: Everything starts with `npm start`
 - ✅ **Component modularity**: Well-organized React component architecture
 - ✅ **CSS Modules**: Scoped styling with CSS Modules and Tailwind CSS
 - ✅ **Development tooling**: ESLint, Prettier, and VS Code integration
-
-## Database Migration System
-
-This project uses a **lightweight, SQL-based migration system** for reliable database management without external dependencies.
-
-### Key Features
-- ✅ **Lightweight**: Pure SQL migrations, no complex ORMs
-- ✅ **Versioned**: Timestamp-based migration versioning
-- ✅ **Trackable**: Migration history stored in database
-- ✅ **Transactional**: Each migration runs in a transaction
-- ✅ **CI/CD Ready**: Automatic deployment integration
-
-### Quick Commands
-```bash
-# Database setup (first time)
-npm run db:setup         # Creates DB + runs migrations + seeds
-
-# Daily development
-npm run db:status        # Check migration status
-npm run db:migrate       # Run pending migrations
-cd server && npm run db:create "description"  # Create new migration
-
-# Production (runs automatically in CI/CD)
-npm run db:migrate       # Safe for production deployment
-```
-
-### Migration Workflow
-
-1. **Create a migration:**
-   ```bash
-   cd server
-   npm run db:create "add_user_preferences"
-   ```
-
-2. **Edit the generated file:**
-   ```sql
-   -- server/db/migrations/20241217120000_add_user_preferences.sql
-   CREATE TABLE user_preferences (
-       id SERIAL PRIMARY KEY,
-       user_id INTEGER NOT NULL,
-       preference_key VARCHAR(100) NOT NULL,
-       preference_value TEXT,
-       created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-       FOREIGN KEY (user_id) REFERENCES users(id)
-   );
-   ```
-
-3. **Run the migration:**
-   ```bash
-   npm run db:migrate
-   ```
-
-### Migration System Structure
-```
-server/
-├── scripts/
-│   └── db.js                            # Database Management CLI (migration engine)
-└── db/
-    ├── connection.js                    # Database connection pool
-    ├── migrations/
-    │   └── YYYYMMDDHHMMSS_description.sql   # Migration files
-    └── seeds/
-        └── 001_initial_data.sql         # Seed data
-```
-
-### Environment Variables
-```env
-# Development (.env file)
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=my_health_plan
-DB_USER=postgres
-DB_PASSWORD=your_password
-
-# Production (Railway/Heroku)
-DATABASE_URL=postgresql://user:pass@host:port/db
-```
-
-### Production Deployment
-Migrations run **automatically** in GitHub Actions:
-- ✅ Zero-downtime deployments
-- ✅ Automatic rollback on failure
-- ✅ Transaction safety
-- ✅ No manual intervention needed
-
-## Environment Setup
-Create `server/.env` with your database credentials:
-```
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=my_health_plan
-DB_USER=your_username
-DB_PASSWORD=your_password
-JWT_SECRET=your_jwt_secret_key
-```
+- ✅ **Client-side auth**: JWT-like authentication without server dependency
 
 ## 📁 Project Structure
 
 ### Overview
-This is a full-stack healthcare management application with a React frontend and Node.js/Express backend.
+This is a client-side React healthcare management application with static data.
 
 ### Root Directory
 ```
 my-health-plan/
-├── client/                 # React frontend application
-├── server/                 # Node.js backend application
+├── client/                 # React application (entire project)
 ├── package.json           # Root package configuration
 └── README.md             # Project documentation
 ```
 
-### Client Structure (React Frontend)
+### Client Structure (React Application)
 ```
 client/
 ├── public/               # Static assets
@@ -214,6 +118,7 @@ client/
 │   │   ├── common/       # Reusable components
 │   │   │   ├── AuthorizationsTable.js
 │   │   │   ├── CMTasksTable.js
+│   │   │   ├── DataModeIndicator.js
 │   │   │   ├── GroupQueuesChart.js
 │   │   │   ├── ModeSwitcher.js & ModeSwitcher.module.css
 │   │   │   ├── Pagination.js
@@ -240,17 +145,21 @@ client/
 │   │   │   ├── MemberTabs.js & MemberTabs.module.css
 │   │   │   └── shared/    # Shared member components
 │   │   └── pages/        # Page-level components  
-│   ├── constants/        # Application constants
+│   ├── constants/        # Application constants & static data
 │   │   ├── index.js      # Main constants
-│   │   └── cmData.js     # Case management data
+│   │   ├── cmData.js     # Case management data
+│   │   └── staticUserData.js  # User authentication data
 │   ├── hooks/           # Custom React hooks
 │   │   ├── useAuth.js   # Authentication logic
 │   │   ├── useMemberActions.js  # Member actions
 │   │   └── useUserMode.js       # User mode & scenario management
-│   ├── services/        # API service layer
-│   │   ├── apiService.js
-│   │   ├── authService.js
-│   │   └── memberService.js
+│   ├── services/        # Data service layer
+│   │   ├── apiService.js       # Legacy API interface
+│   │   ├── authService.js      # Authentication service
+│   │   ├── staticAuthService.js # Client-side auth implementation
+│   │   ├── memberService.js    # Member data service
+│   │   ├── dataService.js      # General data service
+│   │   └── staticDataService.js # Static data provider
 │   ├── types/           # TypeScript-style prop definitions
 │   │   └── index.js
 │   ├── utils/           # Utility functions
@@ -262,7 +171,7 @@ client/
 │   │   ├── header/
 │   │   ├── icons/
 │   │   └── login/
-│   ├── App.js           # Main App component
+│   ├── App.js           # Main App component with routing
 │   ├── App.css          # Global styles
 │   ├── index.js         # Application entry point
 │   └── index.css        # Base styles with Tailwind imports
@@ -272,87 +181,43 @@ client/
 └── package.json         # Client dependencies
 ```
 
-### Server Structure (Node.js Backend)
-```
-server/
-├── controllers/         # Request handlers (organized by feature)
-├── db/                 # Database layer
-│   ├── connection.js   # Database connection
-│   ├── migrations/     # SQL migration files
-│   │   └── YYYYMMDDHHMMSS_description.sql
-│   └── seeds/          # Database seed data
-│       └── 001_initial_data.sql
-├── middleware/         # Express middleware
-│   ├── auth.js        # Authentication middleware
-│   └── errorHandler.js # Error handling middleware
-├── models/            # Data models
-│   ├── BaseModel.js   # Base model class
-│   ├── User.js        # User model
-│   └── Member.js      # Member model
-├── routes/            # API routes
-│   ├── auth.js        # Authentication routes
-│   └── dashboard.js   # Dashboard routes
-├── scripts/           # Database & utility scripts
-│   ├── db.js          # Unified database CLI (migrations, seeds, setup)
-│   └── generate-user-hashes.js # Password hashing utilities
-├── utils/             # Utility functions
-│   ├── constants.js   # Server constants
-│   └── helpers.js     # Helper functions
-├── server.js          # Main server file
-└── package.json       # Server dependencies
-```
-
 ## 🏗️ Architecture & Features
 
 ### Frontend (React)
 - **Modern React**: React 19+ with hooks, functional components, and latest features
 - **Styling**: Tailwind CSS + CSS Modules for scoped component styles
-- **Service Layer**: Centralized API calls with comprehensive error handling
-- **Authentication**: JWT-based authentication with auto-refresh and persona switching
+- **Data Layer**: Static JSON services with realistic healthcare data
+- **Authentication**: Client-side JWT-like authentication with demo users
 - **State Management**: Custom hooks for complex state (useAuth, useUserMode, useMemberActions)
 - **Deep Linking**: Hash-based routing for bookmarkable authorization states
 - **Responsive Design**: Mobile-first design with Tailwind CSS utilities
 - **Component Architecture**: Modular components with clear separation of concerns
 
 ### Advanced Features
-- **User Mode System**: Support for UM, UM-SNF, and CM user types
-- **Scenario Management**: Dynamic content based on active clinical scenarios
-- **Clinical Review Workflow**: Multi-step authorization review process
-- **Animation System**: Smooth transitions and progressive UI reveals
-- **Real-time Updates**: Live data modifications based on user context
-
-### Backend (Node.js/Express)
-- **MVC Architecture**: Clean separation with organized controllers, models, and routes
-- **Database Layer**: PostgreSQL with connection pooling and custom migration system
-- **Authentication**: JWT tokens with refresh capability and role-based access
-- **Error Handling**: Centralized error handling middleware with detailed logging
-- **Security**: Input validation, rate limiting, CORS, parameterized queries
-- **Modular Design**: Reusable models with BaseModel pattern and utilities
-- **Health Monitoring**: Comprehensive health check endpoints with database connectivity
+- **User Mode System**: Support for UM, UM-SNF, and CM user types with different dashboards
+- **Scenario Management**: Dynamic content based on active clinical scenarios (sepsis)
+- **Clinical Review Workflow**: Multi-step authorization review process with animations
+- **Persona Switching**: Admin users can switch between different user personas
+- **Static Data Services**: Complete healthcare data simulation without backend dependency
+- **Real-time Updates**: Live data modifications based on user context and scenarios
 
 ## 🔧 Available Scripts
 
 ### Root Level Commands
 ```bash
-npm start                    # Start both frontend and backend in development mode
-npm run dev                  # Same as npm start
-npm run install:all          # Install all dependencies (client + server)
-npm run client:dev           # Start only the frontend
-npm run server:dev           # Start only the backend
+npm start                    # Start React development server
+npm run dev                  # Same as npm start  
+npm run install:all          # Install all dependencies
+npm run client:dev           # Start the client application
 npm run client:build         # Build React app for production
 npm run client:build:watch   # Build with watch mode
-npm run db:setup             # Initialize database with schema and seed data
-npm run passwords:generate   # Regenerate user password hashes
-npm run dev:debug            # Start with server debugging enabled
-npm run watch                # Watch mode for client builds
-npm run test                 # Run all tests
-npm run test:server          # Run server tests
-npm run lint                 # Run linting on both client and server
-npm run clean                # Clean all build artifacts and node_modules
-npm run heroku-postbuild     # Production build for deployment
+npm run build                # Production build
+npm run test                 # Run client tests
+npm run lint                 # Run linting
+npm run clean                # Clean build artifacts and node_modules
 ```
 
-### Client-Specific Commands
+### Client Commands (from client/ directory)
 ```bash
 cd client
 npm start                    # Start React development server
@@ -366,197 +231,136 @@ npm run lint:fix             # Fix ESLint issues automatically
 npm run format               # Format code with Prettier
 ```
 
-### Server-Specific Commands
-```bash
-cd server
-npm start                    # Start production server
-npm run dev                  # Start with nodemon for development
-npm run debug                # Start with debugging enabled
-npm run db:setup             # Setup database
-npm run db:migrate           # Run database migrations
-npm run db:seed              # Seed database with test data
-npm test                     # Run server tests
-npm run test:watch           # Run tests in watch mode
-npm run test:coverage        # Run tests with coverage
-npm run lint                 # Run ESLint on server code
-npm run lint:fix             # Fix ESLint issues
-```
-
 ## 🌐 Environment Configuration
 
 ### Development
 - **Frontend:** http://localhost:3000
-- **Backend:** http://localhost:5000
-- **Database:** PostgreSQL on localhost:5432
+- **Data:** Static JSON files with realistic healthcare data
+- **Authentication:** Client-side demo users
 
 ### Production
-- Environment variables configured via .env files
-- Database connection via DATABASE_URL
-- JWT secrets properly configured
-- CORS origins restricted
-- Railway deployment ready with railway.json
+- **Build:** Optimized React production build
+- **Deployment:** Static hosting compatible (Vercel, Netlify, GitHub Pages)
+- **No environment variables required** - all configuration is client-side
 
 ## 🔒 Security Features
-- Passwords hashed with bcrypt (10 salt rounds)
-- JWT tokens with 24h expiration
+- Client-side password hashing with bcrypt-like implementation
+- JWT-like tokens for session management (demo purposes)
+- Role-based access control (UM, UM-SNF, CM)
 - Input validation and sanitization
-- CORS properly configured  
-- Rate limiting on API endpoints
-- Environment variables for sensitive data
-- Parameterized queries for SQL injection prevention
+- No sensitive data transmission (all client-side)
+- Secure demo environment for healthcare workflow testing
 
-## 🗄️ Database Schema
+## � Data Architecture
 
-### Core Business Tables
-- **users**: Authentication and user management with role-based access
-- **members**: Healthcare plan members with comprehensive demographics
-- **authorizations**: Healthcare authorization requests (main business entity)
-- **providers**: Healthcare providers and facilities with contract management
-- **diagnoses**: Medical diagnoses with ICD-10 codes and categories
-- **drg_codes**: Diagnosis-Related Group codes for billing and classification
+### Static Data Structure
+- **Users**: 6 demo users with different roles and access levels
+- **Members**: Comprehensive healthcare plan member profiles
+- **Authorizations**: Healthcare authorization requests with full workflow states
+- **Providers**: Healthcare facilities and provider networks
+- **Clinical Data**: Diagnoses, procedures, and medical codes
+- **Dashboard Statistics**: Pre-calculated metrics for different user types
 
-### Reference Tables
-- **priority_levels**: Authorization priority levels (High, Medium, Low)
-- **review_types**: Types of review processes (Initial, Concurrent, etc.)
-- **status_types**: Authorization status tracking workflow
-- **dashboard_stats**: Cached dashboard statistics for performance
+### User Roles & Data Access
+- **UM (Utilization Management)**: Standard authorization reviews and sepsis scenarios
+- **UM-SNF (Skilled Nursing)**: Specialized SNF authorization workflows  
+- **CM (Case Management)**: High-priority case management tasks and member alerts
+- **Admin**: Full access with persona switching capabilities
 
-### Support Tables
-- **authorization_documents**: Document attachments for authorizations
-- **authorization_notes**: Clinical notes and review comments
-- **schema_migrations**: Database version control and migration tracking
-
-### Key Relationships & Indexes
-- Members have multiple authorizations with foreign key constraints
-- Authorizations link to providers, diagnoses, and DRG codes
-- Comprehensive indexing for dashboard query optimization
-- Database views for complex authorization summaries
-
-## 🚀 API Endpoints
-
-### Authentication
-- `POST /api/auth/login` - User authentication with persona selection
-- `POST /api/auth/logout` - User logout with session cleanup
-- `GET /api/auth/me` - Get current user profile and permissions
-
-### Dashboard
-- `GET /api/dashboard/stats` - Dashboard statistics with scenario modifications
-- `GET /api/dashboard/authorizations` - List authorizations with filtering
-- `GET /api/dashboard/member/:memberNumber` - Get member details
-
-### Member Management  
-- `GET /api/dashboard/member/:memberNumber` - Comprehensive member profile
-- `PUT /api/dashboard/member/:memberNumber` - Update member information
-
-### Health & Monitoring
-- `GET /api/health` - Health check with database connectivity test
-
-### Response Format
-All API responses follow a consistent format:
-```javascript
-// Success Response
-{
-  success: true,
-  data: {...},
-  message: "Operation completed successfully"
-}
-
-// Error Response  
-{
-  success: false,
-  error: "Error message",
-  details: {...}
-}
-```
+### Scenario System
+- **Sepsis Scenario**: Modifies dashboard data and member information for UM users
+- **User Mode Switching**: Different data views based on active user role
+- **Dynamic Statistics**: Real-time calculation based on scenarios and user context
 
 ## 🧪 Testing & Quality
-- **Manual Testing**: Focus on core user workflows and edge cases
-- **Component Testing**: Individual component functionality verification
-- **API Testing**: Backend endpoint validation and error handling
-- **Integration Testing**: Full workflow testing from UI to database
+- **Component Testing**: Individual React component functionality verification
+- **User Workflow Testing**: End-to-end testing of healthcare authorization workflows
 - **Cross-browser Testing**: Chrome, Firefox, Safari, Edge compatibility
 - **Responsive Testing**: Mobile, tablet, and desktop layouts
-- **Security Testing**: Authentication flows and data protection
-- **Performance Testing**: Load times and query optimization
+- **Static Data Validation**: Ensuring data consistency across scenarios
+- **Performance Testing**: Client-side rendering and state management optimization
+- **Accessibility Testing**: WCAG compliance for healthcare applications
 
 ## 🚢 Deployment
 
-### Frontend
-- **Build Process**: Optimized production build with code splitting
-- **Static Hosting**: Ready for Vercel, Netlify, or Railway deployment
-- **Environment**: Configurable API endpoints for different environments
+### Static Hosting Deployment
+- **Build Process**: Optimized production build with code splitting and tree shaking
+- **Hosting Options**: Vercel, Netlify, GitHub Pages, or any static hosting provider
+- **Zero Configuration**: No environment variables or server setup required
+- **CDN Ready**: Automatic asset optimization and caching
 
-### Backend  
-- **Process Management**: PM2 ready for production scaling
-- **Database**: PostgreSQL with connection pooling and migrations
-- **Monitoring**: Health endpoints and structured logging
-- **Containerization**: Docker-ready configuration
+### Build Commands
+```bash
+npm run build                # Create production build
+npm run client:build         # Alternative build command
+```
 
-### Railway Deployment
-- **Configuration**: Pre-configured railway.json for one-click deployment
-- **Database**: Automated PostgreSQL provisioning and migration
-- **Environment**: Production-ready environment variable management
+### Deployment Platforms
+- **Vercel**: Connect GitHub repo for automatic deployments
+- **Netlify**: Drag-and-drop build folder or connect repository  
+- **GitHub Pages**: Use existing deploy-client.yml workflow
+- **Custom Hosting**: Upload build folder contents to any web server
 
 ## Development Workflow
-1. **Feature Development**: Edit files in `client/` or `server/` directories
-2. **Auto-reload**: Changes trigger instant recompilation and browser refresh
-3. **Health Monitoring**: Check http://localhost:5000/api/health for backend status
-4. **Debugging**: Use browser dev tools for frontend, VS Code debugger for backend
-5. **Database Changes**: Use migration system for schema modifications
-6. **Component Development**: Create modular components with CSS Modules
-7. **State Management**: Use custom hooks for complex application state
+1. **Feature Development**: Edit files in `client/src/` directory
+2. **Hot Reload**: Changes trigger instant recompilation and browser refresh
+3. **Static Data**: Modify JSON data in `client/src/constants/` and services
+4. **Component Development**: Create modular components with CSS Modules
+5. **State Management**: Use custom hooks for complex application state
+6. **User Testing**: Switch between personas and scenarios to test workflows
+7. **Build Testing**: Test production builds before deployment
 
 ## Troubleshooting
 
-**Database connection issues?**
-- Ensure PostgreSQL is running
-- Check credentials in `server/.env`
-- Check database user privileges
-- Use `npm run db:status` to check migration state
-- Try: `npm run db:setup`
+**Development server won't start?**
+- Ensure Node.js v18+ is installed
+- Clear cache: `npm run clean`
+- Reinstall dependencies: `npm run install:all`
+- Check port 3000 is available
 
-**Port conflicts?**
-- Default ports: 3000 (frontend), 5000 (backend)
-- Kill existing processes or change ports in config
-
-**Auto-reload not working?**
+**Hot reload not working?**
 - Save files (Ctrl+S)
-- Check terminal for errors
-- Restart: Ctrl+C then `npm start`
+- Check terminal for compilation errors
+- Restart development server: Ctrl+C then `npm start`
 
 **CSS/Styling issues?**
 - Check Tailwind CSS configuration in `tailwind.config.js`
 - Verify PostCSS setup in `postcss.config.js`
 - Ensure CSS Modules are properly imported
 
-**Authorization workflow issues?**
-- Check hash-based routing parameters
-- Verify user mode and scenario state
-- Use browser dev tools to inspect component state
+**Authentication issues?**
+- Clear browser localStorage
+- Check demo user credentials (password: `password123`)
+- Verify static user data in `constants/staticUserData.js`
 
-**Migration conflicts?**
-- Use `npm run db:status` to check state
-- Check SQL syntax and database permissions
+**Persona switching not working?**
+- Use admin@myhealthplan.com to access persona switching
+- Check browser console for JavaScript errors
+- Verify persona data in authentication service
+
+**Build failures?**
+- Clear `client/build` directory
+- Check for JavaScript syntax errors
+- Ensure all imports have valid file paths
 
 ## Password Management
 
-### 🔒 Simple Password System
-All users share the same password: **`password123`**
+### 🔒 Simple Demo Authentication
+All demo users share the same password: **`password123`**
 
-### 🛠️ Password Commands
-```bash
-npm run passwords:generate   # Regenerate password hashes if needed
-```
+### � Available Demo Users
+- **admin@myhealthplan.com** - Full admin access with persona switching
+- **maria.hartsell@myhealthplan.com** - UM role with sepsis scenario access
+- **elise.tran@myhealthplan.com** - UM-SNF role for skilled nursing workflows
+- **karen.white@myhealthplan.com** - CM role for case management
+- **john.doe@myhealthplan.com** - Standard user
+- **jane.smith@myhealthplan.com** - Standard user
 
-### 🔧 How It Works
-- Uses bcrypt with 10 salt rounds for security
-- Outputs SQL for manual database updates or migration creation
-- All users get the same password for simplicity
-
-### 🚨 When to Regenerate
-- If you change the default password in the script
-- If login authentication stops working
-- After modifying the user list in the script
+### 🔧 Customizing Authentication
+To modify users or authentication:
+1. Edit `client/src/constants/staticUserData.js`
+2. Update user roles, names, or credentials
+3. Restart development server
 
 ---
 **Created**: December 2024 | **Updated**: June 30, 2025 | Optimized for enterprise healthcare workflows and developer experience
