@@ -164,11 +164,8 @@ const Login = ({ onLogin }) => {
                   </button>
                 </div>
 
-                {/* Divider */}
+                {/* OR text without horizontal lines */}
                 <div id="divider-section" className={styles.dividerSection}>
-                  <div className={styles.dividerLine}>
-                    <div className={styles.dividerBorder}></div>
-                  </div>
                   <div className={styles.dividerTextContainer}>
                     <span id="divider-text" className={styles.dividerText}>OR</span>
                   </div>
