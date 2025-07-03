@@ -2,38 +2,41 @@
 
 A comprehensive healthcare authorization management MVP with advanced clinical review features, user personas, and scenario-based workflows.
 
+**🎯 Now running in Static Data Mode - No backend required!**
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js (v16+)
-- PostgreSQL (running locally or remotely)
+- **No database required** - all data is now static!
 
 ### Setup & Run (2 commands)
 ```bash
 npm run install:all    # Install dependencies
-npm start              # Start both frontend & backend (auto-setup database)
+npm run client:dev     # Start frontend only (static mode)
 ```
 
 **That's it!** 🎉
-- The database will be automatically created and seeded on first run
+- No database setup needed - all data is hardcoded in the client
 - Frontend: http://localhost:3000
-- Backend: http://localhost:5000/api/health
+- **100% client-side operation** with realistic demo data
 
 ## Tech Stack
 - **Frontend**: React 19+ with Tailwind CSS & CSS Modules
-- **Backend**: Node.js + Express
-- **Database**: PostgreSQL with custom migration system
-- **Auth**: JWT + bcrypt
+- **Data**: Static JSON data with dynamic scenarios
+- **Auth**: Client-side authentication with demo users
 - **Build Tools**: Create React App with CRACO for Tailwind integration
 
 ## Demo Login
 All users use the password: **password123**
 
-### Available Personas
-- **admin@myhealthplan.com** (System Administrator - Admin)
-- **maria.hartsell@myhealthplan.com** (Maria Hartsell - Admin)  
-- **john.doe@myhealthplan.com** (John Doe - User)
-- **jane.smith@myhealthplan.com** (Jane Smith - User)
+### Available Demo Users
+- **admin@myhealthplan.com** (System Administrator - Can switch personas)
+- **maria.hartsell@myhealthplan.com** (Maria Hartsell - UM mode)  
+- **elise.tran@myhealthplan.com** (Elise Tran - UM-SNF mode)
+- **karen.white@myhealthplan.com** (Karen White - CM mode)
+- **john.doe@myhealthplan.com** (John Doe - Standard user)
+- **jane.smith@myhealthplan.com** (Jane Smith - Standard user)
 
 ### User Modes & Scenarios
 The application supports multiple user modes and scenarios for comprehensive testing:

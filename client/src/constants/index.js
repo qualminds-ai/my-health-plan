@@ -2,13 +2,15 @@
  * Application Constants
  */
 
-// API Configuration
+// API Configuration (Legacy - no longer used in static mode)
+// Kept for reference only - application now runs entirely client-side
 export const API_CONFIG = {
     BASE_URL: process.env.NODE_ENV === 'production'
         ? 'https://my-health-plan.up.railway.app'
         : 'http://localhost:5000',
     TIMEOUT: 10000,
-    RETRY_ATTEMPTS: 3
+    RETRY_ATTEMPTS: 3,
+    STATIC_MODE: true // Application now runs in static mode
 };
 
 // Route Constants

@@ -1,9 +1,9 @@
 /**
- * Data Mode Indicator Component - Removed
- * No longer needed since the application is now purely static data mode
+ * Data Mode Indicator Component
+ * Component disabled - no indicator shown
  */
 const DataModeIndicator = () => {
-    // Component removed - application is now purely static data mode
+    // Return null to not render any indicator
     return null;
 };
 
