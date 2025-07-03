@@ -118,7 +118,7 @@ const AuthorizationsTable = ({
                         <th className={styles.tableHeaderCell}>Admission Date</th>
                         <th className={styles.tableHeaderCell}>Diagnosis</th>
                         <th className={styles.tableHeaderCell}>DRG</th>
-                        <th className={styles.tableHeaderCell}>Request Type</th>
+                        {userMode !== 'UM' && <th className={styles.tableHeaderCell}>Request Type</th>}
                         <th className={`${styles.tableHeaderCell} ${styles.posColumnHeader}`}>POS</th>
                         <th className={styles.tableHeaderCell}>Type</th>
                         <th className={styles.tableHeaderCell}>Member Name</th>
@@ -151,7 +151,7 @@ const AuthorizationsTable = ({
                                 <td className={`${styles.tableCell} ${styles.primary}`}>{formatDate(auth.admission_date)}</td>
                                 <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.diagnosis_code}</td>
                                 <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.drg_code}</td>
-                                <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.request_type}</td>
+                                {userMode !== 'UM' && <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.request_type}</td>}
                                 <td
                                     className={`${styles.tableCell} ${styles.secondary} ${styles.posCell}`}
                                     data-full-text={auth.pos}

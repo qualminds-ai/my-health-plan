@@ -1,25 +1,26 @@
-import apiService from './apiService';
+import dataService from './dataService';
 
 /**
  * Member Service
  * Handles all member-related API calls
+ * Now uses dataService which automatically routes to static data or API
  */
 class MemberService {
     /**
      * Get member by number
      */
-    async getMemberByNumber(memberNumber) {
-        const data = await apiService.get(`/api/dashboard/member/${memberNumber}`);
+    async getMemberByNumber(memberNumber, userMode, scenarios) {
+        const data = await dataService.getMemberByNumber(memberNumber, userMode, scenarios);
 
         // Transform snake_case to camelCase for frontend consistency
         if (data) {
             return {
                 ...data,
-                memberNumber: data.member_number,
-                firstName: data.first_name,
-                lastName: data.last_name,
-                dateOfBirth: data.dob,
-                primaryCareProvider: data.pcp
+                memberNumber: data.member_number || data.memberNumber,
+                firstName: data.first_name || data.firstName,
+                lastName: data.last_name || data.lastName,
+                dateOfBirth: data.dob || data.dateOfBirth,
+                primaryCareProvider: data.pcp || data.primaryCareProvider
             };
         }
 
@@ -29,22 +30,22 @@ class MemberService {
     /**
      * Get all members
      */
-    async getAllMembers() {
-        return await apiService.get('/api/dashboard/members');
+    async getAllMembers(options = {}) {
+        return await dataService.getAllMembers(options);
     }
 
     /**
      * Search members
      */
     async searchMembers(query) {
-        return await apiService.get(`/api/dashboard/members/search?q=${encodeURIComponent(query)}`);
+        return await dataService.searchMembers(query);
     }
 
     /**
      * Update member
      */
     async updateMember(memberNumber, memberData) {
-        return await apiService.put(`/api/dashboard/member/${memberNumber}`, memberData);
+        return await dataService.updateMember(memberNumber, memberData);
     }
 }
 

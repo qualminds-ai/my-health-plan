@@ -10,8 +10,8 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
     // Authorization number for Robert Abbott's sepsis case
     const authorizationNumber = '2025OP000389';
 
-    // Check if user is UM with sepsis scenario active AND viewing the specific authorization
-    const isUMWithSepsisForAuth = activeMode === 'UM' && hasScenario('sepsis');
+    // Check if user is UM or UM-SNF with sepsis scenario active AND viewing the specific authorization
+    const isUMWithSepsisForAuth = (activeMode === 'UM' || activeMode === 'UM-SNF') && hasScenario('sepsis');
 
     // Debug logging for development
     console.log('🔍 AuthorizationSummary Debug:', {

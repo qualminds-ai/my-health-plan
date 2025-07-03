@@ -26,12 +26,10 @@ const SEPSIS_MODIFICATIONS = {
     },
     // Remove blue arrow for first record when sepsis is active
     removeArrow: true,
-    // Member info changes for Robert Abbott
+    // Member info changes for Robert Abbott (no alert)
     memberInfo: {
         'MEM001': {
-            urgentAlert: true,
-            alertMessage: 'SEPSIS ALERT: Patient condition escalated to concurrent review',
-            additionalNotes: 'Immediate clinical attention required'
+            // Future: Add other member-specific modifications here
         }
     }
 };
@@ -261,14 +259,17 @@ export const useUserMode = (initialUser) => {
                         setActiveMode(internalMode);
                         console.log(`🔄 Restored saved mode: ${savedMode} (internal: ${internalMode}) for ${currentUserContext?.full_name || currentUserContext?.email}`);
                     } else {
-                        // Set default mode for user, but preserve existing scenarios
+                        // Set default mode for user and save the corrected mode
                         setActiveMode(defaultMode);
-                        console.log(`🔄 Invalid saved mode, set default for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
+                        saveMode(defaultMode, new Set());
+                        console.log(`🔄 Invalid saved mode, set and saved default for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
                     }
                 } else {
-                    // Set default mode for user, but preserve existing scenarios
+                    // Set default mode for user and save it to localStorage
                     setActiveMode(defaultMode);
-                    console.log(`🔄 Set default mode for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
+                    // Save the default mode to localStorage for future reloads
+                    saveMode(defaultMode, new Set());
+                    console.log(`🔄 Set and saved default mode for ${currentUserContext?.full_name || currentUserContext?.email}: ${defaultMode}`);
                 }
 
                 // Handle scenarios initialization properly

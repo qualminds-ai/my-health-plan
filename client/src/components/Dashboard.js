@@ -9,7 +9,7 @@ import GroupQueuesChart from './common/GroupQueuesChart';
 import Pagination from './common/Pagination';
 import { CalendarIcon, ClockIcon, BellIcon, ExpandIcon, RefreshIcon } from './common/Icons';
 import { getCMData } from '../constants/cmData';
-import apiService from '../services/apiService';
+import dataService from '../services/dataService';
 import styles from './Dashboard.module.css';
 
 const Dashboard = ({
@@ -34,6 +34,7 @@ const Dashboard = ({
   applySNFModifications
 }) => {
   const [dashboardStats, setDashboardStats] = useState({
+    date: '',
     due_today_count: 0,
     high_priority_count: 0,
     reminders_count: 0,
@@ -45,16 +46,66 @@ const Dashboard = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('My Tasks');
+  const [modeInitialized, setModeInitialized] = useState(false); // Track mode initialization
 
   // Use refs to track fetch state without causing re-renders
   const lastFetchKeyRef = useRef('');
   const isFetchingRef = useRef(false);
 
   useEffect(() => {
+    console.log(`🔄 Dashboard useEffect triggered: user=${user?.email}, activeMode=${activeMode}, scenarios=[${scenarios.join(',')}]`);
+
     const token = localStorage.getItem('token');
     if (!user?.email || !token) {
-      console.log('⚠️ User or token not available, skipping data fetch');
+      console.log('❌ No user email or token available, skipping fetch');
       setLoading(false);
+      return;
+    }
+
+    // Wait for user mode initialization to complete before fetching data
+    // This prevents race conditions where CM users get UM data on page reload
+    const savedPersona = localStorage.getItem('activePersona');
+    const savedUserMode = localStorage.getItem('userMode');
+
+    console.log(`🔍 Mode check: savedPersona=${savedPersona}, savedUserMode=${savedUserMode}, currentMode=${activeMode}`);
+
+    // For admin users (who can switch personas), wait for persona to be properly set
+    if (user.email === 'admin@myhealthplan.com' && savedPersona) {
+      let expectedMode = 'UM'; // default
+      if (savedUserMode === 'CM') {
+        expectedMode = 'CM';
+      } else if (savedUserMode === 'UM, SNF') {
+        expectedMode = 'UM-SNF';
+      }
+
+      if (activeMode !== expectedMode) {
+        console.log(`⏳ Admin waiting for user mode initialization: expected ${expectedMode}, current ${activeMode}`);
+        setModeInitialized(false);
+        setLoading(true); // Keep loading until mode is ready
+        return;
+      }
+    }
+
+    // For non-admin users, check if their mode matches their expected default
+    if (user.email !== 'admin@myhealthplan.com') {
+      let expectedMode = 'UM'; // default
+      if (user.email === 'karen.white@myhealthplan.com') expectedMode = 'CM';
+      if (user.email === 'elise.tran@myhealthplan.com') expectedMode = 'UM-SNF';
+
+      if (activeMode !== expectedMode) {
+        console.log(`⏳ Non-admin waiting for user mode initialization: expected ${expectedMode}, current ${activeMode}`);
+        setModeInitialized(false);
+        setLoading(true); // Keep loading until mode is ready
+        return;
+      }
+    }
+
+    console.log(`✅ User mode properly initialized: ${activeMode} for ${user.email}`);
+    setModeInitialized(true); // Mark mode as initialized
+
+    // Only proceed with data loading if mode is initialized
+    if (!modeInitialized) {
+      console.log('⏳ Mode not yet initialized, skipping data load');
       return;
     }
 
@@ -62,8 +113,9 @@ const Dashboard = ({
     const fetchKey = `${user.email}-${activeMode}-${scenarios.join(',')}`;
 
     // Only fetch if this combination hasn't been fetched yet and not currently fetching
-    if (fetchKey !== lastFetchKeyRef.current && !isFetchingRef.current) {
-      console.log('🔄 Dashboard fetch triggered by key change:', fetchKey);
+    if (fetchKey !== lastFetchKeyRef.current && !isFetchingRef.current && modeInitialized) {
+      console.log(`🚀 Starting data fetch for: ${fetchKey}`);
+
       lastFetchKeyRef.current = fetchKey;
       isFetchingRef.current = true;
 
@@ -71,7 +123,7 @@ const Dashboard = ({
       const performFetch = async () => {
         // Don't fetch if user is not available
         if (!user?.email) {
-          console.log('⚠️ User not available, skipping dashboard data fetch');
+
           return;
         }
 
@@ -79,10 +131,8 @@ const Dashboard = ({
           setLoading(true);
           setError(null);
 
-          console.log('🔄 Fetching dashboard data...');
-          console.log('Current scenarios:', scenarios);
-          console.log('Current active mode:', activeMode);
-          console.log('Has sepsis scenario:', scenarios.includes('sepsis'));
+
+
 
           // Handle CM Dashboard with static data
           if (activeMode === 'CM') {
@@ -90,12 +140,42 @@ const Dashboard = ({
             const userScenarios = JSON.parse(localStorage.getItem('userScenarios') || '[]');
             const currentScenario = userScenarios.length > 0 ? userScenarios[0] : 'default';
 
-            // Load CM static data
-            const cmStats = getCMData('stats', currentScenario);
-            const cmTasksData = getCMData('tasks', currentScenario);
-            const cmQueuesData = getCMData('queues', currentScenario);
+            // Get "at_home" query parameter from hash-based URL (using same logic as useUserMode)
+            let atHomeParam = null;
+            if (window.location.hash) {
+              // Extract query params from hash (e.g., #/dashboard?at_home=1)
+              const hashParts = window.location.hash.split('?');
+              if (hashParts.length > 1) {
+                const hashParams = new URLSearchParams(hashParts[1]);
+                atHomeParam = hashParams.get('at_home');
+                console.log(`🔍 Found hash URL params: ${hashParts[1]}`);
+              }
+            } else {
+              // Fallback to regular query params
+              const urlParams = new URLSearchParams(window.location.search);
+              atHomeParam = urlParams.get('at_home');
+            }
+
+            // Debug logging
+            console.log('🔍 CM Dashboard Debug Info:');
+            console.log('- Current URL:', window.location.href);
+            console.log('- Hash:', window.location.hash);
+            console.log('- at_home param (final):', atHomeParam);
+            console.log('- Current scenario:', currentScenario);
+
+            // Load CM static data with "at_home" parameter
+            const cmStats = getCMData('stats', currentScenario, atHomeParam);
+            const cmTasksData = getCMData('tasks', currentScenario, atHomeParam);
+            const cmQueuesData = getCMData('queues', currentScenario, atHomeParam);
+
+            console.log('📊 CM Data Retrieved:');
+            console.log('- Stats date:', cmStats.date);
+            console.log('- Due today count:', cmStats.due_today_count);
+            console.log('- Tasks count:', cmTasksData.length);
+            console.log('- First task activity:', cmTasksData[0]?.activity);
 
             setDashboardStats({
+              date: cmStats.date || new Date().toLocaleDateString(), // Use date from CM stats
               due_today_count: cmStats.due_today_count,
               high_priority_count: cmStats.overdue_count,
               reminders_count: cmStats.reminder_for_today_count,
@@ -105,35 +185,35 @@ const Dashboard = ({
             setGroupQueues(cmQueuesData);
             setAuthorizations([]); // CM doesn't use authorizations
 
-            console.log('📊 CM Dashboard data loaded:', { cmStats, cmTasksData, cmQueuesData });
+
             return;
           }
 
           // Handle UM/SNF Dashboard with API data
-          const statsResponse = await apiService.get('/api/dashboard/stats');
-          console.log('📊 Original stats response:', statsResponse);
+          const statsResponse = await dataService.getDashboardStats(activeMode, scenarios);
+
 
           // Apply sepsis modifications to stats if scenario is active
           const modifiedStats = getSepsisModifiedStats ? getSepsisModifiedStats(statsResponse) : statsResponse;
-          console.log('📊 Modified stats:', modifiedStats);
+
           setDashboardStats(modifiedStats);
 
-          const authResponse = await apiService.get('/api/dashboard/authorizations?limit=50');
-          console.log('📋 Original authorizations response:', authResponse.data.slice(0, 3));
+          const authResponse = await dataService.getAuthorizations(activeMode, scenarios, { limit: 50 });
+
+          // Handle both paginated response (API) and direct array (static)
+          const authData = authResponse.data || authResponse;
 
           // Apply sepsis modifications to authorizations if scenario is active
-          let modifiedAuthorizations = applySepsisModifications ? applySepsisModifications(authResponse.data) : authResponse.data;
-          console.log('📋 Sepsis modified authorizations:', modifiedAuthorizations.slice(0, 3));
+          let modifiedAuthorizations = applySepsisModifications ? applySepsisModifications(authData) : authData;
 
           // Apply SNF modifications to authorizations if user is in SNF mode
           modifiedAuthorizations = applySNFModifications ? applySNFModifications(modifiedAuthorizations) : modifiedAuthorizations;
-          console.log('🏥 SNF modified authorizations:', modifiedAuthorizations.slice(0, 3));
 
           setAuthorizations(modifiedAuthorizations);
           setCmTasks([]); // UM/SNF doesn't use CM tasks
           setGroupQueues([]); // UM/SNF doesn't use group queues
 
-          console.log('✅ Dashboard data loaded successfully');
+
         } catch (error) {
           console.error('Error fetching dashboard data:', error);
           setError('Failed to load dashboard data');
@@ -145,9 +225,130 @@ const Dashboard = ({
 
       performFetch();
     } else {
-      console.log('✅ Dashboard data already fetched for this combination or currently fetching, skipping');
+      // Data already fetched for this combination, skipping
     }
-  }, [user?.email, activeMode, scenarios, applySepsisModifications, applySNFModifications, getSepsisModifiedStats]); // Include necessary functions
+  }, [user?.email, activeMode, scenarios, applySepsisModifications, applySNFModifications, getSepsisModifiedStats, modeInitialized]); // Include necessary functions
+
+  // Add a separate effect to trigger data loading when mode becomes initialized
+  useEffect(() => {
+    if (modeInitialized && user?.email) {
+      console.log('🚀 Mode initialized, triggering data load...');
+      // The main useEffect above will handle the actual data loading
+    }
+  }, [modeInitialized, user?.email]);
+
+  // Listen for URL hash changes to update CM dashboard data when at_home parameter changes
+  useEffect(() => {
+    if (activeMode !== 'CM') {
+      return; // Only for CM users
+    }
+
+    const handleHashChange = () => {
+      console.log('🔄 Hash changed, checking for at_home parameter update...');
+      console.log('🔍 Current hash:', window.location.hash);
+
+      // Extract at_home parameter from current URL
+      let atHomeParam = null;
+      if (window.location.hash) {
+        const hashParts = window.location.hash.split('?');
+        if (hashParts.length > 1) {
+          const hashParams = new URLSearchParams(hashParts[1]);
+          atHomeParam = hashParams.get('at_home');
+          console.log(`🔍 New at_home param: ${atHomeParam}`);
+        } else {
+          console.log('🔍 No query parameters in hash');
+        }
+      } else {
+        console.log('🔍 No hash in URL');
+      }
+
+      // Get current scenario from localStorage
+      const userScenarios = JSON.parse(localStorage.getItem('userScenarios') || '[]');
+      const currentScenario = userScenarios.length > 0 ? userScenarios[0] : 'default';
+
+      // Load updated CM static data with new at_home parameter
+      const cmStats = getCMData('stats', currentScenario, atHomeParam);
+      const cmTasksData = getCMData('tasks', currentScenario, atHomeParam);
+      const cmQueuesData = getCMData('queues', currentScenario, atHomeParam);
+
+      console.log('📊 CM Data Updated for new at_home param:');
+      console.log('- Stats date:', cmStats.date);
+      console.log('- Due today count:', cmStats.due_today_count);
+      console.log('- Tasks count:', cmTasksData.length);
+      console.log('- First task activity:', cmTasksData[0]?.activity);
+
+      // Update state with new data
+      setDashboardStats({
+        date: cmStats.date || new Date().toLocaleDateString(),
+        due_today_count: cmStats.due_today_count,
+        high_priority_count: cmStats.overdue_count,
+        reminders_count: cmStats.reminder_for_today_count,
+        start_this_week_count: cmStats.start_this_week_count
+      });
+      setCmTasks(cmTasksData);
+      setGroupQueues(cmQueuesData);
+    };
+
+    // Listen for hash changes and browser navigation
+    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleHashChange);
+    console.log('✅ Hash change and popstate listeners added for CM dashboard');
+
+    // Clean up listeners on unmount
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handleHashChange);
+      console.log('🧹 Hash change and popstate listeners removed');
+    };
+  }, [activeMode]); // Only re-run when activeMode changes
+
+  // Also handle direct navigation with at_home parameter (initial page load)
+  useEffect(() => {
+    if (activeMode !== 'CM') {
+      return; // Only for CM users
+    }
+
+    // Check if we have an at_home parameter on load/mode change
+    let atHomeParam = null;
+    if (window.location.hash) {
+      const hashParts = window.location.hash.split('?');
+      if (hashParts.length > 1) {
+        const hashParams = new URLSearchParams(hashParts[1]);
+        atHomeParam = hashParams.get('at_home');
+        console.log(`🔍 Initial/mode change at_home param: ${atHomeParam}`);
+      }
+    }
+
+    // Only update if we have an at_home parameter (prevents double-fetching)
+    if (atHomeParam) {
+      console.log('🚀 Updating CM data for initial/mode change at_home parameter...');
+
+      // Get current scenario from localStorage
+      const userScenarios = JSON.parse(localStorage.getItem('userScenarios') || '[]');
+      const currentScenario = userScenarios.length > 0 ? userScenarios[0] : 'default';
+
+      // Load CM static data with at_home parameter
+      const cmStats = getCMData('stats', currentScenario, atHomeParam);
+      const cmTasksData = getCMData('tasks', currentScenario, atHomeParam);
+      const cmQueuesData = getCMData('queues', currentScenario, atHomeParam);
+
+      console.log('📊 CM Data Updated for initial at_home param:');
+      console.log('- Stats date:', cmStats.date);
+      console.log('- Due today count:', cmStats.due_today_count);
+      console.log('- Tasks count:', cmTasksData.length);
+
+      // Update state with new data
+      setDashboardStats({
+        date: cmStats.date || new Date().toLocaleDateString(),
+        due_today_count: cmStats.due_today_count,
+        high_priority_count: cmStats.overdue_count,
+        reminders_count: cmStats.reminder_for_today_count,
+        start_this_week_count: cmStats.start_this_week_count
+      });
+      setCmTasks(cmTasksData);
+      setGroupQueues(cmQueuesData);
+    }
+  }, [activeMode, user?.email]); // Run when mode changes or user changes
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -364,7 +565,7 @@ const Dashboard = ({
           </div>
           <div className={styles.rightSection}>
             <div className={styles.dateDisplay}>
-              {new Date().toLocaleDateString('en-US', {
+              {dashboardStats.date || new Date().toLocaleDateString('en-US', {
                 weekday: 'long',
                 month: 'long',
                 day: 'numeric'
@@ -462,9 +663,9 @@ const Dashboard = ({
                   <button
                     className={`${styles.scenarioButton} ${scenarios.includes('sepsis') ? styles.scenarioActive : ''}`}
                     onClick={() => {
-                      console.log('🎭 Sepsis scenario toggle clicked!');
-                      console.log('Current scenarios before toggle:', scenarios);
-                      console.log('Current user:', user);
+
+
+
                       toggleScenario('sepsis');
                     }}
                   >

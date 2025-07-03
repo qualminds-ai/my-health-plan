@@ -9,9 +9,9 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
     // Use the actual authorization number from the active request tab
     const authorizationNumber = activeRequestTab || '20250P000367';
 
-    // Check if user is UM with sepsis scenario active AND viewing Robert Abbott's specific authorization
+    // Check if user is UM or UM-SNF with sepsis scenario active AND viewing Robert Abbott's specific authorization
     // For sepsis scenario, we check if it's the specific sepsis authorization (20250P000367)
-    const isUMWithSepsisForAuth = activeMode === 'UM' && hasScenario('sepsis') && authorizationNumber === '20250P000367';
+    const isUMWithSepsisForAuth = (activeMode === 'UM' || activeMode === 'UM-SNF') && hasScenario('sepsis') && authorizationNumber === '20250P000367';
 
     // Display authorization number - show sepsis-specific number when in sepsis scenario
     const displayAuthNumber = isUMWithSepsisForAuth ? '2025OP000389' : authorizationNumber;

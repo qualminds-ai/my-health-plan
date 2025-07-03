@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard';
 import Member from './components/Member';
 import ProtectedRoute from './components/guards/ProtectedRoute';
 import PublicRoute from './components/guards/PublicRoute';
+import DataModeIndicator from './components/common/DataModeIndicator';
 import memberService from './services/memberService';
 import { useAuth } from './hooks/useAuth';
 import { ROUTES } from './constants';
@@ -52,7 +53,7 @@ const MemberPage = ({
     }
 
     // Create a unique key for this fetch combination
-    const fetchKey = `${memberNumber}-${user.email}-${activePersona?.id || ''}-${scenarios.join(',')}`;
+    const fetchKey = `${memberNumber}-${user.email}-${activePersona?.id || ''}-${scenarios.join(',')}-${activeMode}`;
 
     // Only fetch if this combination hasn't been fetched yet and not currently fetching
     if (fetchKey !== lastFetchKeyRef.current && !isFetchingRef.current) {
@@ -70,7 +71,7 @@ const MemberPage = ({
           console.log('Current activePersona:', activePersona);
           console.log('Current scenarios:', scenarios);
 
-          const data = await memberService.getMemberByNumber(memberNumber);
+          const data = await memberService.getMemberByNumber(memberNumber, activeMode, scenarios);
 
           if (data) {
             setMemberData(data);
@@ -91,7 +92,7 @@ const MemberPage = ({
     } else {
       console.log('✅ Member data already fetched for this combination or currently fetching, skipping');
     }
-  }, [memberNumber, user, activePersona, scenarios]);
+  }, [memberNumber, user, activePersona, scenarios, activeMode]);
 
   // Apply scenario modifications after data is loaded
   const displayMemberData = React.useMemo(() => {
@@ -242,6 +243,7 @@ function App() {
 
   return (
     <div className="App">
+      <DataModeIndicator />
       <Routes>
         {/* Public Routes - Login */}
         <Route

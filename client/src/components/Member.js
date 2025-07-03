@@ -46,18 +46,9 @@ const Member = ({
       let updatedData = { ...propMemberData };
 
       // Apply scenario-specific modifications if needed
-      if (scenarios.includes('sepsis') && activeMode === 'UM') {
-        // Add sepsis-related modifications for Robert Abbott specifically
-        if (propMemberData.memberNumber === 'M1000020000' || propMemberData.name === 'Robert Abbott') {
-          updatedData = {
-            ...updatedData,
-            urgentAlert: true,
-            alertMessage: 'SEPSIS ALERT: Patient condition escalated to concurrent review',
-            additionalNotes: 'Immediate clinical attention required',
-            sepsisActive: true
-          };
-          console.log('🦠 Applied sepsis modifications to member data for Robert Abbott');
-        }
+      if (scenarios.includes('sepsis') && (activeMode === 'UM' || activeMode === 'UM-SNF')) {
+        // Future: Add other sepsis-related modifications here without alert
+        console.log('🦠 Sepsis scenario active for', activeMode, 'mode');
       }
 
       // Apply persona-specific modifications if needed
@@ -480,7 +471,7 @@ const Member = ({
         {/* Member Info Bar */}
         <MemberInfoBar
           memberName="Robert Abbott"
-          memberNumber={memberData.memberNumber}
+          memberNumber="M1000020000"
           dateOfBirth="01/01/1974"
           age={51}
           gender="Male"
@@ -489,9 +480,6 @@ const Member = ({
           programs="Care Coordination: ERM PH"
           bhpType="Large Group"
           optOut="No"
-          urgentAlert={memberData.urgentAlert}
-          alertMessage={memberData.alertMessage}
-          sepsisActive={memberData.sepsisActive}
         />
 
         {/* CM Alert Section - Only for CM users */}
