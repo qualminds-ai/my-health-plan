@@ -619,7 +619,7 @@ const Dashboard = ({
                 />
 
                 {/* Pagination */}
-                <Pagination />
+                <Pagination userMode={activeMode} />
               </div>
             </div>
 
@@ -703,7 +703,7 @@ const Dashboard = ({
               />
 
               {/* Pagination */}
-              <Pagination />
+              <Pagination userMode={activeMode} />
             </div>
           </div>)}
 

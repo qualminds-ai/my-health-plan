@@ -177,7 +177,7 @@ export default staticDataService;
 ### File Naming & Organization
 - **Components**: PascalCase (`Dashboard.js`, `MemberHeader.js`)
 - **CSS Modules**: Match component name (`Dashboard.module.css`)
-- **Services**: camelCase (`apiService.js`, `authService.js`)
+- **Services**: camelCase (`staticDataService.js`, `staticAuthService.js`)
 - **Migrations**: `YYYYMMDDHHMMSS_description.sql`
 - **Always add IDs**: `<button id="save-member-btn">` for all interactive elements
 

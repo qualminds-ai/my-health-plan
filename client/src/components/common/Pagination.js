@@ -7,7 +7,8 @@ const Pagination = ({
     totalPages = 9,
     itemsPerPage = 10,
     onPageChange,
-    onItemsPerPageChange
+    onItemsPerPageChange,
+    userMode = 'UM' // Add userMode prop with default value
 }) => {
     const handlePreviousPage = () => {
         if (currentPage > 1 && onPageChange) {
@@ -32,6 +33,19 @@ const Pagination = ({
             onItemsPerPageChange(parseInt(event.target.value, 10));
         }
     };
+
+    // Determine which page numbers to show based on user mode
+    const getPageNumbers = () => {
+        if (userMode === 'CM') {
+            // For CM users, show pages 1, 2, 5, 6
+            return [1, 2, 5, 6];
+        } else {
+            // For UM/UM-SNF users, show pages 1, 2, 8, 9 (existing behavior)
+            return [1, 2, 8, 9];
+        }
+    };
+
+    const pageNumbers = getPageNumbers();
 
     return (
         <div className={styles.pagination}>
@@ -73,50 +87,30 @@ const Pagination = ({
                     </svg>
                 </button>
 
-                {/* Page 1 */}
-                <button
-                    id="pagination-page-1"
-                    className={`${styles.paginationButton} ${currentPage === 1 ? styles.active : ''}`}
-                    onClick={() => handlePageClick(1)}
-                >
-                    1
-                </button>
+                {/* Dynamic page numbers based on user mode */}
+                {pageNumbers.map((pageNum, index) => (
+                    <React.Fragment key={pageNum}>
+                        {/* Add ellipsis between non-consecutive pages */}
+                        {index > 0 && pageNum - pageNumbers[index - 1] > 1 && (
+                            <button
+                                id={`pagination-ellipsis-${index}`}
+                                className={`${styles.paginationButton} ${styles.paginationEllipsis}`}
+                                disabled
+                            >
+                                ...
+                            </button>
+                        )}
 
-                {/* Page 2 */}
-                <button
-                    id="pagination-page-2"
-                    className={`${styles.paginationButton} ${currentPage === 2 ? styles.active : ''}`}
-                    onClick={() => handlePageClick(2)}
-                >
-                    2
-                </button>
-
-                {/* Ellipsis */}
-                <button
-                    id="pagination-ellipsis"
-                    className={`${styles.paginationButton} ${styles.paginationEllipsis}`}
-                    disabled
-                >
-                    ...
-                </button>
-
-                {/* Page 8 */}
-                <button
-                    id="pagination-page-8"
-                    className={`${styles.paginationButton} ${currentPage === 8 ? styles.active : ''}`}
-                    onClick={() => handlePageClick(8)}
-                >
-                    8
-                </button>
-
-                {/* Page 9 */}
-                <button
-                    id="pagination-page-9"
-                    className={`${styles.paginationButton} ${currentPage === 9 ? styles.active : ''}`}
-                    onClick={() => handlePageClick(9)}
-                >
-                    9
-                </button>
+                        {/* Page number button */}
+                        <button
+                            id={`pagination-page-${pageNum}`}
+                            className={`${styles.paginationButton} ${currentPage === pageNum ? styles.active : ''}`}
+                            onClick={() => handlePageClick(pageNum)}
+                        >
+                            {pageNum}
+                        </button>
+                    </React.Fragment>
+                ))}
 
                 {/* Next button */}
                 <button
@@ -139,7 +133,8 @@ Pagination.propTypes = {
     totalPages: PropTypes.number,
     itemsPerPage: PropTypes.number,
     onPageChange: PropTypes.func,
-    onItemsPerPageChange: PropTypes.func
+    onItemsPerPageChange: PropTypes.func,
+    userMode: PropTypes.string // Add userMode prop type
 };
 
 export default Pagination;

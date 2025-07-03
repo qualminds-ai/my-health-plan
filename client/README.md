@@ -1,70 +1,138 @@
-# Getting Started with Create React App
+# MyHealthPlan Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the React frontend for the MyHealthPlan healthcare authorization management system.
 
-## Available Scripts
+## 🚀 Quick Start
 
-In the project directory, you can run:
+### Prerequisites
+- Node.js (v18+)
+- No backend or database required - fully client-side application
 
-### `npm start`
+### Development
+```bash
+npm start                    # Start development server (http://localhost:3000)
+npm run build                # Create production build
+npm test                     # Run tests
+npm run lint                 # Run ESLint
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🏗️ Architecture
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Technology Stack
+- **React 19+** with functional components and hooks
+- **Tailwind CSS + CSS Modules** for styling
+- **Static Data Services** for healthcare data simulation
+- **Client-side Authentication** with demo users
+- **React Router** with hash-based deep linking
 
-### `npm test`
+### Key Features
+- **Multi-step Clinical Review Workflow** with 4 phases
+- **User Persona System** (UM, UM-SNF, CM roles)
+- **Scenario Management** (sepsis scenario modifications)
+- **Real-time Data Modifications** based on user context
+- **Hash-based Deep Linking** for authorization states
+- **Responsive Design** optimized for healthcare workflows
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Demo Authentication
+All users use password: **`password123`**
 
-### `npm run build`
+**Available Users:**
+- `admin@myhealthplan.com` - Admin with persona switching
+- `maria.hartsell@myhealthplan.com` - UM role
+- `elise.tran@myhealthplan.com` - UM-SNF role  
+- `karen.white@myhealthplan.com` - CM role
+- `john.doe@myhealthplan.com` - Standard user
+- `jane.smith@myhealthplan.com` - Standard user
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 📁 Project Structure
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+src/
+├── components/              # React components
+│   ├── Dashboard.js         # Main dashboard
+│   ├── Login.js            # Authentication
+│   ├── Member.js           # Member management
+│   ├── common/             # Reusable components
+│   ├── guards/             # Route protection
+│   └── member/             # Member-specific components
+│       └── authorization/  # Authorization workflow
+├── constants/              # Static data & configuration
+├── hooks/                  # Custom React hooks
+├── services/               # Data & authentication services
+├── types/                  # TypeScript-style definitions
+├── utils/                  # Helper functions
+└── assets/                 # Static assets
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🔧 Configuration Files
 
-### `npm run eject`
+- **`craco.config.js`** - CRACO configuration for Tailwind CSS
+- **`tailwind.config.js`** - Tailwind CSS configuration
+- **`postcss.config.js`** - PostCSS configuration
+- **`.prettierrc.js`** - Code formatting rules
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🧪 Testing & Development
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Available Scripts
+```bash
+npm start                    # Development server with hot reload
+npm test                     # Run tests in watch mode
+npm test:coverage            # Run tests with coverage report
+npm run build                # Production build
+npm run build:watch         # Build with file watching
+npm run lint                 # ESLint code analysis
+npm run lint:fix             # Auto-fix ESLint issues
+npm run format               # Format code with Prettier
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Development Features
+- **Hot Reload** - React Fast Refresh for instant updates
+- **Static Data** - No backend setup required
+- **Component Modularity** - CSS Modules + Tailwind CSS
+- **Real-time Scenarios** - Dynamic data based on user context
+- **Cross-browser Support** - Chrome, Firefox, Safari, Edge
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🚢 Deployment
 
-## Learn More
+### Build Process
+```bash
+npm run build                # Creates optimized production build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The build folder contains:
+- Optimized React bundle with code splitting
+- Static assets with cache-friendly filenames
+- Service worker for offline functionality
+- Ready for deployment to any static hosting
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Hosting Options
+- **Vercel** - Connect GitHub repo for automatic deployments
+- **Netlify** - Drag-and-drop or connect repository
+- **GitHub Pages** - Static site hosting
+- **AWS S3** - Static website hosting
+- **Any web server** - Upload build folder contents
 
-### Code Splitting
+## 🔍 Troubleshooting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+**Development server won't start?**
+- Ensure Node.js v18+ is installed
+- Clear cache: `rm -rf node_modules package-lock.json && npm install`
+- Check port 3000 availability
 
-### Analyzing the Bundle Size
+**Hot reload not working?**
+- Save files and check terminal for errors
+- Restart: `Ctrl+C` then `npm start`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+**Styling issues?**
+- Verify Tailwind configuration in `tailwind.config.js`
+- Check CSS Modules imports match component names
+- Ensure PostCSS is configured correctly
 
-### Making a Progressive Web App
+**Authentication problems?**
+- Clear browser localStorage: `localStorage.clear()`
+- Use correct password: `password123` for all demo users
+- Check browser console for JavaScript errors
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and enhanced with CRACO for Tailwind CSS integration.

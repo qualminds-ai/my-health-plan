@@ -154,12 +154,8 @@ client/
 │   │   ├── useMemberActions.js  # Member actions
 │   │   └── useUserMode.js       # User mode & scenario management
 │   ├── services/        # Data service layer
-│   │   ├── apiService.js       # Legacy API interface
-│   │   ├── authService.js      # Authentication service
-│   │   ├── staticAuthService.js # Client-side auth implementation
-│   │   ├── memberService.js    # Member data service
-│   │   ├── dataService.js      # General data service
-│   │   └── staticDataService.js # Static data provider
+│   │   ├── staticAuthService.js # Client-side authentication implementation
+│   │   └── staticDataService.js # Static data provider (all healthcare data)
 │   ├── types/           # TypeScript-style prop definitions
 │   │   └── index.js
 │   ├── utils/           # Utility functions
@@ -363,4 +359,4 @@ To modify users or authentication:
 3. Restart development server
 
 ---
-**Created**: December 2024 | **Updated**: June 30, 2025 | Optimized for enterprise healthcare workflows and developer experience
+**Created**: December 2024 | **Updated**: July 3, 2025 | Optimized for enterprise healthcare workflows and developer experience
