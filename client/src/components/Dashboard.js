@@ -446,7 +446,7 @@ const Dashboard = ({
           value: dashboardStats.high_priority_count || 11,
           label: 'Overdue',
           iconSvg: <ClockIcon />,
-          variant: 'secondary'
+          variant: 'tertiary'
         },
         {
           title: 'Reminder for Today',
@@ -525,7 +525,7 @@ const Dashboard = ({
     // Modify based on user mode
     if (activeMode === 'UM-SNF') {
       baseCards[0].title = 'SNF Authorizations';
-      baseCards[0].label = 'Skilled Nursing';
+      // Keep default "Due Today" label for SNF users
     }
 
     return baseCards;

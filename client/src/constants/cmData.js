@@ -173,7 +173,7 @@ export const CM_TASKS_DATA = {
             pos: 'SNF',
             diagnosis: 'DKA, CHF',
             member_name: 'Abbott, Robert',
-            due_date: '05/12/2025 1:00 PM',
+            due_date: '05/01/2025 1:00 PM',
             status: 'Pending'
         },
         {
@@ -186,7 +186,7 @@ export const CM_TASKS_DATA = {
             pos: 'SNF',
             diagnosis: 'CHF',
             member_name: 'Perry, Samuel',
-            due_date: '05/12/2025 4:00 PM',
+            due_date: '05/01/2025 4:20 PM',
             status: 'Pending'
         },
         {
@@ -199,7 +199,7 @@ export const CM_TASKS_DATA = {
             pos: 'Home',
             diagnosis: 'CKD',
             member_name: 'Smith, Laura',
-            due_date: '05/20/2025 11:00 AM',
+            due_date: '05/02/2025 11:00 AM',
             status: 'Pending'
         },
         {
@@ -212,7 +212,7 @@ export const CM_TASKS_DATA = {
             pos: 'LTACH',
             diagnosis: 'COPD',
             member_name: 'Emerson, John',
-            due_date: '05/20/2025 3:00 PM',
+            due_date: '05/02/2025 3:00 PM',
             status: 'Pending'
         },
         {
@@ -225,7 +225,7 @@ export const CM_TASKS_DATA = {
             pos: 'SNF',
             diagnosis: 'DKA',
             member_name: 'Rutherford, Renee',
-            due_date: '05/24/2025 11:00 AM',
+            due_date: '05/04/2025 11:00 AM',
             status: 'Pending'
         },
         {
@@ -238,7 +238,7 @@ export const CM_TASKS_DATA = {
             pos: 'Home',
             diagnosis: 'Cellulitis',
             member_name: 'Oliver, James',
-            due_date: '05/24/2025 12:00 PM',
+            due_date: '05/04/2025 12:00 PM',
             status: 'Pending'
         },
         {
@@ -251,7 +251,7 @@ export const CM_TASKS_DATA = {
             pos: 'LTACH',
             diagnosis: 'CKD',
             member_name: 'Sawyer, Kate',
-            due_date: '05/24/2025 1:00 PM',
+            due_date: '05/04/2025 1:00 PM',
             status: 'Pending'
         },
         {
@@ -264,7 +264,7 @@ export const CM_TASKS_DATA = {
             pos: 'IRF',
             diagnosis: 'UTI',
             member_name: 'Perry, Maria',
-            due_date: '05/24/2025 2:00 PM',
+            due_date: '05/04/2025 3:00 PM',
             status: 'Pending'
         },
         {
@@ -277,7 +277,7 @@ export const CM_TASKS_DATA = {
             pos: 'IRF',
             diagnosis: 'DKA',
             member_name: 'Smith, Jane',
-            due_date: '05/24/2025 3:00 PM',
+            due_date: '05/04/2025 3:30 PM',
             status: 'Pending'
         },
         {
@@ -290,7 +290,7 @@ export const CM_TASKS_DATA = {
             pos: 'Home',
             diagnosis: 'DKA',
             member_name: 'Andrews, Mike',
-            due_date: '05/24/2025 4:00 PM',
+            due_date: '05/04/2025 4:00 PM',
             status: 'Pending'
         }
     ],
@@ -305,7 +305,7 @@ export const CM_TASKS_DATA = {
             pos: 'SNF',
             diagnosis: 'DKA, CHF',
             member_name: 'Robert Abbott',
-            due_date: '05/24/2025 4:00 PM',
+            due_date: '05/04/2025 4:00 PM',
             status: 'Pending'
         },
         {
@@ -318,7 +318,7 @@ export const CM_TASKS_DATA = {
             pos: 'SNF',
             diagnosis: 'DKA, CHF',
             member_name: 'Robert Abbott',
-            due_date: '05/24/2025 3:00 PM',
+            due_date: '05/04/2025 3:00 PM',
             status: 'Pending'
         },
         {
@@ -331,7 +331,7 @@ export const CM_TASKS_DATA = {
             pos: 'SNF',
             diagnosis: 'DKA, CHF',
             member_name: 'Robert Abbott',
-            due_date: '05/24/2025 2:00 PM',
+            due_date: '05/04/2025 2:00 PM',
             status: 'Pending'
         },
         {
@@ -344,7 +344,7 @@ export const CM_TASKS_DATA = {
             pos: 'SNF',
             diagnosis: 'DKA, CHF',
             member_name: 'Abbott, Robert',
-            due_date: '05/12/2025 1:00 PM',
+            due_date: '05/1/2025 1:00 PM',
             status: 'Pending'
         },
         {
@@ -357,7 +357,7 @@ export const CM_TASKS_DATA = {
             pos: 'SNF',
             diagnosis: 'CHF',
             member_name: 'Perry, Samuel',
-            due_date: '05/12/2025 4:00 PM',
+            due_date: '05/1/2025 4:00 PM',
             status: 'Pending'
         },
         {
@@ -370,7 +370,7 @@ export const CM_TASKS_DATA = {
             pos: 'Home',
             diagnosis: 'CKD',
             member_name: 'Smith, Laura',
-            due_date: '05/20/2025 11:00 AM',
+            due_date: '05/02/2025 11:00 AM',
             status: 'Pending'
         },
         {
@@ -383,7 +383,7 @@ export const CM_TASKS_DATA = {
             pos: 'LTACH',
             diagnosis: 'COPD',
             member_name: 'Emerson, John',
-            due_date: '05/20/2025 3:00 PM',
+            due_date: '05/02/2025 3:00 PM',
             status: 'Pending'
         },
         {
@@ -396,7 +396,7 @@ export const CM_TASKS_DATA = {
             pos: 'SNF',
             diagnosis: 'DKA',
             member_name: 'Rutherford, Renee',
-            due_date: '05/24/2025 11:00 AM',
+            due_date: '05/04/2025 11:00 AM',
             status: 'Pending'
         },
         {
@@ -409,7 +409,7 @@ export const CM_TASKS_DATA = {
             pos: 'Home',
             diagnosis: 'Cellulitis',
             member_name: 'Oliver, James',
-            due_date: '05/24/2025 12:00 PM',
+            due_date: '05/04/2025 12:00 PM',
             status: 'Pending'
         },
         {
@@ -422,7 +422,7 @@ export const CM_TASKS_DATA = {
             pos: 'LTACH',
             diagnosis: 'CKD',
             member_name: 'Sawyer, Kate',
-            due_date: '05/24/2025 1:00 PM',
+            due_date: '05/04/2025 1:00 PM',
             status: 'Pending'
         }
     ]

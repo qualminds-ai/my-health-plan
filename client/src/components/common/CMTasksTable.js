@@ -6,12 +6,41 @@ import styles from '../Dashboard.module.css';
  * CM Tasks Table Component for Case Management Dashboard
  */
 const CMTasksTable = ({ tasks, onRowClick }) => {
+    // Detect at_home=2 scenario
+    const isAtHome2Scenario = () => {
+        // Check hash-based URL first (e.g., #/dashboard?at_home=2)
+        if (window.location.hash?.includes('?')) {
+            const hashParts = window.location.hash.split('?');
+            if (hashParts.length > 1) {
+                const hashParams = new URLSearchParams(hashParts[1]);
+                return hashParams.get('at_home') === '2';
+            }
+        }
+
+        // Fallback to regular URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('at_home') === '2';
+    };
+
     const getPriorityClass = (priority) => {
-        switch (priority?.toLowerCase()) {
-            case 'high': return styles.high;
-            case 'medium': return styles.medium;
-            case 'low': return styles.low;
-            default: return styles.low;
+        const isAtHome2 = isAtHome2Scenario();
+
+        if (isAtHome2) {
+            // Special colors for at_home=2 scenario
+            switch (priority?.toLowerCase()) {
+                case 'high': return styles.athome2High;
+                case 'medium': return styles.athome2Medium;
+                case 'low': return styles.low; // Keep default low priority color
+                default: return styles.low;
+            }
+        } else {
+            // Default priority colors
+            switch (priority?.toLowerCase()) {
+                case 'high': return styles.high;
+                case 'medium': return styles.medium;
+                case 'low': return styles.low;
+                default: return styles.low;
+            }
         }
     };
 
@@ -47,7 +76,7 @@ const CMTasksTable = ({ tasks, onRowClick }) => {
                                 data-member-number={task.member_number}
                                 data-task-id={task.id}
                                 className={styles.tableRow}
-                                onClick={() => onRowClick && onRowClick(task)}
+                                onClick={() => onRowClick?.(task)}
                             >
                                 <td className={`${styles.priorityStrip} ${priorityClass}`}></td>
                                 <td className={`${styles.tableCell} ${styles.priority}`}>{task.priority}</td>

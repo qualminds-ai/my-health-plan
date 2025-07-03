@@ -379,6 +379,15 @@
     background: #0077B6;
 }
 
+/* Priority colors for at_home=2 scenario (athome2) */
+.priorityStrip.athome2High {
+    background: #03045E !important;
+}
+
+.priorityStrip.athome2Medium {
+    background: #0077B6 !important;
+}
+
 .tableCell {
     padding: 12px;
     font-size: 10px;
