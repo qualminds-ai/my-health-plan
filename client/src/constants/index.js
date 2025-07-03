@@ -2,15 +2,10 @@
  * Application Constants
  */
 
-// API Configuration (Legacy - no longer used in static mode)
-// Kept for reference only - application now runs entirely client-side
-export const API_CONFIG = {
-    BASE_URL: process.env.NODE_ENV === 'production'
-        ? 'https://my-health-plan.up.railway.app'
-        : 'http://localhost:5000',
-    TIMEOUT: 10000,
-    RETRY_ATTEMPTS: 3,
-    STATIC_MODE: true // Application now runs in static mode
+// Application Configuration - Client-only mode
+export const APP_CONFIG = {
+    STATIC_MODE: true, // Application runs entirely client-side
+    VERSION: '2.0.0'
 };
 
 // Route Constants
@@ -34,22 +29,18 @@ export const STORAGE_KEYS = {
 // Application Messages
 export const MESSAGES = {
     LOADING: 'Loading...',
-    LOGIN_REQUIRED: 'Please log in to continue',
+    LOGIN_SUCCESS: 'Login successful',
     MEMBER_NOT_FOUND: 'Member not found',
-    NETWORK_ERROR: 'Network error occurred',
-    UNAUTHORIZED: 'Unauthorized access',
-    SESSION_EXPIRED: 'Session expired. Please log in again.'
+    DATA_ERROR: 'Error loading data',
+    INVALID_CREDENTIALS: 'Invalid email or password'
 };
 
-// HTTP Status Codes
-export const HTTP_STATUS = {
-    OK: 200,
-    CREATED: 201,
-    BAD_REQUEST: 400,
-    UNAUTHORIZED: 401,
-    FORBIDDEN: 403,
-    NOT_FOUND: 404,
-    INTERNAL_SERVER_ERROR: 500
+// Application Status Codes
+export const APP_STATUS = {
+    SUCCESS: 'success',
+    ERROR: 'error',
+    LOADING: 'loading',
+    IDLE: 'idle'
 };
 
 // Navigation Items

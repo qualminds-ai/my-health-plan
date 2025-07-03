@@ -6,24 +6,18 @@ This file provides essential context and coding guidelines for AI agents working
 
 MyHealthPlan is a **healthcare authorization management MVP** with sophisticated clinical workflows:
 - **Purpose**: Enterprise-ready demo showcasing healthcare authorization workflows with clinical review systems
-- **Architecture**: React 19+ frontend + Node.js/Express backend + PostgreSQL with custom migration system
+- **Architecture**: React 19+ frontend with static data simulation
 - **Key Features**: Multi-step clinical review, user personas, scenario-based data modifications, hash-based deep linking
-- **Authentication**: JWT + bcrypt with persona switching and role-based access (3 user types: UM, UM-SNF, CM)
+- **Authentication**: Static authentication with persona switching and role-based access (3 user types: UM, UM-SNF, CM)
 
 ## 🚀 Development Workflow (Essential Commands)
 
 ```bash
-# Start everything (auto-creates DB)
-npm start                    # Starts both frontend (3000) and backend (5000)
-
-# Database management 
-npm run db:setup             # Full database setup (creates DB + migrations + seeds)
-npm run db:migrate           # Run pending migrations only
-npm run db:status            # Check migration status
-cd server && npm run db:create "name"  # Create new migration
+# Start everything
+npm start                    # Starts frontend (3000)
 
 # Package management
-npm run install:all          # Install all dependencies (root + client + server)
+npm run install:all          # Install all dependencies (root + client)
 
 # Production build
 npm run client:build         # Build React app for production
@@ -46,23 +40,17 @@ my-health-plan/
 │   │   ├── member/          # Member-specific components
 │   │   │   └── authorization/  # Clinical review workflow
 │   │   └── guards/          # Route protection
-│   ├── services/            # API layer (apiService, authService, memberService)
+│   ├── services/            # Static data services (staticAuthService, staticDataService)
 │   ├── hooks/              # Custom hooks (useAuth, useUserMode, useMemberActions)
 │   └── constants/          # App constants & scenario data
-└── server/
-    ├── routes/             # Express routes with route handlers
-    ├── models/             # Database models extending BaseModel
-    ├── middleware/         # Auth & error handling middleware
-    └── db/migrations/      # SQL migration files (YYYYMMDDHHMMSS_name.sql)
 ```
 
-### Database Migration System
-**Critical**: This project uses a **custom CLI-based migration system** (not Sequelize/Prisma)
-- **Files**: `server/scripts/db.js` (CLI) + `server/db/migrations/*.sql`
-- **Create**: `cd server && npm run db:create "description"` 
-- **Execute**: `npm run db:migrate`
-- **Track**: Uses `schema_migrations` table for versioning
-- **Format**: Pure SQL files with timestamp prefixes
+### Static Data Architecture
+**Important**: This project uses **static data services** for demo purposes
+- **Files**: `client/src/services/staticDataService.js` + `client/src/constants/staticData.js`
+- **Authentication**: Static user validation with localStorage persistence
+- **Data Storage**: JSON-based static data with scenario modifications
+- **State Management**: Client-side only with localStorage for persistence
 
 
 ## 💻 Code Patterns & Examples
@@ -72,7 +60,7 @@ my-health-plan/
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useAuth } from '../hooks/useAuth';
-import apiService from '../services/apiService';
+import staticDataService from '../services/staticDataService';
 import styles from './Component.module.css';
 
 const ExampleComponent = ({ memberData, onUpdate }) => {
@@ -82,8 +70,8 @@ const ExampleComponent = ({ memberData, onUpdate }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await apiService.get('/endpoint');
-                setData(response.data);
+                const response = await staticDataService.getMemberData();
+                setData(response);
             } catch (error) {
                 console.error('❌ Failed to fetch data:', error);
             }
@@ -116,41 +104,21 @@ ExampleComponent.propTypes = {
 export default ExampleComponent;
 ```
 
-### Express Route Pattern
+### Static Data Service Pattern
 ```javascript
-const express = require('express');
-const router = express.Router();
-const auth = require('../middleware/auth');
-const { asyncHandler } = require('../middleware/errorHandler');
-
-router.get('/endpoint', auth, asyncHandler(async (req, res) => {
-    const data = await SomeModel.findAll();
-    res.json({
-        success: true,
-        data,
-        message: 'Data retrieved successfully'
-    });
-}));
-
-module.exports = router;
-```
-
-### Database Model Pattern (extends BaseModel)
-```javascript
-const BaseModel = require('./BaseModel');
-
-class ExampleModel extends BaseModel {
-    constructor() {
-        super('table_name');
-    }
+const staticDataService = {
+    getMemberData: () => {
+        // Return static member data
+        return memberData;
+    },
     
-    async customMethod(params) {
-        const query = `SELECT * FROM ${this.tableName} WHERE condition = $1`;
-        return await this.query(query, [params]);
+    getAuthorizationData: (memberId) => {
+        // Return static authorization data for member
+        return authorizationData.filter(auth => auth.memberId === memberId);
     }
-}
+};
 
-module.exports = new ExampleModel();
+export default staticDataService;
 ```
 
 ## 🎯 Key Features & Workflows
@@ -169,31 +137,17 @@ module.exports = new ExampleModel();
 - **State Management**: Previous/Next navigation with validation
 
 ### API Service Layer
-- **Centralized**: `client/src/services/apiService.js` with axios interceptors
-- **Auto-logout**: 401 responses clear all storage and redirect to login
-- **Token Management**: JWT tokens auto-added to requests
-- **Error Handling**: Consistent error format across all API calls
+- **Centralized**: `client/src/services/staticDataService.js` with static data management
+- **Authentication**: Static user validation with localStorage persistence
+- **Data Management**: JSON-based data with scenario modifications
+- **Error Handling**: Consistent error format across all data operations
 
-## 🗄️ Database Schema & Patterns
+## 🎯 Key Features & Data Management
 
-### Key Tables
-- **users**: Authentication with role-based access
-- **members**: Healthcare plan members (MEM001, MEM002, etc.)
-- **authorizations**: Main business entity (2025OP000389, etc.)
-- **providers**, **diagnoses**, **drg_codes**: Reference data
-
-### Migration Commands
-```bash
-# Create new migration (server directory)
-cd server && npm run db:create "add_new_table"
-
-# Migration file format: server/db/migrations/20241217120000_add_new_table.sql
-CREATE TABLE example (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-```
+### Static Data Structure
+- **Member Data**: Healthcare plan members (MEM001, MEM002, etc.)
+- **Authorization Data**: Main business entity (2025OP000389, etc.)
+- **Reference Data**: Providers, diagnoses, DRG codes stored as static JSON
 
 ## ⚠️ Critical Patterns & Conventions
 
@@ -244,22 +198,21 @@ console.log('🔄 Retrying request...');
 
 ## 🚨 Common Pitfalls & Solutions
 
-1. **Database migrations**: Always use `cd server && npm run db:create "name"` (custom CLI, not Sequelize)
+1. **Static Data Management**: Ensure static data services return consistent format
 2. **CSS organization**: Write styles in CSS Modules files, not inline or global CSS
 3. **Component IDs**: Add unique IDs to buttons, links, rows for testability
-4. **API calls**: Use service layer (`apiService.js`), not direct axios calls
+4. **Data calls**: Use service layer (`staticDataService.js`), not direct data access
 5. **User scenarios**: Remember UM users see sepsis modifications, SNF users see different data
 6. **Persona switching**: Admin can become Maria/Elise/Karen without logout
 
 ## 🎯 Development Workflow
 1. Focus on sophisticated user workflows and clinical features
-2. Create database migrations for healthcare data model enhancements  
-3. Implement comprehensive API endpoints with advanced validation
-4. Create modular React components with CSS Modules and Tailwind styling
-5. Add comprehensive error handling and user feedback systems
-6. Test complex user workflows (login → dashboard → member lookup → clinical review)
-7. Implement user persona switching and scenario management
-8. Test multi-step clinical review processes and authorization workflows
+2. Create modular React components with CSS Modules and Tailwind styling
+3. Implement static data services for healthcare data simulation
+4. Add comprehensive error handling and user feedback systems
+5. Test complex user workflows (login → dashboard → member lookup → clinical review)
+6. Implement user persona switching and scenario management
+7. Test multi-step clinical review processes and authorization workflows
 
 
 

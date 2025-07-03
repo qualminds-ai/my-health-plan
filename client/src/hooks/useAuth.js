@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { STORAGE_KEYS, ROUTES, MESSAGES } from '../constants';
-import authService from '../services/authService';
+import staticAuthService from '../services/staticAuthService';
 import { useUserMode } from './useUserMode';
 
 /**
@@ -79,7 +79,7 @@ export const useAuth = () => {
             setLoading(true);
             setError(null);
 
-            const response = await authService.login(credentials);
+            const response = await staticAuthService.login(credentials);
 
             if (response.token && response.user) {
                 // Set state synchronously to avoid flickering
@@ -102,10 +102,10 @@ export const useAuth = () => {
 
                 return response;
             } else {
-                throw new Error('Invalid response from server');
+                throw new Error('Invalid response from authentication');
             }
         } catch (error) {
-            const errorMessage = error.message || MESSAGES.NETWORK_ERROR;
+            const errorMessage = error.message || MESSAGES.DATA_ERROR;
             setError(errorMessage);
             setLoading(false);
             throw error;
@@ -117,7 +117,7 @@ export const useAuth = () => {
             setLoading(true);
 
             // Call logout endpoint
-            await authService.logout();
+            await staticAuthService.logout();
         } catch (error) {
             console.error('Logout error:', error);
             // Continue with logout even if API call fails

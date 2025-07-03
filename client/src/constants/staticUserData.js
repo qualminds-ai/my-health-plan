@@ -50,10 +50,10 @@ export const STATIC_USERS = [
 
 /**
  * Simple token generation for demo purposes
- * In production, use proper JWT library
+ * In production, use proper authentication library
  */
 export const generateDemoToken = (user) => {
-    const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
+    const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'TOKEN' }));
     const payload = btoa(JSON.stringify({
         userId: user.id,
         email: user.email,

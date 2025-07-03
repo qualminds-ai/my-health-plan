@@ -9,7 +9,7 @@ import GroupQueuesChart from './common/GroupQueuesChart';
 import Pagination from './common/Pagination';
 import { CalendarIcon, ClockIcon, BellIcon, ExpandIcon, RefreshIcon } from './common/Icons';
 import { getCMData } from '../constants/cmData';
-import dataService from '../services/dataService';
+import staticDataService from '../services/staticDataService';
 import styles from './Dashboard.module.css';
 
 const Dashboard = ({
@@ -190,7 +190,7 @@ const Dashboard = ({
           }
 
           // Handle UM/SNF Dashboard with API data
-          const statsResponse = await dataService.getDashboardStats(activeMode, scenarios);
+          const statsResponse = await staticDataService.getDashboardStats(activeMode, scenarios);
 
 
           // Apply sepsis modifications to stats if scenario is active
@@ -198,7 +198,7 @@ const Dashboard = ({
 
           setDashboardStats(modifiedStats);
 
-          const authResponse = await dataService.getAuthorizations(activeMode, scenarios, { limit: 50 });
+          const authResponse = await staticDataService.getAuthorizations(activeMode, scenarios, { limit: 50 });
 
           // Handle both paginated response (API) and direct array (static)
           const authData = authResponse.data || authResponse;

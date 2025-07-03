@@ -25,13 +25,6 @@ export const CM_STATS_DATA = {
         overdue_count: 11,
         reminder_for_today_count: 5,
         start_this_week_count: 3
-    },
-    athome3: {
-        date: "Thursday, May 22", // Display date for at home=3 scenario
-        due_today_count: 24,
-        overdue_count: 11,
-        reminder_for_today_count: 5,
-        start_this_week_count: 3
     }
 };
 
@@ -432,138 +425,6 @@ export const CM_TASKS_DATA = {
             due_date: '05/24/2025 1:00 PM',
             status: 'Pending'
         }
-    ],
-    athome3: [
-        {
-            id: 1,
-            member_id: 1,
-            member_number: 'MEM001',
-            priority: 'High',
-            activity: 'Follow up call',
-            type: 'Readmission Risk',
-            pos: 'SNF',
-            diagnosis: 'DKA, CHF',
-            member_name: 'Robert Abbott',
-            due_date: '05/24/2025 4:00 PM',
-            status: 'Pending'
-        },
-        {
-            id: 2,
-            member_id: 1,
-            member_number: 'MEM001',
-            priority: 'High',
-            activity: 'Care plan review',
-            type: 'Readmission Risk',
-            pos: 'SNF',
-            diagnosis: 'DKA, CHF',
-            member_name: 'Robert Abbott',
-            due_date: '05/24/2025 3:00 PM',
-            status: 'Pending'
-        },
-        {
-            id: 3,
-            member_id: 1,
-            member_number: 'MEM001',
-            priority: 'High',
-            activity: 'Endocrinologist ref',
-            type: 'Care Planning',
-            pos: 'SNF',
-            diagnosis: 'DKA, CHF',
-            member_name: 'Robert Abbott',
-            due_date: '05/24/2025 2:00 PM',
-            status: 'Pending'
-        },
-        {
-            id: 4,
-            member_id: 1,
-            member_number: 'MEM001',
-            priority: 'High',
-            activity: 'Initial meeting',
-            type: 'Discharge Planning',
-            pos: 'SNF',
-            diagnosis: 'DKA, CHF',
-            member_name: 'Abbott, Robert',
-            due_date: '05/12/2025 1:00 PM',
-            status: 'Pending'
-        },
-        {
-            id: 5,
-            member_id: 2,
-            member_number: 'MEM002',
-            priority: 'High',
-            activity: 'Review care plan',
-            type: 'Readmission Risk',
-            pos: 'SNF',
-            diagnosis: 'CHF',
-            member_name: 'Perry, Samuel',
-            due_date: '05/12/2025 4:00 PM',
-            status: 'Pending'
-        },
-        {
-            id: 6,
-            member_id: 4,
-            member_number: 'MEM004',
-            priority: 'High',
-            activity: 'Call member',
-            type: 'Readmission Risk',
-            pos: 'Home',
-            diagnosis: 'CKD',
-            member_name: 'Smith, Laura',
-            due_date: '05/20/2025 11:00 AM',
-            status: 'Pending'
-        },
-        {
-            id: 7,
-            member_id: 8,
-            member_number: 'MEM008',
-            priority: 'High',
-            activity: 'Meet care team',
-            type: 'Discharge Planning',
-            pos: 'LTACH',
-            diagnosis: 'COPD',
-            member_name: 'Emerson, John',
-            due_date: '05/20/2025 3:00 PM',
-            status: 'Pending'
-        },
-        {
-            id: 8,
-            member_id: 5,
-            member_number: 'MEM005',
-            priority: 'Medium',
-            activity: 'Assessment',
-            type: 'Readmission Risk',
-            pos: 'SNF',
-            diagnosis: 'DKA',
-            member_name: 'Rutherford, Renee',
-            due_date: '05/24/2025 11:00 AM',
-            status: 'Pending'
-        },
-        {
-            id: 9,
-            member_id: 7,
-            member_number: 'MEM007',
-            priority: 'Medium',
-            activity: 'Meet care team',
-            type: 'Transition of Care',
-            pos: 'Home',
-            diagnosis: 'Cellulitis',
-            member_name: 'Oliver, James',
-            due_date: '05/24/2025 12:00 PM',
-            status: 'Pending'
-        },
-        {
-            id: 10,
-            member_id: 3,
-            member_number: 'MEM003',
-            priority: 'Medium',
-            activity: 'Review discharge',
-            type: 'Transition of Care',
-            pos: 'LTACH',
-            diagnosis: 'CKD',
-            member_name: 'Sawyer, Kate',
-            due_date: '05/24/2025 1:00 PM',
-            status: 'Pending'
-        }
     ]
 };
 
@@ -585,7 +446,7 @@ export const GROUP_QUEUES_DATA = {
  * Get CM data based on current scenario from localStorage or "at_home" query parameter
  * @param {string} dataType - 'stats', 'tasks', or 'queues'
  * @param {string} scenario - scenario name, defaults to 'default'
- * @param {string|number} atHomeParam - "at_home" query parameter (1, 2, or 3)
+ * @param {string|number} atHomeParam - "at_home" query parameter (1 or 2)
  * @returns {Object|Array} The requested data
  */
 export const getCMData = (dataType, scenario = 'default', atHomeParam = null) => {
@@ -599,9 +460,6 @@ export const getCMData = (dataType, scenario = 'default', atHomeParam = null) =>
                 break;
             case '2':
                 scenario = 'athome2';
-                break;
-            case '3':
-                scenario = 'athome3';
                 break;
             default:
                 scenario = 'default';

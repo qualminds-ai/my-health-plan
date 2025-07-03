@@ -1,7 +1,7 @@
 /**
  * Static Data Service
- * Replaces API calls with static data access for complete disconnection from backend
- * Maintains the same interface as the original API service for seamless replacement
+ * Provides static healthcare data for the MyHealthPlan demo application
+ * All data is client-side only with no external dependencies
  */
 
 import {
@@ -14,11 +14,11 @@ import {
 
 /**
  * Static Data Service Class
- * Provides the same interface as apiService but returns hardcoded data
+ * Provides static healthcare data with scenario-based modifications
  */
 class StaticDataService {
     /**
-     * Simulate API delay for realistic behavior
+     * Simulate loading delay for realistic user experience
      * @param {number} delay - Delay in milliseconds
      */
     async simulateDelay(delay = 100) {
@@ -26,7 +26,7 @@ class StaticDataService {
     }
 
     /**
-     * Dashboard Stats - replaces GET /api/dashboard/stats
+     * Dashboard Statistics
      * @param {string} userMode - Current user mode
      * @param {array} scenarios - Active scenarios
      * @returns {Promise<object>} Dashboard statistics
@@ -42,7 +42,7 @@ class StaticDataService {
     }
 
     /**
-     * Authorizations Data - replaces GET /api/dashboard/authorizations
+     * Authorization Data
      * @param {string} userMode - Current user mode
      * @param {array} scenarios - Active scenarios
      * @param {object} options - Query options (limit, page, filters)
@@ -99,7 +99,7 @@ class StaticDataService {
     }
 
     /**
-     * Member Data - replaces GET /api/dashboard/member/:memberNumber
+     * Member Data
      * @param {string} memberNumber - Member number
      * @param {string} userMode - Current user mode
      * @param {array} scenarios - Active scenarios
@@ -123,7 +123,7 @@ class StaticDataService {
     }
 
     /**
-     * Search Members - replaces GET /api/dashboard/members/search
+     * Search Members
      * @param {string} query - Search query
      * @returns {Promise<array>} Search results
      */
@@ -139,7 +139,7 @@ class StaticDataService {
     }
 
     /**
-     * Get All Members - replaces GET /api/dashboard/members
+     * Get All Members
      * @param {object} options - Query options (limit, page)
      * @returns {Promise<object>} Members with pagination
      */
@@ -158,7 +158,7 @@ class StaticDataService {
     }
 
     /**
-     * Update Member - replaces PUT /api/dashboard/member/:memberNumber
+     * Update Member
      * @param {string} memberNumber - Member number
      * @param {object} memberData - Updated member data
      * @returns {Promise<object>} Updated member data
@@ -189,7 +189,7 @@ class StaticDataService {
     }
 
     /**
-     * Authorization Details - replaces GET /api/dashboard/authorizations/:id
+     * Authorization Details
      * @param {string} authorizationId - Authorization ID
      * @param {string} userMode - Current user mode
      * @param {array} scenarios - Active scenarios
@@ -217,7 +217,7 @@ class StaticDataService {
     }
 
     /**
-     * Health Check - replaces GET /api/health
+     * Application Health Status
      * @returns {Promise<object>} Health status
      */
     async getHealthStatus() {
@@ -226,14 +226,13 @@ class StaticDataService {
         return {
             status: 'OK',
             timestamp: new Date().toISOString(),
-            server: 'Static Data Mode',
-            database: 'Not Connected (Static Mode)',
-            mode: 'static'
+            mode: 'Static Data Mode',
+            version: '2.0.0'
         };
     }
 
     /**
-     * Generic error handler for consistency with original API service
+     * Generic error handler for consistent error responses
      * @param {Error} error - Error object
      * @returns {object} Formatted error
      */

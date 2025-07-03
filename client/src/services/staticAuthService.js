@@ -85,7 +85,7 @@ class StaticAuthService {
     }
 
     /**
-     * Refresh token - replaces POST /api/auth/refresh
+     * Refresh token
      * @returns {Promise<object>} Refresh response
      */
     async refreshToken() {
@@ -137,7 +137,7 @@ class StaticAuthService {
     }
 
     /**
-     * Validate token - replaces POST /api/auth/validate
+     * Validate token
      * @returns {Promise<object>} Validation response
      */
     async validateToken() {

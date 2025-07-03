@@ -10,7 +10,7 @@ const SEPSIS_MODIFICATIONS = {
             status: 'In Review',
             priority: 'High',
             clinical_notes: 'Patient developed sepsis - escalated to concurrent review',
-            member_name: 'Abbott, Robert' // Database format is "Last, First"
+            member_name: 'Abbott, Robert' // Format is "Last, First"
         },
         '2025OP000312': {
             priority: 'Medium',

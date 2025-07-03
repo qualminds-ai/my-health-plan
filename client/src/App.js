@@ -7,7 +7,7 @@ import Member from './components/Member';
 import ProtectedRoute from './components/guards/ProtectedRoute';
 import PublicRoute from './components/guards/PublicRoute';
 import DataModeIndicator from './components/common/DataModeIndicator';
-import memberService from './services/memberService';
+import staticDataService from './services/staticDataService';
 import { useAuth } from './hooks/useAuth';
 import { ROUTES } from './constants';
 import './App.css';
@@ -71,7 +71,7 @@ const MemberPage = ({
           console.log('Current activePersona:', activePersona);
           console.log('Current scenarios:', scenarios);
 
-          const data = await memberService.getMemberByNumber(memberNumber, activeMode, scenarios);
+          const data = await staticDataService.getMemberByNumber(memberNumber, activeMode, scenarios);
 
           if (data) {
             setMemberData(data);
