@@ -388,6 +388,19 @@
     background: #0077B6 !important;
 }
 
+/* Table header styles for at_home=2 scenario */
+.tableHeader.athome2 {
+    background: #EDF4FF !important;
+}
+
+.tableHeaderCell.athome2 {
+    border-bottom: 1.431px solid #BEBEBE !important;
+}
+
+.priorityCell.athome2 {
+    border-bottom: 1.431px solid #BEBEBE !important;
+}
+
 .tableCell {
     padding: 12px;
     font-size: 10px;

@@ -48,19 +48,19 @@ const CMTasksTable = ({ tasks, onRowClick }) => {
         <div className={styles.tableContainer}>
             <table id="cm-tasks-table" className={styles.authTable}>
                 <thead>
-                    <tr className={styles.tableHeader}>
-                        <th className={styles.priorityCell}></th>
-                        <th className={styles.tableHeaderCell}>
+                    <tr className={`${styles.tableHeader} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>
+                        <th className={`${styles.priorityCell} ${isAtHome2Scenario() ? styles.athome2 : ''}`}></th>
+                        <th className={`${styles.tableHeaderCell} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>
                             Priority <span className={styles.prioritySortIcon}>↓</span>
                         </th>
-                        <th className={styles.tableHeaderCell}>Activity</th>
-                        <th className={styles.tableHeaderCell}>Type</th>
-                        <th className={`${styles.tableHeaderCell} ${styles.posColumnHeader}`}>POS</th>
-                        <th className={styles.tableHeaderCell}>Diagnosis</th>
-                        <th className={styles.tableHeaderCell}>Member Name</th>
-                        <th className={styles.tableHeaderCell}>Due Date</th>
-                        <th className={styles.tableHeaderCell}>Status</th>
-                        <th className={styles.tableHeaderCell}>Action</th>
+                        <th className={`${styles.tableHeaderCell} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>Activity</th>
+                        <th className={`${styles.tableHeaderCell} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>Type</th>
+                        <th className={`${styles.tableHeaderCell} ${styles.posColumnHeader} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>POS</th>
+                        <th className={`${styles.tableHeaderCell} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>Diagnosis</th>
+                        <th className={`${styles.tableHeaderCell} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>Member Name</th>
+                        <th className={`${styles.tableHeaderCell} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>Due Date</th>
+                        <th className={`${styles.tableHeaderCell} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>Status</th>
+                        <th className={`${styles.tableHeaderCell} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>Action</th>
                     </tr>
                 </thead>
                 <tbody className={styles.tableBody}>

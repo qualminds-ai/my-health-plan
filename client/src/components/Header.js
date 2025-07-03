@@ -89,15 +89,15 @@ const Header = ({
         {/* Right icons and user */}
         <div id="header-actions" className={styles.headerActions}>
           <img
-            id="header-file-icon"
-            src={FileIcon}
-            alt="File"
-            className={styles.headerIcon}
-          />
-          <img
             id="header-expand-icon"
             src={ExpandIcon}
             alt="Expand"
+            className={styles.headerIcon}
+          />
+          <img
+            id="header-file-icon"
+            src={FileIcon}
+            alt="File"
             className={styles.headerIcon}
           />
 
