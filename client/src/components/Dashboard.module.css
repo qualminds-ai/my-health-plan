@@ -35,6 +35,16 @@
     width: 80px;
 }
 
+.requestTypeColumnHeader {
+    max-width: 92px;
+    width: 92px;
+}
+
+.typeColumnHeader {
+    max-width: 130px;
+    width: 130px;
+}
+
 .topSection {
     display: flex;
     justify-content: space-between;
@@ -396,6 +406,24 @@
     position: relative;
     cursor: help;
     max-width: 80px;
+}
+
+.requestTypeCell {
+    position: relative;
+    cursor: help;
+    max-width: 92px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.typeCell {
+    position: relative;
+    cursor: help;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .actionButton {

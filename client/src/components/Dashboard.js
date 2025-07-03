@@ -351,26 +351,44 @@ const Dashboard = ({
   }, [activeMode, user?.email]); // Run when mode changes or user changes
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric'
-    });
+    if (!dateString) return '';
+
+    // Handle both ISO datetime strings and date-only strings without timezone conversion
+    // Example: '2025-04-28T03:47:01Z' or '2025-04-28' -> '04/28/2025'
+    let datePart;
+    if (dateString.includes('T')) {
+      // ISO datetime string like '2025-04-28T03:47:01Z'
+      datePart = dateString.split('T')[0];
+    } else {
+      // Date-only string like '2025-04-28'
+      datePart = dateString;
+    }
+
+    const [year, month, day] = datePart.split('-');
+    return `${month}/${day}/${year}`;
   };
 
   const formatDateTime = (dateString) => {
     if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-    }) + ' ' + date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
+
+    // Parse ISO date string without timezone conversion
+    // Example: '2025-04-28T03:47:01Z' -> '04/28/2025 03:47:01 AM'
+    // Extract date and time components directly from the string
+    const isoDate = dateString.replace('Z', ''); // Remove Z for UTC indicator
+    const [datePart, timePart] = isoDate.split('T');
+    const [year, month, day] = datePart.split('-');
+    const [hour, minute, second] = timePart.split(':');
+
+    // Format date as MM/DD/YYYY
+    const formattedDate = `${month}/${day}/${year}`;
+
+    // Convert hour to 12-hour format
+    const hourNum = parseInt(hour, 10);
+    const hour12 = hourNum === 0 ? 12 : hourNum > 12 ? hourNum - 12 : hourNum;
+    const ampm = hourNum >= 12 ? 'PM' : 'AM';
+    const formattedTime = `${hour12.toString().padStart(2, '0')}:${minute}:${second} ${ampm}`;
+
+    return `${formattedDate} ${formattedTime}`;
   };
 
   const handleRowClick = (item) => {
@@ -449,7 +467,7 @@ const Dashboard = ({
 
     // Sepsis scenario values for UM mode
     const sepsisStats = {
-      due_today_count: 48,
+      due_today_count: 49,
       high_priority_count: 5,
       reminders_count: 9,
       start_this_week_count: 21
@@ -653,7 +671,7 @@ const Dashboard = ({
 
               {/* Section Title */}
               <div className={styles.sectionTitle}>
-                Inpatient Tasks - Due Today ({scenarios.includes('sepsis') && activeMode === 'UM' ? 48 : (dashboardStats.due_today_count || 0)})
+                Inpatient Tasks - Due Today ({scenarios.includes('sepsis') && activeMode === 'UM' ? 49 : (dashboardStats.due_today_count || 0)})
                 <ExpandIcon />
               </div>
 

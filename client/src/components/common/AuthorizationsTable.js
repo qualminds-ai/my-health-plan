@@ -118,9 +118,9 @@ const AuthorizationsTable = ({
                         <th className={styles.tableHeaderCell}>Admission Date</th>
                         <th className={styles.tableHeaderCell}>Diagnosis</th>
                         <th className={styles.tableHeaderCell}>DRG</th>
-                        {userMode !== 'UM' && <th className={styles.tableHeaderCell}>Request Type</th>}
+                        {userMode !== 'UM' && <th className={`${styles.tableHeaderCell} ${styles.requestTypeColumnHeader}`}>Request Type</th>}
                         <th className={`${styles.tableHeaderCell} ${styles.posColumnHeader}`}>POS</th>
-                        <th className={styles.tableHeaderCell}>Type</th>
+                        <th className={`${styles.tableHeaderCell} ${styles.typeColumnHeader}`}>Type</th>
                         <th className={styles.tableHeaderCell}>Member Name</th>
                         <th className={styles.tableHeaderCell}>Approved Days</th>
                         <th className={styles.tableHeaderCell}>Next Review Date</th>
@@ -151,7 +151,15 @@ const AuthorizationsTable = ({
                                 <td className={`${styles.tableCell} ${styles.primary}`}>{formatDate(auth.admission_date)}</td>
                                 <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.diagnosis_code}</td>
                                 <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.drg_code}</td>
-                                {userMode !== 'UM' && <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.request_type}</td>}
+                                {userMode !== 'UM' &&
+                                    <td
+                                        className={`${styles.tableCell} ${styles.secondary} ${styles.requestTypeCell}`}
+                                        data-full-text={auth.request_type}
+                                        title={auth.request_type}
+                                    >
+                                        {auth.request_type}
+                                    </td>
+                                }
                                 <td
                                     className={`${styles.tableCell} ${styles.secondary} ${styles.posCell}`}
                                     data-full-text={auth.pos}
@@ -159,7 +167,11 @@ const AuthorizationsTable = ({
                                 >
                                     {auth.pos}
                                 </td>
-                                <td className={`${styles.tableCell} ${styles.secondary} ${scenarios.includes('sepsis') && userMode === 'UM' && auth.member_name === 'Robert Abbott' ? styles.typeHighlight : ''}`}>
+                                <td
+                                    className={`${styles.tableCell} ${styles.secondary} ${styles.typeCell} ${scenarios.includes('sepsis') && userMode === 'UM' && auth.member_name === 'Robert Abbott' ? styles.typeHighlight : ''}`}
+                                    data-full-text={auth.review_type}
+                                    title={auth.review_type}
+                                >
                                     {auth.review_type}
                                 </td>
                                 <td className={`${styles.tableCell} ${styles.secondary}`}>{auth.member_name}</td>

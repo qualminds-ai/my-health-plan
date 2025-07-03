@@ -9,12 +9,28 @@ export const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
 
     try {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
+        // Handle both ISO datetime strings and date-only strings without timezone conversion
+        let datePart;
+        if (dateString.includes('T')) {
+            // ISO datetime string like '2025-04-28T03:47:01Z'
+            datePart = dateString.split('T')[0];
+        } else {
+            // Date-only string like '2025-04-28'
+            datePart = dateString;
+        }
+
+        const [year, month, day] = datePart.split('-');
+
+        // Create month names array
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        const monthName = months[parseInt(month, 10) - 1];
+        const dayNum = parseInt(day, 10);
+
+        return `${monthName} ${dayNum}, ${year}`;
     } catch (error) {
         console.error('Error formatting date:', error);
         return 'Invalid Date';
@@ -64,7 +80,7 @@ export const debounce = (func, wait) => {
  * Generate unique ID
  */
 export const generateId = () => {
-    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 };
 
 /**
