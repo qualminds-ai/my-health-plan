@@ -220,7 +220,7 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 150%;
-    text-align: center;
+    text-align: left;
 }
 
 .riskValueWithIcon {
@@ -243,7 +243,6 @@
     width: 20px;
     height: 20px;
     flex-shrink: 0;
-    fill: #A64544;
 }
 
 /* Table Styles */
@@ -274,7 +273,6 @@
     font-size: 8.182px;
     font-weight: 700;
     border-bottom: none;
-    text-transform: uppercase;
     letter-spacing: 0.025em;
 }
 

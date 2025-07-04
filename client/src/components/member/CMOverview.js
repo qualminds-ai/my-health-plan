@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './CMOverview.module.css';
+import warningIcon from '../../assets/authorizations/warning.svg';
 
 /**
  * CM Member Overview Component for Case Management users
@@ -31,10 +32,11 @@ const CMOverview = ({ memberData, activeMode }) => {
                         <div className={styles.riskItem}>
                             <span className={styles.riskLabel}>Overall Risk Score</span>
                             <div className={styles.riskValueWithIcon}>
-                                <svg className={styles.warningIcon} width="20" height="20" viewBox="0 0 16 16" fill="#A64544">
-                                    <path d="M8 1L1 15h14L8 1z" />
-                                    <path d="M8 6v4M8 12h.01" stroke="white" strokeWidth="1" />
-                                </svg>
+                                <img
+                                    src={warningIcon}
+                                    alt="Warning"
+                                    className={styles.warningIcon}
+                                />
                                 <span className={styles.riskValueHigh}>High</span>
                             </div>
                         </div>
@@ -216,16 +218,16 @@ const CMOverview = ({ memberData, activeMode }) => {
                                         <tr className={styles.tableRow}>
                                             <td className={styles.tableCell}>Predictive</td>
                                             <td className={styles.tableCell}>PM-High</td>
-                                            <td className={styles.tableCell}></td>
+                                            <td className={styles.tableCell}>-</td>
                                             <td className={styles.tableCell}>01/11/2022</td>
-                                            <td className={styles.tableCell}></td>
+                                            <td className={styles.tableCell}>-</td>
                                         </tr>
                                         <tr className={styles.tableRow}>
                                             <td className={styles.tableCell}>Psychographic</td>
                                             <td className={styles.tableCell}>Assessments...</td>
-                                            <td className={styles.tableCell}></td>
+                                            <td className={styles.tableCell}>-</td>
                                             <td className={styles.tableCell}>01/11/2022</td>
-                                            <td className={styles.tableCell}></td>
+                                            <td className={styles.tableCell}>-</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -252,28 +254,28 @@ const CMOverview = ({ memberData, activeMode }) => {
                                     </thead>
                                     <tbody>
                                         <tr className={styles.tableRow}>
-                                            <td className={styles.tableCell}>Morphine</td>
+                                            <td className={styles.tableCell}>Mounjaro</td>
                                             <td className={styles.tableCell}>Weekly</td>
                                             <td className={styles.tableCell}>Open</td>
-                                            <td className={styles.tableCell}>02/30/2023</td>
+                                            <td className={styles.tableCell}>02/08/2025</td>
                                         </tr>
                                         <tr className={styles.tableRow}>
                                             <td className={styles.tableCell}>Lantus</td>
                                             <td className={styles.tableCell}>10mg sub q BID</td>
                                             <td className={styles.tableCell}>Open</td>
-                                            <td className={styles.tableCell}>02/30/2023</td>
+                                            <td className={styles.tableCell}>02/30/2025</td>
                                         </tr>
                                         <tr className={styles.tableRow}>
                                             <td className={styles.tableCell}>Novolog</td>
                                             <td className={styles.tableCell}>As directed</td>
                                             <td className={styles.tableCell}>In Progress</td>
-                                            <td className={styles.tableCell}>02/30/2023</td>
+                                            <td className={styles.tableCell}>02/08/2026</td>
                                         </tr>
                                         <tr className={styles.tableRow}>
                                             <td className={styles.tableCell}>Lisinopril</td>
                                             <td className={styles.tableCell}>5mg po daily</td>
                                             <td className={styles.tableCell}>Pending</td>
-                                            <td className={styles.tableCell}>Renewal Name</td>
+                                            <td className={styles.tableCell}>Reviewer Name</td>
                                         </tr>
                                     </tbody>
                                 </table>

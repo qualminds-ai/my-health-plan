@@ -25,6 +25,8 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
     // Dynamic values based on sepsis scenario for this specific authorization
     const diagnosisValue = isUMWithSepsisForAuth ? 'Sepsis, Other' : 'DKA';
     const updatedValue = isUMWithSepsisForAuth ? 'Concurrent Review' : 'Initial Review';
+    const receivedDateValue = isUMWithSepsisForAuth ? '03/29/2025 09:03 AM' : '04/28/2025 03:47:01 AM';
+    const admissionDateValue = isUMWithSepsisForAuth ? '03/25/2025' : '04/28/2025 02:58:09 AM';
 
     // Handle status change
     const handleStatusChange = (event) => {
@@ -35,6 +37,10 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
 
     // Determine which CSS class to use based on selected status
     const getStatusSelectClass = () => {
+        // Special case for UM-SNF users with sepsis - use the UM-SNF specific styling
+        if (activeMode === 'UM-SNF' && hasScenario('sepsis')) {
+            return styles.authStatusSelectUMSNFSepsis;
+        }
         if (selectedStatus === 'Partial approval') {
             // Use the sepsis-specific class with increased width (125px)
             return styles.authStatusSelectSepsis;
@@ -49,15 +55,15 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
                 <div id="authorization-details-grid" className={styles.authGridLayout}>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Authorization #</div>
-                        <div className={styles.authGridValue}>{authorizationNumber}</div>
+                        <div className={styles.authGridValue}>20250P000367</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Received Date</div>
-                        <div className={styles.authGridValue}>04/28/2025 03:47:01 AM</div>
+                        <div className={styles.authGridValue}>{receivedDateValue}</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Admission Date</div>
-                        <div className={styles.authGridValue}>04/28/2025 02:58:09 AM</div>
+                        <div className={styles.authGridValue}>{admissionDateValue}</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Request Type</div>

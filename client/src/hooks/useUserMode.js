@@ -269,9 +269,18 @@ export const useUserMode = (initialUser) => {
                     // No URL parameter, restore from localStorage
                     try {
                         const scenarioArray = JSON.parse(savedScenarios);
-                        const restoredScenarios = new Set(scenarioArray);
+                        let restoredScenarios = new Set(scenarioArray);
+
+                        // Clear sepsis scenario if this is a CM user (Karen White)
+                        if (currentUserContext?.email === 'karen.white@myhealthplan.com' && restoredScenarios.has('sepsis')) {
+                            restoredScenarios.delete('sepsis');
+                            console.log('🧹 Cleared sepsis scenario during initialization for CM user (Karen White)');
+                            // Save the cleared scenarios back to localStorage immediately
+                            localStorage.setItem(STORAGE_KEYS.USER_SCENARIOS, JSON.stringify([...restoredScenarios]));
+                        }
+
                         setScenarios(restoredScenarios);
-                        console.log(`🎯 Restored scenarios from localStorage: ${scenarioArray.join(', ')}`);
+                        console.log(`🎯 Restored scenarios from localStorage: ${[...restoredScenarios].join(', ')}`);
                     } catch (error) {
                         console.error('Error parsing saved scenarios:', error);
                         localStorage.removeItem(STORAGE_KEYS.USER_SCENARIOS);
@@ -324,11 +333,15 @@ export const useUserMode = (initialUser) => {
 
             console.log(`🔄 Setting mode for ${newPersona.full_name}: internal="${defaultMode}", storage="${defaultMode === 'UM-SNF' ? 'UM, SNF' : defaultMode}"`);
 
-            // Preserve sepsis scenario when switching personas, but clear other scenarios
+            // Handle sepsis scenario based on target persona
             const preservedScenarios = new Set();
-            if (scenarios.has('sepsis')) {
+            if (scenarios.has('sepsis') && newPersona.id !== 'karen.white') {
+                // Preserve sepsis scenario for all personas except CM (Karen White)
                 preservedScenarios.add('sepsis');
                 console.log('🦠 Preserving sepsis scenario during persona switch');
+            } else if (scenarios.has('sepsis') && newPersona.id === 'karen.white') {
+                // Clear sepsis scenario when switching to CM user (Karen White)
+                console.log('🧹 Clearing sepsis scenario when switching to CM user (Karen White)');
             }
             setScenarios(preservedScenarios);
             saveMode(defaultMode, preservedScenarios);
@@ -355,11 +368,15 @@ export const useUserMode = (initialUser) => {
         setLoading(true);
 
         try {
-            // Preserve sepsis scenario when switching modes, but clear other scenarios
+            // Handle sepsis scenario based on target mode
             const preservedScenarios = new Set();
-            if (scenarios.has('sepsis')) {
+            if (scenarios.has('sepsis') && internalMode !== 'CM') {
+                // Preserve sepsis scenario for all modes except CM
                 preservedScenarios.add('sepsis');
                 console.log('🦠 Preserving sepsis scenario during mode switch');
+            } else if (scenarios.has('sepsis') && internalMode === 'CM') {
+                // Clear sepsis scenario when switching to CM mode
+                console.log('🧹 Clearing sepsis scenario when switching to CM mode');
             }
 
             setActiveMode(internalMode);
