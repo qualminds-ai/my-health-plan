@@ -47,6 +47,7 @@ const Dashboard = ({
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('My Tasks');
   const [modeInitialized, setModeInitialized] = useState(false); // Track mode initialization
+  const [atHomeParamValue, setAtHomeParamValue] = useState(null);
 
   // Use refs to track fetch state without causing re-renders
   const lastFetchKeyRef = useRef('');
@@ -155,6 +156,7 @@ const Dashboard = ({
               const urlParams = new URLSearchParams(window.location.search);
               atHomeParam = urlParams.get('at_home');
             }
+            setAtHomeParamValue(atHomeParam);
 
             // Debug logging
             console.log('🔍 CM Dashboard Debug Info:');
@@ -261,6 +263,7 @@ const Dashboard = ({
       } else {
         console.log('🔍 No hash in URL');
       }
+      setAtHomeParamValue(atHomeParam);
 
       // Get current scenario from localStorage
       const userScenarios = JSON.parse(localStorage.getItem('userScenarios') || '[]');
@@ -318,6 +321,7 @@ const Dashboard = ({
         console.log(`🔍 Initial/mode change at_home param: ${atHomeParam}`);
       }
     }
+    setAtHomeParamValue(atHomeParam);
 
     // Only update if we have an at_home parameter (prevents double-fetching)
     if (atHomeParam) {
@@ -597,7 +601,7 @@ const Dashboard = ({
           // CM Dashboard Layout - No background wrapper, direct flex layout
           <div className={styles.cmDashboardLayout}>
             {/* Left Side - Stats and Table with Background */}
-            <div className={styles.cmLeftContent}>
+            <div className={`${styles.cmLeftContent} ${atHomeParamValue === '2' ? styles.athome2 : ''}`}>
               {/* Stats Cards and Section Title Container */}
               <div className={styles.statsContainer}>
                 {/* Stats Cards Row */}

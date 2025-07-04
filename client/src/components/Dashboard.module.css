@@ -742,15 +742,22 @@
     padding-right: 30px;
 }
 
+/* Default CM left content background */
 .cmLeftContent {
     flex: 1;
     min-width: 0;
     /* Allow flex item to shrink */
     background: #F6F6F6;
-    /* Same as existing contentContainer background */
+    /* Default background for CM user dashboard */
     border-radius: 16px;
     overflow: hidden;
 }
+
+/* at_home=2 scenario: override background color */
+.cmLeftContent.athome2 {
+    background: #F2FCFE;
+}
+
 
 .cmRightContent {
     max-width: 350px;
