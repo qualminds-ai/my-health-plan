@@ -94,6 +94,24 @@ export const useUserMode = (initialUser) => {
                     if (savedPersonaData) {
                         setActivePersona(savedPersonaData);
                         console.log(`👤 Restored saved persona for admin: ${savedPersonaData.full_name}`);
+                        
+                        // Clear sepsis if restored persona is CM user
+                        if (savedPersonaData.email === 'karen.white@myhealthplan.com') {
+                            const savedScenarios = localStorage.getItem(STORAGE_KEYS.USER_SCENARIOS);
+                            if (savedScenarios) {
+                                try {
+                                    const scenarioArray = JSON.parse(savedScenarios);
+                                    const currentScenarios = new Set(scenarioArray);
+                                    if (currentScenarios.has('sepsis')) {
+                                        currentScenarios.delete('sepsis');
+                                        localStorage.setItem(STORAGE_KEYS.USER_SCENARIOS, JSON.stringify([...currentScenarios]));
+                                        console.log('🧹 Cleared sepsis scenario for restored CM persona');
+                                    }
+                                } catch (error) {
+                                    console.error('Error clearing sepsis for restored CM persona:', error);
+                                }
+                            }
+                        }
                     } else {
                         // Default to Maria if saved persona not found
                         const mariaPersona = availablePersonas.find(p => p.id === 'maria.hartsell');
@@ -113,6 +131,24 @@ export const useUserMode = (initialUser) => {
                     setActivePersona(userPersona);
                     localStorage.setItem(STORAGE_KEYS.ACTIVE_PERSONA, userPersona.id);
                     console.log(`👤 Set persona for user: ${userPersona.full_name}`);
+                    
+                    // Clear sepsis if this is a CM user
+                    if (userPersona.email === 'karen.white@myhealthplan.com') {
+                        const savedScenarios = localStorage.getItem(STORAGE_KEYS.USER_SCENARIOS);
+                        if (savedScenarios) {
+                            try {
+                                const scenarioArray = JSON.parse(savedScenarios);
+                                const currentScenarios = new Set(scenarioArray);
+                                if (currentScenarios.has('sepsis')) {
+                                    currentScenarios.delete('sepsis');
+                                    localStorage.setItem(STORAGE_KEYS.USER_SCENARIOS, JSON.stringify([...currentScenarios]));
+                                    console.log('🧹 Cleared sepsis scenario for CM user persona');
+                                }
+                            } catch (error) {
+                                console.error('Error clearing sepsis for CM user persona:', error);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -237,6 +273,8 @@ export const useUserMode = (initialUser) => {
                 const currentUserContext = activePersona || initialUser;
                 const defaultMode = getDefaultModeForUser(currentUserContext);
 
+                console.log(`🔄 Initializing mode for user context: ${currentUserContext?.full_name || currentUserContext?.email}`);
+
                 if (savedMode) {
                     // Convert stored mode back to internal representation
                     let internalMode = savedMode;
@@ -311,10 +349,9 @@ export const useUserMode = (initialUser) => {
                 setTimeout(initializeMode, 150);
             }
         }
-        // Only run this effect when user changes, but make it more stable
-        // Disable exhaustive deps to prevent over-initialization
+        // Only run this effect when user or activePersona changes
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [initialUser?.email]);
+    }, [initialUser?.email, activePersona?.id]);
 
     // Switch user persona
     const switchPersona = useCallback(async (personaId) => {
@@ -333,13 +370,13 @@ export const useUserMode = (initialUser) => {
 
             console.log(`🔄 Setting mode for ${newPersona.full_name}: internal="${defaultMode}", storage="${defaultMode === 'UM-SNF' ? 'UM, SNF' : defaultMode}"`);
 
-            // Handle sepsis scenario based on target persona
+            // Handle sepsis scenario based on target persona - Clear for CM user
             const preservedScenarios = new Set();
-            if (scenarios.has('sepsis') && newPersona.id !== 'karen.white') {
+            if (scenarios.has('sepsis') && newPersona.email !== 'karen.white@myhealthplan.com') {
                 // Preserve sepsis scenario for all personas except CM (Karen White)
                 preservedScenarios.add('sepsis');
                 console.log('🦠 Preserving sepsis scenario during persona switch');
-            } else if (scenarios.has('sepsis') && newPersona.id === 'karen.white') {
+            } else if (scenarios.has('sepsis') && newPersona.email === 'karen.white@myhealthplan.com') {
                 // Clear sepsis scenario when switching to CM user (Karen White)
                 console.log('🧹 Clearing sepsis scenario when switching to CM user (Karen White)');
             }
@@ -368,7 +405,7 @@ export const useUserMode = (initialUser) => {
         setLoading(true);
 
         try {
-            // Handle sepsis scenario based on target mode
+            // Handle sepsis scenario based on target mode - Clear for CM mode
             const preservedScenarios = new Set();
             if (scenarios.has('sepsis') && internalMode !== 'CM') {
                 // Preserve sepsis scenario for all modes except CM

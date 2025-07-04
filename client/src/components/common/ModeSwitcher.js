@@ -31,7 +31,7 @@ const ModeSwitcher = ({
     const getModeIcon = (mode) => {
         switch (mode) {
             case 'UM': return '👨‍⚕️';
-            case 'SNF': return '🏥';
+            case 'UM, SNF': return '🏥';
             case 'CM': return '📋';
             default: return '👤';
         }
@@ -40,7 +40,7 @@ const ModeSwitcher = ({
     const getModeColor = (mode) => {
         switch (mode) {
             case 'UM': return '#007bff';
-            case 'SNF': return '#28a745';
+            case 'UM, SNF': return '#28a745';
             case 'CM': return '#ffc107';
             default: return '#6c757d';
         }
@@ -90,7 +90,7 @@ const ModeSwitcher = ({
                                     <div className={styles.optionLabel}>{mode} Mode</div>
                                     <div className={styles.optionDescription}>
                                         {mode === 'UM' && 'Utilization Manager'}
-                                        {mode === 'SNF' && 'Skilled Nursing Facility'}
+                                        {mode === 'UM, SNF' && 'Skilled Nursing Facility'}
                                         {mode === 'CM' && 'Case Manager'}
                                     </div>
                                 </div>
