@@ -5,18 +5,22 @@
 
 .memberTabsContainer {
     width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .memberTabsList {
     display: flex;
     border: 0;
     margin-bottom: 0;
-    gap: 30px;
     border-bottom: 4px solid #EDEDED;
+    flex-wrap: nowrap;
+    width: 100%;
 }
 
 .memberTabItem {
     list-style: none;
+    flex: 1 1;
 }
 
 .memberTabButton {
@@ -35,6 +39,9 @@
     border-bottom: none;
     margin-bottom: -4px;
     cursor: pointer;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
 }
 
 .memberTabButtonActive {

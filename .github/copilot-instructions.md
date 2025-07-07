@@ -4,17 +4,17 @@ This file provides essential context and coding guidelines for AI agents working
 
 ## Project Overview
 
-MyHealthPlan is a **healthcare authorization management MVP** with sophisticated clinical workflows:
+MyHealthPlan is a **client-side healthcare authorization management MVP** with sophisticated clinical workflows:
 - **Purpose**: Enterprise-ready demo showcasing healthcare authorization workflows with clinical review systems
-- **Architecture**: React 19+ frontend with static data simulation
+- **Architecture**: React 19+ frontend with static data simulation (NO backend required)
 - **Key Features**: Multi-step clinical review, user personas, scenario-based data modifications, hash-based deep linking
 - **Authentication**: Static authentication with persona switching and role-based access (3 user types: UM, UM-SNF, CM)
 
 ## 🚀 Development Workflow (Essential Commands)
 
 ```bash
-# Start everything
-npm start                    # Starts frontend (3000)
+# Start everything (100% client-side)
+npm start                    # Starts React dev server on :3000
 
 # Package management
 npm run install:all          # Install all dependencies (root + client)
@@ -39,23 +39,23 @@ my-health-plan/
 │   │   ├── common/          # Reusable UI components
 │   │   ├── member/          # Member-specific components
 │   │   │   └── authorization/  # Clinical review workflow
-│   │   └── guards/          # Route protection
+│   │   └── guards/          # Route protection (ProtectedRoute, PublicRoute)
 │   ├── services/            # Static data services (staticAuthService, staticDataService)
 │   ├── hooks/              # Custom hooks (useAuth, useUserMode, useMemberActions)
-│   └── constants/          # App constants & scenario data
+│   ├── constants/          # App constants & scenario data (staticData.js, staticUserData.js)
+│   └── assets/             # Organized by feature (authorizations/, dashboard/, header/)
 ```
 
 ### Static Data Architecture
-**Important**: This project uses **static data services** for demo purposes
+**Critical**: This project uses **static data services** for demo purposes - NO backend required
 - **Files**: `client/src/services/staticDataService.js` + `client/src/constants/staticData.js`
 - **Authentication**: Static user validation with localStorage persistence
-- **Data Storage**: JSON-based static data with scenario modifications
+- **Data Storage**: JSON-based static data with scenario modifications (sepsis, SNF)
 - **State Management**: Client-side only with localStorage for persistence
-
 
 ## 💻 Code Patterns & Examples
 
-### React Component Pattern (Tailwind + CSS Modules)
+### React Component Pattern (CSS Modules + Tailwind Hybrid)
 ```javascript
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -65,23 +65,23 @@ import styles from './Component.module.css';
 
 const ExampleComponent = ({ memberData, onUpdate }) => {
     const [data, setData] = useState([]);
-    const { user } = useAuth();
+    const { user, activeMode, scenarios } = useAuth();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await staticDataService.getMemberData();
+                const response = await staticDataService.getMemberData(activeMode, scenarios);
                 setData(response);
             } catch (error) {
                 console.error('❌ Failed to fetch data:', error);
             }
         };
         fetchData();
-    }, []);
+    }, [activeMode, scenarios]);
 
     return (
         <div className={styles.container}>
-            {/* Hybrid: CSS Modules + Tailwind classes */}
+            {/* CSS Modules + Tailwind hybrid approach */}
             <h2 className={`${styles.title} text-lg font-semibold`}>
                 {memberData.name}
             </h2>
@@ -104,24 +104,22 @@ ExampleComponent.propTypes = {
 export default ExampleComponent;
 ```
 
-### Static Data Service Pattern
+### Authentication & User Mode Pattern
 ```javascript
-const staticDataService = {
-    getMemberData: () => {
-        // Return static member data
-        return memberData;
-    },
-    
-    getAuthorizationData: (memberId) => {
-        // Return static authorization data for member
-        return authorizationData.filter(auth => auth.memberId === memberId);
-    }
-};
+// Always use the useAuth hook for user state and scenarios
+const { 
+    user, 
+    activeMode,        // 'UM', 'UM-SNF', or 'CM'
+    scenarios,         // ['sepsis'] for active scenarios
+    switchUserMode,    // Function to change user mode
+    toggleScenario     // Function to toggle scenarios
+} = useAuth();
 
-export default staticDataService;
+// Pass mode and scenarios to all data service calls
+const data = await staticDataService.getDashboardStats(activeMode, scenarios);
 ```
 
-## 🎯 Key Features & Workflows
+## 🎯 Key Features & Data Management
 
 ### User Persona System (useUserMode hook)
 - **3 User Types**: UM, UM-SNF, CM with different dashboard views
@@ -135,23 +133,17 @@ export default staticDataService;
 - **Hash Routing**: Deep linking to specific authorization states (`#/member/MEM001?auth=2025OP000389`)
 - **Progressive Animation**: Clinical indicators reveal with smooth transitions
 - **State Management**: Previous/Next navigation with validation
+- **Components**: `AuthorizationClinicalReview.js` orchestrates 4 step components
 
-### API Service Layer
-- **Centralized**: `client/src/services/staticDataService.js` with static data management
-- **Authentication**: Static user validation with localStorage persistence
-- **Data Management**: JSON-based data with scenario modifications
-- **Error Handling**: Consistent error format across all data operations
-
-## 🎯 Key Features & Data Management
-
-### Static Data Structure
-- **Member Data**: Healthcare plan members (MEM001, MEM002, etc.)
-- **Authorization Data**: Main business entity (2025OP000389, etc.)
-- **Reference Data**: Providers, diagnoses, DRG codes stored as static JSON
+### Static Data Service Layer
+- **Centralized**: `client/src/services/staticDataService.js` manages all healthcare data
+- **Authentication**: `client/src/services/staticAuthService.js` handles login/logout
+- **Data Structure**: `client/src/constants/staticData.js` contains all JSON data
+- **Scenario Support**: Data automatically modified based on `activeMode` and `scenarios` parameters
 
 ## ⚠️ Critical Patterns & Conventions
 
-### CSS Modules + Tailwind Hybrid
+### CSS Modules + Tailwind Hybrid (Required Pattern)
 ```css
 /* Component.module.css */
 .container {
@@ -160,7 +152,7 @@ export default staticDataService;
 }
 
 .button {
-    @apply px-4 py-2 rounded-lg font-medium; /* Tailwind utilities */
+    @apply px-4 py-2 rounded-lg font-medium; /* Tailwind utilities in CSS Modules */
     background-color: #3b82f6;
 }
 ```
@@ -178,7 +170,6 @@ export default staticDataService;
 - **Components**: PascalCase (`Dashboard.js`, `MemberHeader.js`)
 - **CSS Modules**: Match component name (`Dashboard.module.css`)
 - **Services**: camelCase (`staticDataService.js`, `staticAuthService.js`)
-- **Migrations**: `YYYYMMDDHHMMSS_description.sql`
 - **Always add IDs**: `<button id="save-member-btn">` for all interactive elements
 
 ### Error Handling & Logging
@@ -191,32 +182,28 @@ console.log('🔄 Retrying request...');
 ```
 
 ### State Management Patterns
-- **useAuth**: Authentication & user state
-- **useUserMode**: Persona switching & scenario management (sepsis, etc.)
+- **useAuth**: Authentication & user state management with persona switching
+- **useUserMode**: Persona switching & scenario management (sepsis scenarios, etc.)
 - **useMemberActions**: Member-specific operations
-- **localStorage**: Persist user mode, scenarios, active persona
+- **localStorage**: Persist user mode, scenarios, active persona across sessions
 
 ## 🚨 Common Pitfalls & Solutions
 
-1. **Static Data Management**: Ensure static data services return consistent format
-2. **CSS organization**: Write styles in CSS Modules files, not inline or global CSS
+1. **Static Data Management**: Always pass `activeMode` and `scenarios` to data service calls
+2. **CSS Organization**: Write styles in CSS Modules files, use Tailwind in className attributes
 3. **Component IDs**: Add unique IDs to buttons, links, rows for testability
-4. **Data calls**: Use service layer (`staticDataService.js`), not direct data access
-5. **User scenarios**: Remember UM users see sepsis modifications, SNF users see different data
-6. **Persona switching**: Admin can become Maria/Elise/Karen without logout
+4. **Data Service Calls**: Use service layer methods, never access `constants/staticData.js` directly
+5. **User Scenarios**: Remember UM users see sepsis modifications, SNF users see different data
+6. **Persona Switching**: Admin can become Maria/Elise/Karen without logout
 
-## 🎯 Development Workflow
-1. Focus on sophisticated user workflows and clinical features
-2. Create modular React components with CSS Modules and Tailwind styling
-3. Implement static data services for healthcare data simulation
-4. Add comprehensive error handling and user feedback systems
-5. Test complex user workflows (login → dashboard → member lookup → clinical review)
-6. Implement user persona switching and scenario management
-7. Test multi-step clinical review processes and authorization workflows
+## 🎯 Development Best Practices
+1. **Component Pattern**: CSS Modules for complex styles + Tailwind for utilities
+2. **Data Flow**: Always use `staticDataService.js` methods with mode/scenario parameters
+3. **Authentication**: Use `useAuth()` hook for all user state and persona management
+4. **Clinical Workflows**: Multi-step components in `member/authorization/clinical-review-steps/`
+5. **Deep Linking**: Support hash-based navigation for authorization states
+6. **Responsive Design**: Mobile-first with Tailwind utilities
 
-
-
-Very Important: Remember: Do not change IDs of any element
 ---
 
 *This file provides comprehensive guidance for GitHub Copilot when working on MyHealthPlan. Follow these conventions to maintain code quality and consistency across the project. This is an enterprise-ready MVP with sophisticated healthcare workflows - prioritize working clinical features and maintain professional code standards.*
