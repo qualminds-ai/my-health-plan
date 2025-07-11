@@ -28,11 +28,21 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
         selectedStatus
     });
 
-    // Dynamic values based on sepsis scenario and user mode
-    const diagnosisValue = isUMWithSepsisForAuth ? 'Sepsis, Other' : 'DKA';
-    const updatedValue = isUMWithSepsisForAuth ? 'Concurrent Review' : 'Initial Review';
-    const receivedDateValue = isUMWithSepsisForAuth ? '03/29/2025 09:03 AM' : '04/28/2025 03:47:01 AM';
-    const admissionDateValue = isUMWithSepsisForAuth ? '03/25/2025' : '04/28/2025 02:58:09 AM';
+    // Dynamic values based on sepsis scenario and user mode - match Request Submitted tab
+    let diagnosisValue, codeNumberValue;
+
+    if (isUMWithSepsisForAuth) {
+        diagnosisValue = 'Sepsis, Other';
+        codeNumberValue = 'A41';
+    } else {
+        diagnosisValue = 'DKA';
+        codeNumberValue = 'E11.10';
+    }
+
+    // UM-SNF users always see "Initial Review" regardless of sepsis scenario
+    const updatedValue = activeMode === 'UM-SNF' ? 'Initial Review' : (isUMWithSepsisForAuth ? 'Concurrent Review' : 'Initial Review');
+    const receivedDateValue = isUMWithSepsisForAuth ? '05/01/2025 09:03 AM' : '04/28/2025 03:47:01 AM';
+    const admissionDateValue = isUMWithSepsisForAuth ? '04/28/2025 02:58:09 AM' : '04/28/2025 02:58:09 AM';
     const placeOfServiceValue = activeMode === 'UM-SNF' ? 'Discharge to SNF' : 'Inpatient Hospital';
 
     // Handle status change
@@ -116,38 +126,13 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Code Number</div>
-                        <div className={styles.authGridValue}>E11.10</div>
+                        <div className={styles.authGridValue}>{codeNumberValue}</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Updated</div>
                         <div className={styles.authGridValue}>{updatedValue}</div>
                     </div>
                 </div>
-                {/* Duplicate the entire row when UM user with sepsis for this authorization */}
-                {isUMWithSepsisForAuth && (
-                    <div className={styles.authGridLayout}>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Place of Service</div>
-                            <div className={styles.authGridValue}>{placeOfServiceValue}</div>
-                        </div>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Diagnosis</div>
-                            <div className={styles.authGridValue}>Sepsis, Other</div>
-                        </div>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Code Type</div>
-                            <div className={styles.authGridValue}>ICD 10</div>
-                        </div>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Code Number</div>
-                            <div className={styles.authGridValue}>E11.10</div>
-                        </div>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Updated</div>
-                            <div className={styles.authGridValue}>Concurrent Review</div>
-                        </div>
-                    </div>
-                )}
             </div>
             <div className={`mb-6 ${styles.closedTabNotesSection}`}>
                 <h3 className={styles.closedTabNotesTitle}>Notes</h3>
@@ -159,7 +144,7 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
                                 From original authorization request:
                             </p>
                             <p className={styles.closedTabNotesP2}>
-                                "Patient did not discharge as anticipated on 3/29
+                                "Patient did not discharge as anticipated on 04/30/2025
                             </p>
                             <p className={styles.closedTabNotesP2}>
                                 Found to have fever of 104 and WBC of 30; patient seems confused, has decreased urine output.

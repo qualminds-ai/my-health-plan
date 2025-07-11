@@ -5,10 +5,10 @@ import styles from '../../Member.module.css';
 
 const AuthorizationRequestNavTabs = ({ activeRequestTab, setActiveRequestTab }) => {
     const { activeMode } = useAuth();
-    
+
     // Dynamic authorization number based on user mode
     const authorizationNumber = activeMode === 'UM-SNF' ? '2025OP000390' : '2025OP000389';
-    
+
     return (
         <div id="authorization-request-nav-tabs" className={styles.flexItemsCenterMb4}>
             <div id="request-nav-container" className={styles.requestNavContainer}>

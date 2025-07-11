@@ -388,11 +388,6 @@
     background: #0077B6 !important;
 }
 
-/* Table header styles for at_home=2 scenario */
-.tableHeader.athome2 {
-    background: #EDF4FF !important;
-}
-
 .tableHeaderCell.athome2 {
     border-bottom: 1.431px solid #BEBEBE !important;
 }
@@ -752,12 +747,6 @@
     border-radius: 16px;
     overflow: hidden;
 }
-
-/* at_home=2 scenario: override background color */
-.cmLeftContent.athome2 {
-    background: #F2FCFE;
-}
-
 
 .cmRightContent {
     max-width: 350px;

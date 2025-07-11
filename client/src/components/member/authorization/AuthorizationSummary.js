@@ -24,9 +24,10 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
 
     // Dynamic values based on sepsis scenario and user mode
     const diagnosisValue = activeMode === 'UM-SNF' ? 'DKA' : (isUMWithSepsisForAuth ? 'Sepsis, Other' : 'DKA');
-    const updatedValue = isUMWithSepsisForAuth ? 'Concurrent Review' : 'Initial Review';
-    const receivedDateValue = isUMWithSepsisForAuth ? '05/01/2025' : '04/28/2025 03:47:01 AM';
-    const admissionDateValue = isUMWithSepsisForAuth ? '04/28/2025' : '04/28/2025 02:58:09 AM';
+    // UM-SNF users always see "Initial Review" regardless of sepsis scenario
+    const updatedValue = activeMode === 'UM-SNF' ? 'Initial Review' : (isUMWithSepsisForAuth ? 'Concurrent Review' : 'Initial Review');
+    const receivedDateValue = isUMWithSepsisForAuth ? '05/01/2025 09:03 AM' : '04/28/2025 03:47:01 AM';
+    const admissionDateValue = isUMWithSepsisForAuth ? '04/28/2025 02:58:09 AM' : '04/28/2025 02:58:09 AM';
     const codeNumberValue = activeMode === 'UM-SNF' ? 'E11.10' : (isUMWithSepsisForAuth ? 'A41' : 'E11.10');
     const placeOfServiceValue = activeMode === 'UM-SNF' ? 'Discharge to SNF' : 'Inpatient Hospital';
 

@@ -63,7 +63,7 @@
 
 /* Risk Stratification Section */
 .riskStratificationSection {
-    background: #F8FBFC;
+    background: #F7F7F7;
     border: 1px solid #E5E7EB;
     border-radius: 13.091px;
     padding: 20px;
@@ -191,7 +191,7 @@
 
 /* First Risk Item - Special Background */
 .riskItem:first-child {
-    background: #FDF9F9;
+    background: #f5f0f0;
 }
 
 .riskLabel {
@@ -260,7 +260,7 @@
 
 .tableHeaderRow {
     border-bottom: 1.636px solid #B5B7BA;
-    background: #EDF4FF;
+    background: #EDEDED;
     padding: 9.818px;
     gap: 19.636px;
 }
