@@ -7,11 +7,11 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
     const { activeMode, hasScenario } = useAuth();
 
     // Use the actual authorization number from the active request tab
-    const authorizationNumber = activeRequestTab || '20250P000367';
+    const authorizationNumber = activeRequestTab || '2025OP000389';
 
     // Check if user is UM or UM-SNF with sepsis scenario active AND viewing Robert Abbott's specific authorization
-    // For sepsis scenario, we check if it's the specific sepsis authorization (20250P000367)
-    const isUMWithSepsisForAuth = (activeMode === 'UM' || activeMode === 'UM-SNF') && hasScenario('sepsis') && authorizationNumber === '20250P000367';
+    // For sepsis scenario, we check if it's the specific sepsis authorization (2025OP000389)
+    const isUMWithSepsisForAuth = (activeMode === 'UM' || activeMode === 'UM-SNF') && hasScenario('sepsis') && authorizationNumber === '2025OP000389';
 
     // Display authorization number - show sepsis-specific number when in sepsis scenario
     const displayAuthNumber = isUMWithSepsisForAuth ? '2025OP000389' : authorizationNumber;
@@ -28,11 +28,12 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
         selectedStatus
     });
 
-    // Dynamic values based on sepsis scenario for this specific authorization
+    // Dynamic values based on sepsis scenario and user mode
     const diagnosisValue = isUMWithSepsisForAuth ? 'Sepsis, Other' : 'DKA';
     const updatedValue = isUMWithSepsisForAuth ? 'Concurrent Review' : 'Initial Review';
     const receivedDateValue = isUMWithSepsisForAuth ? '03/29/2025 09:03 AM' : '04/28/2025 03:47:01 AM';
     const admissionDateValue = isUMWithSepsisForAuth ? '03/25/2025' : '04/28/2025 02:58:09 AM';
+    const placeOfServiceValue = activeMode === 'UM-SNF' ? 'Discharge to SNF' : 'Inpatient Hospital';
 
     // Handle status change
     const handleStatusChange = (event) => {
@@ -61,7 +62,7 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
                 <div id="authorization-details-grid" className={styles.authGridLayout}>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Authorization #</div>
-                        <div className={styles.authGridValue}>20250P000367</div>
+                        <div className={styles.authGridValue}>{displayAuthNumber}</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Received Date</div>
@@ -85,8 +86,8 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
                                 onChange={handleStatusChange}
                             >
                                 <option value="Pending">Pending</option>
-                                {/* Only show Approved option for UM + sepsis + Robert Abbott case */}
-                                {isUMWithSepsisForAuth ? (
+                                {/* Show Approved option for UM-SNF users or UM + sepsis + Robert Abbott case */}
+                                {(activeMode === 'UM-SNF' || isUMWithSepsisForAuth) ? (
                                     <option value="Approved">Approved</option>
                                 ) : (
                                     <option value="Approve">Approve</option>
@@ -103,7 +104,7 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
                 <div className={styles.authGridLayout}>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Place of Service</div>
-                        <div className={styles.authGridValue}>Inpatient Hospital</div>
+                        <div className={styles.authGridValue}>{placeOfServiceValue}</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Diagnosis</div>
@@ -115,7 +116,7 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Code Number</div>
-                        <div className={styles.authGridValue}>A41</div>
+                        <div className={styles.authGridValue}>E11.10</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Updated</div>
@@ -127,7 +128,7 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
                     <div className={styles.authGridLayout}>
                         <div className={styles.authGridItem}>
                             <div className={styles.authGridLabel}>Place of Service</div>
-                            <div className={styles.authGridValue}>Inpatient Hospital</div>
+                            <div className={styles.authGridValue}>{placeOfServiceValue}</div>
                         </div>
                         <div className={styles.authGridItem}>
                             <div className={styles.authGridLabel}>Diagnosis</div>
@@ -139,7 +140,7 @@ const AuthorizationClosedSummary = ({ activeRequestTab }) => {
                         </div>
                         <div className={styles.authGridItem}>
                             <div className={styles.authGridLabel}>Code Number</div>
-                            <div className={styles.authGridValue}>A41</div>
+                            <div className={styles.authGridValue}>E11.10</div>
                         </div>
                         <div className={styles.authGridItem}>
                             <div className={styles.authGridLabel}>Updated</div>

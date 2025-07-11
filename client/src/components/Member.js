@@ -73,8 +73,11 @@ const Member = ({
   ], []);
 
   // Helper function to parse hash and extract tab info - ADAPTED FOR HASHROUTER
-  const parseHashForTabs = () => {
+  const parseHashForTabs = (userMode = 'UM') => {
     const hash = window.location.hash; // Full hash including route
+
+    // Dynamic default authorization number based on user mode
+    const defaultAuthNumber = userMode === 'UM-SNF' ? '2025OP000390' : '2025OP000389';
 
     // With HashRouter, hash format is: #/member/MEM001?tab=Authorizations&authTab=Clinical%20Review&step=2
     // Split by '?' to separate route from query parameters
@@ -82,7 +85,7 @@ const Member = ({
 
     if (hashParts.length < 2) {
       // No query parameters, return defaults
-      return { mainTab: 'Authorizations', authTab: 'Request Submitted', requestTab: '20250P000367', clinicalStep: 1 };
+      return { mainTab: 'Authorizations', authTab: 'Request Submitted', requestTab: defaultAuthNumber, clinicalStep: 1 };
     }
 
     const queryString = hashParts[1]; // Everything after the '?'
@@ -91,7 +94,7 @@ const Member = ({
     const params = new URLSearchParams(queryString);
     const mainTab = params.get('tab') || 'Authorizations';
     const authTab = params.get('authTab') || 'Request Submitted';
-    const requestTab = params.get('requestTab') || '20250P000367';
+    const requestTab = params.get('requestTab') || defaultAuthNumber;
     const clinicalStep = parseInt(params.get('step')) || 1;
 
     // Validate that the main tab exists
@@ -139,7 +142,7 @@ const Member = ({
   };
 
   // Initialize state from hash
-  const initialTabState = parseHashForTabs();
+  const initialTabState = parseHashForTabs(activeMode);
   const [activeTab, setActiveTab] = useState(initialTabState.mainTab);
   const [activeAuthTab, setActiveAuthTab] = useState(initialTabState.authTab);
   const [activeRequestTab, setActiveRequestTab] = useState(initialTabState.requestTab);
@@ -198,9 +201,10 @@ const Member = ({
 
       if (hashParts.length < 2) {
         // No query parameters, set defaults
+        const defaultAuthNumber = activeMode === 'UM-SNF' ? '2025OP000390' : '2025OP000389';
         setActiveTab('Authorizations');
         setActiveAuthTab('Request Submitted');
-        setActiveRequestTab('20250P000367');
+        setActiveRequestTab(defaultAuthNumber);
         setClinicalReviewStep(1);
         return;
       }
@@ -209,9 +213,10 @@ const Member = ({
 
       // Parse the query parameters
       const params = new URLSearchParams(queryString);
+      const defaultAuthNumber = activeMode === 'UM-SNF' ? '2025OP000390' : '2025OP000389';
       const mainTab = params.get('tab') || 'Authorizations';
       const authTab = params.get('authTab') || 'Request Submitted';
-      const requestTab = params.get('requestTab') || '20250P000367';
+      const requestTab = params.get('requestTab') || defaultAuthNumber;
       const clinicalStep = parseInt(params.get('step')) || 1;
 
       // Validate that the main tab exists
@@ -227,7 +232,7 @@ const Member = ({
 
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [tabs, authTabs]);
+  }, [tabs, authTabs, activeMode]);
 
   // Handle Clinical Review Step 2 animation whenever step changes to 2
   useEffect(() => {
@@ -534,7 +539,7 @@ const Member = ({
                   )}
 
                   {/* Request Tab Content - Only show the specific authorization */}
-                  {activeRequestTab === '20250P000367' && (
+                  {(activeRequestTab === '2025OP000389' || activeRequestTab === '2025OP000390') && (
                     <div className="request-detail-content">
                       {/* Authorization Workflow Progress */}
                       <div className="authorization-workflow mb-6">

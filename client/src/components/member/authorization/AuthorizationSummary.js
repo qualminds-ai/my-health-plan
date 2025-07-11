@@ -7,8 +7,8 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
     const { activeMode, hasScenario } = useAuth();
     const [selectedStatus, setSelectedStatus] = useState('Pending');
 
-    // Authorization number for Robert Abbott's sepsis case
-    const authorizationNumber = '2025OP000389';
+    // Authorization number - different for UM-SNF users
+    const authorizationNumber = activeMode === 'UM-SNF' ? '2025OP000390' : '2025OP000389';
 
     // Check if user is UM or UM-SNF with sepsis scenario active AND viewing the specific authorization
     const isUMWithSepsisForAuth = (activeMode === 'UM' || activeMode === 'UM-SNF') && hasScenario('sepsis');
@@ -22,11 +22,13 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
         selectedStatus
     });
 
-    // Dynamic values based on sepsis scenario for this specific authorization
-    const diagnosisValue = isUMWithSepsisForAuth ? 'Sepsis, Other' : 'DKA';
+    // Dynamic values based on sepsis scenario and user mode
+    const diagnosisValue = activeMode === 'UM-SNF' ? 'DKA' : (isUMWithSepsisForAuth ? 'Sepsis, Other' : 'DKA');
     const updatedValue = isUMWithSepsisForAuth ? 'Concurrent Review' : 'Initial Review';
-    const receivedDateValue = isUMWithSepsisForAuth ? '03/29/2025 09:03 AM' : '04/28/2025 03:47:01 AM';
-    const admissionDateValue = isUMWithSepsisForAuth ? '03/25/2025' : '04/28/2025 02:58:09 AM';
+    const receivedDateValue = isUMWithSepsisForAuth ? '05/01/2025' : '04/28/2025 03:47:01 AM';
+    const admissionDateValue = isUMWithSepsisForAuth ? '04/28/2025' : '04/28/2025 02:58:09 AM';
+    const codeNumberValue = activeMode === 'UM-SNF' ? 'E11.10' : (isUMWithSepsisForAuth ? 'A41' : 'E11.10');
+    const placeOfServiceValue = activeMode === 'UM-SNF' ? 'Discharge to SNF' : 'Inpatient Hospital';
 
     // Handle status change
     const handleStatusChange = (event) => {
@@ -55,7 +57,7 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
                 <div id="authorization-details-grid" className={styles.authGridLayout}>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Authorization #</div>
-                        <div className={styles.authGridValue}>20250P000367</div>
+                        <div className={styles.authGridValue}>{authorizationNumber}</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Received Date</div>
@@ -96,7 +98,7 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
                 <div className={styles.authGridLayout}>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Place of Service</div>
-                        <div className={styles.authGridValue}>Inpatient Hospital</div>
+                        <div className={styles.authGridValue}>{placeOfServiceValue}</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Diagnosis</div>
@@ -108,38 +110,13 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Code Number</div>
-                        <div className={styles.authGridValue}>A41</div>
+                        <div className={styles.authGridValue}>{codeNumberValue}</div>
                     </div>
                     <div className={styles.authGridItem}>
                         <div className={styles.authGridLabel}>Updated</div>
                         <div className={styles.authGridValue}>{updatedValue}</div>
                     </div>
                 </div>
-                {/* Duplicate the entire row when UM user with sepsis for this authorization */}
-                {isUMWithSepsisForAuth && (
-                    <div className={styles.authGridLayout}>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Place of Service</div>
-                            <div className={styles.authGridValue}>Inpatient Hospital</div>
-                        </div>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Diagnosis</div>
-                            <div className={styles.authGridValue}>Sepsis, Other</div>
-                        </div>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Code Type</div>
-                            <div className={styles.authGridValue}>ICD 10</div>
-                        </div>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Code Number</div>
-                            <div className={styles.authGridValue}>A41</div>
-                        </div>
-                        <div className={styles.authGridItem}>
-                            <div className={styles.authGridLabel}>Updated</div>
-                            <div className={styles.authGridValue}>Concurrent Review</div>
-                        </div>
-                    </div>
-                )}
             </div>
             <div className={`mb-6 ${styles.closedTabNotesSection}`}>
                 <h3 className={styles.closedTabNotesTitle}>Notes</h3>
@@ -151,7 +128,7 @@ const AuthorizationSummary = ({ getStatusBadgeClass, getPriorityBadgeClass }) =>
                                 From original authorization request:
                             </p>
                             <p className={styles.closedTabNotesP2}>
-                                "Patient did not discharge as anticipated on 3/29
+                                "Patient did not discharge as anticipated on 04/30/2025
                             </p>
                             <p className={styles.closedTabNotesP2}>
                                 Found to have fever of 104 and WBC of 30; patient seems confused, has decreased urine output.

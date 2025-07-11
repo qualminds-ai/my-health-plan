@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from '../Dashboard.module.css';
+import VectorRightIcon from '../../assets/dashboard/Vector-right.svg';
 
 /**
  * CM Tasks Table Component for Case Management Dashboard
@@ -23,29 +24,22 @@ const CMTasksTable = ({ tasks, onRowClick }) => {
     };
 
     const getPriorityClass = (priority) => {
-        const isAtHome2 = isAtHome2Scenario();
-
-        if (isAtHome2) {
-            // Special colors for at_home=2 scenario
-            switch (priority?.toLowerCase()) {
-                case 'high': return styles.athome2High;
-                case 'medium': return styles.athome2Medium;
-                case 'low': return styles.low; // Keep default low priority color
-                default: return styles.low;
-            }
-        } else {
-            // Default priority colors
-            switch (priority?.toLowerCase()) {
-                case 'high': return styles.high;
-                case 'medium': return styles.medium;
-                case 'low': return styles.low;
-                default: return styles.low;
-            }
+        // Always use default UM priority styling regardless of scenario
+        switch (priority?.toLowerCase()) {
+            case 'high': return styles.high;
+            case 'medium': return styles.medium;
+            case 'low': return styles.low;
+            default: return styles.low;
         }
     };
 
     return (
         <div className={styles.tableContainer}>
+            {tasks.length > 0 && (
+                <div className={styles.vectorIcon}>
+                    <img src={VectorRightIcon} alt="Row indicator" width="14" height="18" />
+                </div>
+            )}
             <table id="cm-tasks-table" className={styles.authTable}>
                 <thead>
                     <tr className={`${styles.tableHeader} ${isAtHome2Scenario() ? styles.athome2 : ''}`}>

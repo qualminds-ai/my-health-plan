@@ -1,5 +1,4 @@
 import React from 'react';
-
 /**
  * ClinicalReviewStep3 Component
  * 
@@ -40,7 +39,7 @@ const ClinicalReviewStep3 = ({ styles }) => {
                 <div className={styles.carePlanningNoteSection}>
                     <div className={styles.carePlanningNoteMain}>Note:</div>
                     <div className={styles.carePlanningNoteSub}>Some patients may be appropriate for Observation care.</div>
-                    <div>For consideration of observation care, see Diabetes: Observation Care.</div>
+                    <div>For consideration of observation care, see <span className={styles.clinicalIndicationsNoteLink}>Diabetes: Observation Care</span>.</div>
                 </div>
 
                 {/* Clinical Indications Section */}
@@ -65,9 +64,9 @@ const ClinicalReviewStep3 = ({ styles }) => {
                         <li>Severe dehydration with poor oral intake or need for IV fluids</li>
                         <li>Significant electrolyte disturbances, such as:
                             <ul className={styles.carePlanningListNested}>
-                                <li>Severe hyponatremia(&lt;3.3 mEq/L)</li>
+                                <li>Severe hypokalemia (&lt;3.3 mEq/L)</li>
                                 <li>Hyperkalemia with ECG changes</li>
-                                <li>Severe hypokalemia</li>
+                                <li>Severe hyponatremia</li>
                             </ul>
                         </li>
                         <li>Refractory or persistent acidosis (e.g., pH &lt;7.0 despite initial treatment)</li>
