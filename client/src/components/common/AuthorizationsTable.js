@@ -17,17 +17,7 @@ const AuthorizationsTable = ({
     hasScenario
 }) => {
     const getPriorityClass = (priority, auth) => {
-        // Special case for authorization 2025OP000312 ONLY when sepsis scenario is active and user is UM
-        if (hasScenario?.('sepsis') && userMode === 'UM' && auth?.authorization_number === '2025OP000312') {
-            return styles.specialBlue;
-        }
-
-        // SNF mode: All rows get #A8A8A8 color regardless of priority - ONLY for UM-SNF mode users
-        if (userMode === 'UM-SNF') {
-            return styles.snfMode;
-        }
-
-        // Normal priority-based styling (no special blue by default)
+        // Always use default UM priority styling regardless of mode or scenario
         switch (priority?.toLowerCase()) {
             case 'high': return styles.high;
             case 'medium': return styles.medium;
@@ -69,18 +59,9 @@ const AuthorizationsTable = ({
         return filtered;
     };
 
-    // Check if arrow should be shown (remove for sepsis scenario and SNF users)
+    // Check if arrow should be shown (always show for consistency with default UM)
     const shouldShowArrow = () => {
-        // If shouldHideArrow prop is true, don't show the arrow
-        if (shouldHideArrow) {
-            return false;
-        }
-
-        // Hide arrow for SNF users
-        if (userMode === 'UM-SNF') {
-            return false;
-        }
-
+        // Always show the arrow regardless of mode or scenario for consistency
         const filteredAuths = getFilteredAuthorizations();
         return filteredAuths.length > 0;
     };
