@@ -1061,15 +1061,6 @@
     margin-bottom: 5px;
 }
 
-.guidelinesEditionLabel {
-    color: #9C9D9C;
-    font-family: 'Inter', sans-serif;
-    font-size: 14.069px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-}
-
 .guidelinesCheckboxLabel {
     display: flex;
     align-items: center;

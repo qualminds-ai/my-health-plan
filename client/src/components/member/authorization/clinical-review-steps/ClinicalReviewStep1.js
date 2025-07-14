@@ -16,9 +16,6 @@ const ClinicalReviewStep1 = ({
         <div className={styles.navigationSection}>
             {/* Guideline Selection Checkboxes */}
             <div id="guidelines-selection-container" className={styles.guidelinesSelectionContainer}>
-                <span id="guidelines-edition-label" className={styles.guidelinesEditionLabel}>
-                    1st Edition
-                </span>
                 <label className={styles.guidelinesCheckboxLabel}>
                     <input
                         id="guideline-checkbox-aco"
