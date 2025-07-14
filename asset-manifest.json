@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.b3fd1c2b.css",
-    "main.js": "/static/js/main.432ae07b.js",
+    "main.css": "/static/css/main.8aeb5fdd.css",
+    "main.js": "/static/js/main.5efd1c30.js",
     "static/js/453.a3c1d153.chunk.js": "/static/js/453.a3c1d153.chunk.js",
     "static/media/background-image.jpg": "/static/media/background-image.a20d352173277356888d.jpg",
     "static/media/watch-icon.png": "/static/media/watch-icon.7a19a8563def4e1b445a.png",
@@ -27,12 +27,12 @@
     "static/media/carat-right.svg": "/static/media/carat-right.eec6e73f4f96b7c405f70e096e309b39.svg",
     "static/media/left-arrow-triangle.svg": "/static/media/left-arrow-triangle.59d0645b5aa01fb7ae4bd5700500bce4.svg",
     "static/media/Vector-right.svg": "/static/media/Vector-right.9857478a1f491461998f13646926a0fd.svg",
-    "main.b3fd1c2b.css.map": "/static/css/main.b3fd1c2b.css.map",
-    "main.432ae07b.js.map": "/static/js/main.432ae07b.js.map",
+    "main.8aeb5fdd.css.map": "/static/css/main.8aeb5fdd.css.map",
+    "main.5efd1c30.js.map": "/static/js/main.5efd1c30.js.map",
     "453.a3c1d153.chunk.js.map": "/static/js/453.a3c1d153.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b3fd1c2b.css",
-    "static/js/main.432ae07b.js"
+    "static/css/main.8aeb5fdd.css",
+    "static/js/main.5efd1c30.js"
   ]
 }
