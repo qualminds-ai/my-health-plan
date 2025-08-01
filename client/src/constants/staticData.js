@@ -517,27 +517,6 @@ export const AUTHORIZATIONS_DATA = {
             },
             {
                 id: 2,
-                authorization_number: '2025OP000389',
-                member_id: 1,
-                member_number: 'MEM001',
-                member_name: 'Abbott, Robert',
-                priority: 'High',
-                status: 'Pending',
-                request_type: 'Inpatient',
-                review_type: 'Discharge from IP to SNF',
-                received_date: '2025-04-28T03:47:00Z',
-                admission_date: '2025-04-28',
-                approved_days: 5,
-                next_review_date: '2025-05-03T09:00:00Z',
-                pos: 'Silverpine Medical Center',
-                diagnosis_code: 'DKA',
-                diagnosis_name: 'Diabetic Ketoacidosis',
-                drg_code: 'ABC',
-                provider_name: 'Silverpine Medical Center',
-                provider_code: 'SILV001'
-            },
-            {
-                id: 3,
                 authorization_number: '2025OP000367',
                 member_id: 9,
                 member_number: 'MEM009',
@@ -558,7 +537,7 @@ export const AUTHORIZATIONS_DATA = {
                 provider_code: 'EVER001'
             },
             {
-                id: 4,
+                id: 3,
                 authorization_number: '2025OP000928',
                 member_id: 3,
                 member_number: 'MEM003',
@@ -579,7 +558,7 @@ export const AUTHORIZATIONS_DATA = {
                 provider_code: 'CASC001'
             },
             {
-                id: 5,
+                id: 4,
                 authorization_number: '2025OP000278',
                 member_id: 4,
                 member_number: 'MEM004',
@@ -600,7 +579,7 @@ export const AUTHORIZATIONS_DATA = {
                 provider_code: 'PALI001'
             },
             {
-                id: 6,
+                id: 5,
                 authorization_number: '2025OP000378',
                 member_id: 5,
                 member_number: 'MEM005',
@@ -621,7 +600,7 @@ export const AUTHORIZATIONS_DATA = {
                 provider_code: 'TRIN001'
             },
             {
-                id: 7,
+                id: 6,
                 authorization_number: '2025OP000312',
                 member_id: 6,
                 member_number: 'MEM006',
@@ -642,7 +621,7 @@ export const AUTHORIZATIONS_DATA = {
                 provider_code: 'LUME001'
             },
             {
-                id: 8,
+                id: 7,
                 authorization_number: '2025OP000152',
                 member_id: 7,
                 member_number: 'MEM007',
@@ -663,7 +642,7 @@ export const AUTHORIZATIONS_DATA = {
                 provider_code: 'SAUR001'
             },
             {
-                id: 9,
+                id: 8,
                 authorization_number: '2025OP000369',
                 member_id: 8,
                 member_number: 'MEM008',
@@ -684,7 +663,7 @@ export const AUTHORIZATIONS_DATA = {
                 provider_code: 'COBA001'
             },
             {
-                id: 10,
+                id: 9,
                 authorization_number: '2025OP003189',
                 member_id: 9,
                 member_number: 'MEM009',

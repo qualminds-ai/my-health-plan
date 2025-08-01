@@ -64,7 +64,7 @@ const ClinicalReviewStep3 = ({ styles }) => {
                         <li>Severe dehydration with poor oral intake or need for IV fluids</li>
                         <li>Significant electrolyte disturbances, such as:
                             <ul className={styles.carePlanningListNested}>
-                                <li>Severe hypokalemia (&lt;3.3 mEq/L)</li>
+                                <li>Severe hypokalemia</li>
                                 <li>Hyperkalemia with ECG changes</li>
                                 <li>Severe hyponatremia</li>
                             </ul>

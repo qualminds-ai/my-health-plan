@@ -290,17 +290,21 @@ const Member = ({
   };
 
   // Static authorization data for attachments and clinical review only
+  // Dynamic title for Summary of Attachments based on authorization number
+  const getSummaryTitle = () => {
+    return `${activeRequestTab} Summary`;
+  };
+
   const attachments = [
-    { id: 1, title: 'Summary of Attachments', date: 'Apr 28, 2025', size: '3KB', type: 'pdf', isSummary: true },
+    { id: 1, title: getSummaryTitle(), date: 'Apr 28, 2025', size: '3KB', type: 'pdf', isSummary: true },
     { id: 2, title: 'Authorization request (original fax)', date: 'Apr 28, 2025', size: '31KB', type: 'fax' },
     { id: 3, title: 'Medical History - Robert Abbott', date: 'Apr 28, 2025', size: '6KB', type: 'pdf' },
     { id: 4, title: 'Specialist Notes', date: 'Apr 28, 2025', size: '6KB', type: 'pdf' },
     { id: 5, title: 'Physical and Labs - Robert Abbott', date: 'Apr 28, 2025', size: '31KB', type: 'text' },
-    { id: 6, title: 'ED Notes', date: 'Apr 28, 2025', size: '3KB', type: 'text' },
-    { id: 7, title: 'Physician notes', date: 'Apr 28, 2025', size: '90KB', type: 'text' },
-    { id: 8, title: 'Nursing notes', date: 'Apr 28, 2025', size: '99KB', type: 'text' },
-    { id: 9, title: 'Referral: infectious disease physician', date: 'Apr 28, 2025', size: '31KB', type: 'pdf' },
-    { id: 10, title: 'Referral: discharge planner', date: 'Apr 28, 2025', size: '3KB', type: 'pdf' },
+    { id: 6, title: 'Physician notes', date: 'Apr 28, 2025', size: '90KB', type: 'text' },
+    { id: 7, title: 'Nursing notes', date: 'Apr 28, 2025', size: '99KB', type: 'text' },
+    { id: 8, title: 'Referral: infectious disease physician', date: 'Apr 28, 2025', size: '31KB', type: 'pdf' },
+    { id: 9, title: 'Referral: discharge planner', date: 'Apr 28, 2025', size: '3KB', type: 'pdf' },
   ];  // Function to get attachment icon based on type
   const getAttachmentIcon = (type, title) => {
     // Special cases based on title
@@ -310,7 +314,8 @@ const Member = ({
     if (title === 'Referral: infectious disease physician' || title === 'Referral: discharge planner') {
       return pdfDocIcon;
     }
-    if (title === 'Summary of Attachments' || title === 'Medical History - Robert Abbott' || title === 'Specialist Notes') {
+    // Check for dynamic summary title (format: "2025OP000389 Summary" or "2025OP000390 Summary")
+    if (title.includes(' Summary') || title === 'Medical History - Robert Abbott' || title === 'Specialist Notes') {
       return textDocIcon;
     }
 
