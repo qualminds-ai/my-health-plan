@@ -76,7 +76,7 @@ const Member = ({
   const parseHashForTabs = (userMode = 'UM') => {
     const hash = window.location.hash; // Full hash including route
 
-    // Dynamic default authorization number based on user mode
+    // Dynamic default authorization number based on the user mode
     const defaultAuthNumber = userMode === 'UM-SNF' ? '2025OP000390' : '2025OP000389';
 
     // With HashRouter, hash format is: #/member/MEM001?tab=Authorizations&authTab=Clinical%20Review&step=2
