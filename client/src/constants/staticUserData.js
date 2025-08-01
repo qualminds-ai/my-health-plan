@@ -104,10 +104,22 @@ export const findUserByEmail = (email) => {
 
 /**
  * Verify user credentials
+ * Only allows admin and maria.hartsell to login, but keeps all user data for persona switching
  */
 export const verifyCredentials = (email, password) => {
     const user = findUserByEmail(email);
     if (!user) {
+        return null;
+    }
+
+    // Restrict login to only admin and maria.hartsell
+    const allowedLoginEmails = [
+        'admin@myhealthplan.com',
+        'maria.hartsell@myhealthplan.com'
+    ];
+
+    if (!allowedLoginEmails.includes(email.toLowerCase())) {
+        console.log(`🚫 Login restricted: ${email} is not allowed to login directly`);
         return null;
     }
 
@@ -116,6 +128,7 @@ export const verifyCredentials = (email, password) => {
     if (user.password === password) {
         // Return user without password
         const { password, ...userWithoutPassword } = user;
+        console.log(`✅ Login allowed for: ${email}`);
         return userWithoutPassword;
     }
 

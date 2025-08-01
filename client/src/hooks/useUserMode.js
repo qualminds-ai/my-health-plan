@@ -81,59 +81,40 @@ export const useUserMode = (initialUser) => {
 
     // Update user when initialUser changes
     useEffect(() => {
-        setUser(initialUser);
+        // Always restore user from localStorage first (for persistence across refreshes)
+        const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
+        if (savedUser) {
+            try {
+                const parsedUser = JSON.parse(savedUser);
+                setUser(parsedUser);
+                console.log(`👤 Restored saved user from localStorage: ${parsedUser.email}`);
+            } catch (error) {
+                console.error('Error parsing saved user:', error);
+                setUser(initialUser);
+                if (initialUser) {
+                    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(initialUser));
+                }
+            }
+        } else if (initialUser) {
+            // No saved user, use initialUser and save it
+            setUser(initialUser);
+            localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(initialUser));
+            console.log(`👤 Set and saved initial user: ${initialUser.email}`);
+        }
 
         // Set default persona based on logged-in user
         if (initialUser) {
             const savedPersona = localStorage.getItem(STORAGE_KEYS.ACTIVE_PERSONA);
 
-            if (initialUser.email === 'admin@myhealthplan.com') {
-                // Admin can switch between personas - check saved persona first
-                if (savedPersona) {
-                    const savedPersonaData = availablePersonas.find(p => p.id === savedPersona);
-                    if (savedPersonaData) {
-                        setActivePersona(savedPersonaData);
-                        console.log(`👤 Restored saved persona for admin: ${savedPersonaData.full_name}`);
-                        
-                        // Clear sepsis if restored persona is CM user
-                        if (savedPersonaData.email === 'karen.white@myhealthplan.com') {
-                            const savedScenarios = localStorage.getItem(STORAGE_KEYS.USER_SCENARIOS);
-                            if (savedScenarios) {
-                                try {
-                                    const scenarioArray = JSON.parse(savedScenarios);
-                                    const currentScenarios = new Set(scenarioArray);
-                                    if (currentScenarios.has('sepsis')) {
-                                        currentScenarios.delete('sepsis');
-                                        localStorage.setItem(STORAGE_KEYS.USER_SCENARIOS, JSON.stringify([...currentScenarios]));
-                                        console.log('🧹 Cleared sepsis scenario for restored CM persona');
-                                    }
-                                } catch (error) {
-                                    console.error('Error clearing sepsis for restored CM persona:', error);
-                                }
-                            }
-                        }
-                    } else {
-                        // Default to Maria if saved persona not found
-                        const mariaPersona = availablePersonas.find(p => p.id === 'maria.hartsell');
-                        setActivePersona(mariaPersona);
-                        localStorage.setItem(STORAGE_KEYS.ACTIVE_PERSONA, 'maria.hartsell');
-                    }
-                } else {
-                    // Default to Maria Hartsell persona
-                    const mariaPersona = availablePersonas.find(p => p.id === 'maria.hartsell');
-                    setActivePersona(mariaPersona);
-                    localStorage.setItem(STORAGE_KEYS.ACTIVE_PERSONA, 'maria.hartsell');
-                }
-            } else {
-                // Find matching persona for the logged-in user
-                const userPersona = availablePersonas.find(p => p.email === initialUser.email);
-                if (userPersona) {
-                    setActivePersona(userPersona);
-                    localStorage.setItem(STORAGE_KEYS.ACTIVE_PERSONA, userPersona.id);
-                    console.log(`👤 Set persona for user: ${userPersona.full_name}`);
-                    
-                    // Clear sepsis if this is a CM user
-                    if (userPersona.email === 'karen.white@myhealthplan.com') {
+            // All authenticated users get persona switching capabilities
+            if (savedPersona) {
+                const savedPersonaData = availablePersonas.find(p => p.id === savedPersona);
+                if (savedPersonaData) {
+                    setActivePersona(savedPersonaData);
+                    console.log(`👤 Restored saved persona: ${savedPersonaData.full_name}`);
+
+                    // Clear sepsis if restored persona is CM user
+                    if (savedPersonaData.email === 'karen.white@myhealthplan.com') {
                         const savedScenarios = localStorage.getItem(STORAGE_KEYS.USER_SCENARIOS);
                         if (savedScenarios) {
                             try {
@@ -142,14 +123,24 @@ export const useUserMode = (initialUser) => {
                                 if (currentScenarios.has('sepsis')) {
                                     currentScenarios.delete('sepsis');
                                     localStorage.setItem(STORAGE_KEYS.USER_SCENARIOS, JSON.stringify([...currentScenarios]));
-                                    console.log('🧹 Cleared sepsis scenario for CM user persona');
+                                    console.log('🧹 Cleared sepsis scenario for restored CM persona');
                                 }
                             } catch (error) {
-                                console.error('Error clearing sepsis for CM user persona:', error);
+                                console.error('Error clearing sepsis for restored CM persona:', error);
                             }
                         }
                     }
+                } else {
+                    // Default to Maria if saved persona not found
+                    const mariaPersona = availablePersonas.find(p => p.id === 'maria.hartsell');
+                    setActivePersona(mariaPersona);
+                    localStorage.setItem(STORAGE_KEYS.ACTIVE_PERSONA, 'maria.hartsell');
                 }
+            } else {
+                // Default to Maria Hartsell persona for all users
+                const mariaPersona = availablePersonas.find(p => p.id === 'maria.hartsell');
+                setActivePersona(mariaPersona);
+                localStorage.setItem(STORAGE_KEYS.ACTIVE_PERSONA, 'maria.hartsell');
             }
         }
     }, [initialUser, availablePersonas]);
@@ -364,6 +355,17 @@ export const useUserMode = (initialUser) => {
             setActivePersona(newPersona);
             localStorage.setItem(STORAGE_KEYS.ACTIVE_PERSONA, personaId);
 
+            // Create a temporary user object for the new persona
+            const tempUser = {
+                ...user,
+                email: newPersona.email,
+                full_name: newPersona.full_name,
+                role: newPersona.role,
+                displayRole: newPersona.displayRole
+            };
+            setUser(tempUser);
+            localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(tempUser));
+
             // Reset to default mode for the new persona
             const defaultMode = getDefaultModeForUser(newPersona);
             setActiveMode(defaultMode);
@@ -390,7 +392,7 @@ export const useUserMode = (initialUser) => {
         } finally {
             setLoading(false);
         }
-    }, [activePersona, availablePersonas, getDefaultModeForUser, saveMode, scenarios]);
+    }, [activePersona, availablePersonas, getDefaultModeForUser, saveMode, scenarios, user]);
 
     // Switch user mode (UM, UM-SNF, CM)
     const switchUserMode = useCallback(async (newMode) => {
@@ -682,12 +684,20 @@ export const useUserMode = (initialUser) => {
         });
     }, [activeMode, saveMode]);
 
-    // Clear all user mode data for logout (doesn't save back to localStorage)
+    // Clear all user mode data for logout (clears localStorage)
     const clearAllForLogout = useCallback(() => {
         setScenarios(new Set());
         setActiveMode('UM');
         setActivePersona(null);
-        console.log('🧹 All user mode data cleared for logout (no localStorage writes)');
+        setUser(null);
+
+        // Clear all localStorage data
+        localStorage.removeItem(STORAGE_KEYS.USER);
+        localStorage.removeItem(STORAGE_KEYS.ACTIVE_PERSONA);
+        localStorage.removeItem(STORAGE_KEYS.USER_MODE);
+        localStorage.removeItem(STORAGE_KEYS.USER_SCENARIOS);
+
+        console.log('🧹 All user mode data and localStorage cleared for logout');
     }, []);
 
     return {
