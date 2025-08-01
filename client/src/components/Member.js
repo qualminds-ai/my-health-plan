@@ -49,6 +49,7 @@ const Member = ({
       if (scenarios.includes('sepsis') && (activeMode === 'UM' || activeMode === 'UM-SNF')) {
         // Future: Add other sepsis-related modifications here without alert
         console.log('🦠 Sepsis scenario active for', activeMode, 'mode');
+      console.log('📅 Build timestamp:', new Date().toISOString());
       }
 
       // Apply persona-specific modifications if needed
