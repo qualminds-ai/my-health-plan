@@ -1,0 +1,38 @@
+{
+  "files": {
+    "main.css": "/static/css/main.8aeb5fdd.css",
+    "main.js": "/static/js/main.2a56a9c4.js",
+    "static/js/453.a3c1d153.chunk.js": "/static/js/453.a3c1d153.chunk.js",
+    "static/media/background-image.jpg": "/static/media/background-image.a20d352173277356888d.jpg",
+    "static/media/watch-icon.png": "/static/media/watch-icon.7a19a8563def4e1b445a.png",
+    "static/media/pdf-doc-icon.png": "/static/media/pdf-doc-icon.0e9fad8bafd64fa207bb.png",
+    "static/media/message-icon.png": "/static/media/message-icon.c48495b9ea426fb50abe.png",
+    "static/media/medical-icon.png": "/static/media/medical-icon.6eb7de0bde830dcceab2.png",
+    "static/media/call-icon.png": "/static/media/call-icon.e082a35e0d0773670b25.png",
+    "static/media/text-chat-icon.png": "/static/media/text-chat-icon.4a3d1c12e27fdd403940.png",
+    "static/media/star-icon.png": "/static/media/star-icon.3a123d482da0a8b31877.png",
+    "static/media/fax-doc-icon.png": "/static/media/fax-doc-icon.2837283aa2ada3252134.png",
+    "static/media/text-doc-icon.png": "/static/media/text-doc-icon.dc7e3fc02d5dd4932ae5.png",
+    "static/media/ion_earth-sharp.svg": "/static/media/ion_earth-sharp.771770e1a09b400727cec2ce1c3e9746.svg",
+    "static/media/fluent_arrow-expand-24-filled.svg": "/static/media/fluent_arrow-expand-24-filled.1e5fa3a4e698bc91a1c245df29f93aa2.svg",
+    "static/media/mingcute_question-fill.svg": "/static/media/mingcute_question-fill.c51060c11f2db32b6d6f4b5bac6c52ef.svg",
+    "static/media/warning.svg": "/static/media/warning.ed985890d67a1e8c26715614bd218185.svg",
+    "static/media/mingcute_user-x-fill.svg": "/static/media/mingcute_user-x-fill.3f1a10d69db802d03d124325b2479e0a.svg",
+    "static/media/Logo.svg": "/static/media/Logo.e9b15757835e3e3009d3b78ac08a9531.svg",
+    "index.html": "/index.html",
+    "static/media/weui_arrow-filled.svg": "/static/media/weui_arrow-filled.1bc54f1010c20432318b54d8ae55e8d4.svg",
+    "static/media/icon-park-outline_share.svg": "/static/media/icon-park-outline_share.02133888f9f7d635b43fe17efda50304.svg",
+    "static/media/mdi_file.svg": "/static/media/mdi_file.9fb0118210e45e5bc88f97d1b50c2f70.svg",
+    "static/media/carat-left.svg": "/static/media/carat-left.4398271e2d1892eae8a4ef8419382735.svg",
+    "static/media/carat-right.svg": "/static/media/carat-right.eec6e73f4f96b7c405f70e096e309b39.svg",
+    "static/media/left-arrow-triangle.svg": "/static/media/left-arrow-triangle.59d0645b5aa01fb7ae4bd5700500bce4.svg",
+    "static/media/Vector-right.svg": "/static/media/Vector-right.9857478a1f491461998f13646926a0fd.svg",
+    "main.8aeb5fdd.css.map": "/static/css/main.8aeb5fdd.css.map",
+    "main.2a56a9c4.js.map": "/static/js/main.2a56a9c4.js.map",
+    "453.a3c1d153.chunk.js.map": "/static/js/453.a3c1d153.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8aeb5fdd.css",
+    "static/js/main.2a56a9c4.js"
+  ]
+}
