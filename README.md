@@ -1,362 +1,337 @@
 # MyHealthPlan Application
 
-A comprehensive healthcare authorization management MVP with advanced clinical review features, user personas, and scenario-based workflows.
+A client-side healthcare authorization management MVP with clinical review workflow, user personas, and scenario-based data. No backend required.
 
-**🎯 100% Client-Side Application - No backend required!**
+## 🚀 Quick start
 
-## 🚀 Quick Start
+Prerequisites
+- Node.js 18+
+- No database/server needed (100% client-side)
 
-### Prerequisites
-- Node.js (v18+)
-- **No database or server required** - fully static client-side application!
-
-### Setup & Run (2 commands)
+Setup and run
 ```bash
-npm run install:all    # Install dependencies
-npm start              # Start client application
+npm run install:all    # install root + client deps
+npm start              # start the client app on http://localhost:3000
 ```
 
-**That's it!** 🎉
-- **100% client-side operation** with realistic demo data
-- Frontend: http://localhost:3000
-- No database, no backend server required
+## Tech stack
+- React 19 with functional components and hooks
+- Styling: Tailwind CSS + CSS Modules (via PostCSS)
+- Router: React Router using HashRouter for static hosting (GitHub Pages)
+- Data/services: Static data only (`staticDataService`, `staticData.js`)
+- Auth: Client-only demo auth (`staticAuthService` + localStorage)
+- Build: react-scripts (Create React App) with PostCSS (Tailwind + Autoprefixer).
 
-## Tech Stack
-- **Frontend**: React 19+ with Tailwind CSS & CSS Modules
-- **Data**: Static JSON data with dynamic scenarios and user modes
-- **Auth**: Client-side authentication with demo users
-- **Build Tools**: Create React App with CRACO for Tailwind integration
-- **Routing**: React Router with hash-based deep linking
+## Demo access and personas
 
-## Demo Login
-All users use the password: **password123**
+Credentials
+- Password for demo users: password123
+- Direct login is allowed for:
+  - admin@myhealthplan.com
+  - maria.hartsell@myhealthplan.com
 
-### Available Demo Users
-- **admin@myhealthplan.com** (System Administrator - Can switch personas)
-- **maria.hartsell@myhealthplan.com** (Maria Hartsell - UM mode)  
-- **elise.tran@myhealthplan.com** (Elise Tran - UM-SNF mode)
-- **karen.white@myhealthplan.com** (Karen White - CM mode)
-- **john.doe@myhealthplan.com** (John Doe - Standard user)
-- **jane.smith@myhealthplan.com** (Jane Smith - Standard user)
+Persona switching (after login)
+- Switch between Maria (UM), Elise (UM, SNF), and Karen (CM) from the header menu.
+- Admin can also use persona switching; Maria can switch personas too.
 
-### User Modes & Scenarios
-The application supports multiple user modes and scenarios for comprehensive testing:
+User modes
+- UM (Utilization Management)
+- UM-SNF (Skilled Nursing; displayed as “UM, SNF” in UI)
+- CM (Case Management)
 
-**User Modes:**
-- **UM** (Utilization Management): Standard authorization reviews
-- **UM-SNF** (Skilled Nursing Facility): Specialized SNF authorization workflows
-- **CM** (Case Management): High-priority case management tasks
+Scenario toggle
+- Sepsis: enable via the UI or URL query parameter `?sepsis=true` (works with HashRouter).
 
-**Available Scenarios:**
-- **Sepsis Scenario**: Simulates urgent sepsis case workflows with:
-  - Modified dashboard statistics
-  - Special authorization routing (Robert Abbott case)
-  - Clinical review modifications
-  - Concurrent review requirements
+## Core features
+- Multi-step Clinical Review (4 steps)
+  1) Guidelines Search and selection
+  2) Clinical Indications with progressive reveal
+  3) Care Planning
+  4) Goal Length of Stay
+- Authorization workflow tabs: Request Submitted, Clinical Review, Closed (others are placeholders)
+- Hash-based deep linking for members and authorization state
+  - Example: `#/member/MEM001?tab=Authorizations&authTab=Clinical%20Review&requestTab=2025OP000389&step=2`
+- Dashboard and authorizations adapt to active user mode and scenarios (e.g., sepsis)
+- Persona switching with role-appropriate modes and persisted state (localStorage)
 
-## ✨ New Features & Capabilities
+## Project structure (high level)
 
-### Advanced Clinical Review System
-- **Multi-step clinical review workflow** with 4 distinct phases:
-  1. **Guidelines Search & Selection**: Interactive medical guideline selection
-  2. **Clinical Indications**: Animated clinical criteria display  
-  3. **Care Planning**: Inpatient admission criteria and alternatives
-  4. **Goal Length of Stay**: Evidence-based stay duration guidelines
-
-### Interactive Authorization Management
-- **Hash-based deep linking**: Direct navigation to specific authorization states
-- **Dynamic authorization states**: Request Submitted, Clinical Review, Closed
-- **Real-time status updates**: Live scenario-based modifications
-- **Document attachments**: Comprehensive attachment management system
-
-### User Persona System
-- **Multiple user personas**: Switch between different user contexts
-- **Role-based UI modifications**: Different views for different roles
-- **Scenario-based data**: Dynamic content based on active scenarios
-- **Persistent state management**: User preferences saved across sessions
-
-### Enhanced Member Management
-- **Comprehensive member profiles**: Complete demographic and clinical data
-- **Multi-tab interface**: Overview, Eligibility, Care Plans, Authorizations, etc.
-- **Real-time scenario integration**: Member data adapts to active scenarios
-- **Responsive design**: Optimized for desktop and mobile workflows
-
-## Development Features
-- ✅ **Hot reload**: React Fast Refresh for instant UI updates
-- ✅ **Static data**: All healthcare data included as JSON files
-- ✅ **No setup**: No database or backend configuration needed
-- ✅ **Cross-platform**: Works on Windows, macOS, Linux
-- ✅ **Single command**: Everything starts with `npm start`
-- ✅ **Component modularity**: Well-organized React component architecture
-- ✅ **CSS Modules**: Scoped styling with CSS Modules and Tailwind CSS
-- ✅ **Development tooling**: ESLint, Prettier, and VS Code integration
-- ✅ **Client-side auth**: JWT-like authentication without server dependency
-
-## 📁 Project Structure
-
-### Overview
-This is a client-side React healthcare management application with static data.
-
-### Root Directory
+Root
 ```
 my-health-plan/
-├── client/                 # React application (entire project)
-├── package.json           # Root package configuration
-└── README.md             # Project documentation
+├─ client/                 # React SPA
+├─ package.json            # root scripts that proxy to client
+└─ README.md
 ```
 
-### Client Structure (React Application)
+Client (key folders)
 ```
 client/
-├── public/               # Static assets
-├── src/
-│   ├── components/       # React components
-│   │   ├── Dashboard.js & Dashboard.module.css
-│   │   ├── Header.js & Header.module.css  
-│   │   ├── Login.js & Login.module.css
-│   │   ├── Member.js & Member.module.css
-│   │   ├── common/       # Reusable components
-│   │   │   ├── AuthorizationsTable.js
-│   │   │   ├── CMTasksTable.js
-│   │   │   ├── DataModeIndicator.js
-│   │   │   ├── GroupQueuesChart.js
-│   │   │   ├── ModeSwitcher.js & ModeSwitcher.module.css
-│   │   │   ├── Pagination.js
-│   │   │   ├── StatsCard.js
-│   │   │   └── TabNavigation.js
-│   │   ├── guards/       # Route guards
-│   │   ├── member/       # Member-specific components
-│   │   │   ├── authorization/  # Authorization workflow
-│   │   │   │   ├── clinical-review-steps/
-│   │   │   │   │   ├── ClinicalReviewStep1.js
-│   │   │   │   │   ├── ClinicalReviewStep2.js  
-│   │   │   │   │   ├── ClinicalReviewStep3.js
-│   │   │   │   │   └── ClinicalReviewStep4.js
-│   │   │   │   ├── AuthorizationAttachments.js
-│   │   │   │   ├── AuthorizationClinicalReview.js
-│   │   │   │   ├── AuthorizationClosed.js
-│   │   │   │   ├── AuthorizationRequestSubmitted.js
-│   │   │   │   ├── AuthorizationSummary.js
-│   │   │   │   └── AuthorizationWorkflowTabs.js
-│   │   │   ├── CMAlert.js & CMAlert.module.css
-│   │   │   ├── CMOverview.js & CMOverview.module.css
-│   │   │   ├── MemberHeader.js & MemberHeader.module.css
-│   │   │   ├── MemberInfoBar.js
-│   │   │   ├── MemberTabs.js & MemberTabs.module.css
-│   │   │   └── shared/    # Shared member components
-│   │   └── pages/        # Page-level components  
-│   ├── constants/        # Application constants & static data
-│   │   ├── index.js      # Main constants
-│   │   ├── cmData.js     # Case management data
-│   │   └── staticUserData.js  # User authentication data
-│   ├── hooks/           # Custom React hooks
-│   │   ├── useAuth.js   # Authentication logic
-│   │   ├── useMemberActions.js  # Member actions
-│   │   └── useUserMode.js       # User mode & scenario management
-│   ├── services/        # Data service layer
-│   │   ├── staticAuthService.js # Client-side authentication implementation
-│   │   └── staticDataService.js # Static data provider (all healthcare data)
-│   ├── types/           # TypeScript-style prop definitions
-│   │   └── index.js
-│   ├── utils/           # Utility functions
-│   │   ├── helpers.js
-│   │   └── memberUI.js
-│   ├── assets/          # Static assets organized by feature
-│   │   ├── authorizations/
-│   │   ├── dashboard/
-│   │   ├── header/
-│   │   ├── icons/
-│   │   └── login/
-│   ├── App.js           # Main App component with routing
-│   ├── App.css          # Global styles
-│   ├── index.js         # Application entry point
-│   └── index.css        # Base styles with Tailwind imports
-├── craco.config.js      # CRACO configuration for Tailwind
-├── tailwind.config.js   # Tailwind CSS configuration
-├── postcss.config.js    # PostCSS configuration
-└── package.json         # Client dependencies
+├─ public/
+├─ src/
+│  ├─ components/
+│  │  ├─ common/           # reusable UI: AuthorizationsTable, CMTasksTable, GroupQueuesChart, ModeSwitcher, etc.
+│  │  ├─ guards/           # ProtectedRoute, PublicRoute
+│  │  ├─ member/
+│  │  │  ├─ authorization/
+│  │  │  │  ├─ AuthorizationClinicalReview.js
+│  │  │  │  ├─ AuthorizationWorkflowTabs.js
+│  │  │  │  ├─ AuthorizationRequestSubmitted.js
+│  │  │  │  ├─ AuthorizationClosed.js
+│  │  │  │  └─ clinical-review-steps/ClinicalReviewStep{1..4}.js
+│  ├─ constants/           # app constants + full static data (staticData.js, cmData.js, staticUserData.js)
+│  ├─ hooks/               # useAuth, useUserMode, useMemberActions
+│  ├─ services/            # staticAuthService, staticDataService
+│  ├─ utils/, types/, assets/
+│  ├─ App.js, index.js, index.css
+├─ tailwind.config.js, postcss.config.js
+└─ package.json
 ```
 
-## 🏗️ Architecture & Features
+Notes
+- Routing uses HashRouter specifically to support static hosting like GitHub Pages.
+- User mode/scenario state is persisted in localStorage (see `useUserMode`).
 
-### Frontend (React)
-- **Modern React**: React 19+ with hooks, functional components, and latest features
-- **Styling**: Tailwind CSS + CSS Modules for scoped component styles
-- **Data Layer**: Static JSON services with realistic healthcare data
-- **Authentication**: Client-side JWT-like authentication with demo users
-- **State Management**: Custom hooks for complex state (useAuth, useUserMode, useMemberActions)
-- **Deep Linking**: Hash-based routing for bookmarkable authorization states
-- **Responsive Design**: Mobile-first design with Tailwind CSS utilities
-- **Component Architecture**: Modular components with clear separation of concerns
+## Scripts
 
-### Advanced Features
-- **User Mode System**: Support for UM, UM-SNF, and CM user types with different dashboards
-- **Scenario Management**: Dynamic content based on active clinical scenarios (sepsis)
-- **Clinical Review Workflow**: Multi-step authorization review process with animations
-- **Persona Switching**: Admin users can switch between different user personas
-- **Static Data Services**: Complete healthcare data simulation without backend dependency
-- **Real-time Updates**: Live data modifications based on user context and scenarios
-
-## 🔧 Available Scripts
-
-### Root Level Commands
+Run from repository root
 ```bash
-npm start                    # Start React development server
-npm run dev                  # Same as npm start  
-npm run install:all          # Install all dependencies
-npm run client:dev           # Start the client application
-npm run client:build         # Build React app for production
-npm run client:build:watch   # Build with watch mode
-npm run build                # Production build
-npm run test                 # Run client tests
-npm run lint                 # Run linting
-npm run clean                # Clean build artifacts and node_modules
+npm start                    # start the client (same as npm run client:dev)
+npm run dev                  # alias for start
+npm run install:all          # install root + client deps
+npm run client:dev           # start from root
+npm run client:build         # production build (client/build)
+npm run client:build:watch   # build in watch mode
+npm run build                # alias for client:build
+npm run test                 # run CRA test runner
+npm run lint                 # run ESLint (CLI). If the ESLint CLI isn’t installed locally, use CRA’s linting via tests/build
+npm run clean                # remove build and node_modules
 ```
 
-### Client Commands (from client/ directory)
+Client-only (optional)
 ```bash
 cd client
-npm start                    # Start React development server
-npm run build                # Create production build
-npm run build:watch          # Build with file watching
-npm test                     # Run React tests
-npm run test:watch           # Run tests in watch mode
-npm run test:coverage        # Run tests with coverage report
-npm run lint                 # Run ESLint
-npm run lint:fix             # Fix ESLint issues automatically
-npm run format               # Format code with Prettier
+npm start
+npm run build
+npm test
+npm run test:watch
+npm run test:coverage
+npm run lint
+npm run lint:fix
+# A "format" script exists, but Prettier must be installed locally to use it
 ```
 
-## 🌐 Environment Configuration
+## Environment
+- Dev server: http://localhost:3000
+- No environment variables are required
+- All data/auth is client-side and stored in localStorage for demo purposes
 
-### Development
-- **Frontend:** http://localhost:3000
-- **Data:** Static JSON files with realistic healthcare data
-- **Authentication:** Client-side demo users
+## Data model and behaviors
+- Static data in `staticData.js` includes dashboard stats, authorizations, and member stubs.
+- `staticDataService` exposes accessors with simulated latency and pagination.
+- Scenario: “sepsis” changes selected dashboard counts and certain authorization rows for UM users.
+- `useUserMode` coordinates active mode, scenario toggling, and persona switching, and reads `?sepsis=true|false` from the hash URL.
 
-### Production
-- **Build:** Optimized React production build
-- **Deployment:** Static hosting compatible (Vercel, Netlify, GitHub Pages)
-- **No environment variables required** - all configuration is client-side
+## Security (demo only)
+- This is a demo-only, client-side auth flow. Tokens are base64-encoded “demo tokens.”
+- Passwords are stored as plaintext in static data. Do not use this pattern in production.
+- Role-based views are enforced in the UI only.
 
-## 🔒 Security Features
-- Client-side password hashing with bcrypt-like implementation
-- JWT-like tokens for session management (demo purposes)
-- Role-based access control (UM, UM-SNF, CM)
-- Input validation and sanitization
-- No sensitive data transmission (all client-side)
-- Secure demo environment for healthcare workflow testing
+## Testing
+- CRA test runner and React Testing Library are available via dependencies.
+- No custom tests are included in this repository at the moment.
 
-## � Data Architecture
+## Deployment
 
-### Static Data Structure
-- **Users**: 6 demo users with different roles and access levels
-- **Members**: Comprehensive healthcare plan member profiles
-- **Authorizations**: Healthcare authorization requests with full workflow states
-- **Providers**: Healthcare facilities and provider networks
-- **Clinical Data**: Diagnoses, procedures, and medical codes
-- **Dashboard Statistics**: Pre-calculated metrics for different user types
+GitHub Pages (preconfigured)
+- Workflow: `.github/workflows/deploy-client.yml`
+- On push to main/master, builds `client` and publishes `client/build` using `peaceiris/actions-gh-pages`.
+- Custom domain is set in the workflow (`cname: myhealthplan.qualminds.com`) and a `CNAME` file exists in the build.
 
-### User Roles & Data Access
-- **UM (Utilization Management)**: Standard authorization reviews and sepsis scenarios
-- **UM-SNF (Skilled Nursing)**: Specialized SNF authorization workflows  
-- **CM (Case Management)**: High-priority case management tasks and member alerts
-- **Admin**: Full access with persona switching capabilities
+Other static hosts
+- The app is a static SPA; any static host (Netlify, Vercel, S3/CloudFront) will work by serving `client/build`.
 
-### Scenario System
-- **Sepsis Scenario**: Modifies dashboard data and member information for UM users
-- **User Mode Switching**: Different data views based on active user role
-- **Dynamic Statistics**: Real-time calculation based on scenarios and user context
+## AWS deployment (EC2 or ECS)
 
-## 🧪 Testing & Quality
-- **Component Testing**: Individual React component functionality verification
-- **User Workflow Testing**: End-to-end testing of healthcare authorization workflows
-- **Cross-browser Testing**: Chrome, Firefox, Safari, Edge compatibility
-- **Responsive Testing**: Mobile, tablet, and desktop layouts
-- **Static Data Validation**: Ensuring data consistency across scenarios
-- **Performance Testing**: Client-side rendering and state management optimization
-- **Accessibility Testing**: WCAG compliance for healthcare applications
+This app is a static React SPA. For AWS you can either:
+- EC2 + Nginx: Copy the production `client/build` folder to the instance and serve it with Nginx.
+- ECS Fargate: Containerize the built app and run it behind an Application Load Balancer.
 
-## 🚢 Deployment
+### Option A: EC2 + Nginx (static hosting)
 
-### Static Hosting Deployment
-- **Build Process**: Optimized production build with code splitting and tree shaking
-- **Hosting Options**: Vercel, Netlify, GitHub Pages, or any static hosting provider
-- **Zero Configuration**: No environment variables or server setup required
-- **CDN Ready**: Automatic asset optimization and caching
+Prerequisites
+- An EC2 VM (Amazon Linux 2 or Ubuntu), security group open on ports 80/443.
+- SSH access with a key pair or SSM Session Manager.
 
-### Build Commands
-```bash
-npm run build                # Create production build
-npm run client:build         # Alternative build command
+Steps
+1) Build the app
+   - From repo root: `npm run install:all` then `npm run client:build` (artifacts in `client/build`).
+2) Install Nginx on EC2
+   - Amazon Linux 2: `sudo amazon-linux-extras install nginx1` then `sudo systemctl enable --now nginx`.
+   - Ubuntu: `sudo apt update && sudo apt install -y nginx` then `sudo systemctl enable --now nginx`.
+3) Copy build artifacts to the server
+   - Copy the contents of `client/build/` to `/var/www/myhealthplan` (create the folder if needed).
+4) Configure Nginx (SPA fallback)
+   - Example server block:
+   ```nginx
+   server {
+     listen 80;
+     server_name _;
+
+     root /var/www/myhealthplan;
+     index index.html;
+
+     location / {
+       try_files $uri /index.html;
+     }
+   }
+   ```
+   - Place under `/etc/nginx/conf.d/myhealthplan.conf` (or update `/etc/nginx/sites-available/default` on Ubuntu).
+5) Apply config and test
+   - `sudo nginx -t` then `sudo systemctl reload nginx`.
+6) Optional: HTTPS with Let’s Encrypt
+   - Install Certbot for Nginx, request a cert for your domain, and reload Nginx.
+
+CI/CD via GitHub Actions (optional)
+- Add the following workflow to build and upload the static bundle to your EC2 host, then reload Nginx.
+- Required GitHub secrets: `EC2_HOST`, `EC2_USER`, `EC2_SSH_KEY` (private key), optional `EC2_DEPLOY_PATH`.
+
+```yaml
+name: Deploy to EC2
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'client/**'
+      - '.github/workflows/deploy-ec2.yml'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+      - name: Build
+        run: |
+          cd client
+          npm ci
+          npm run build
+      - name: Upload build to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "client/build/*"
+          target: ${{ secrets.EC2_DEPLOY_PATH || '/var/www/myhealthplan' }}
+      - name: Reload Nginx
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo nginx -t && sudo systemctl reload nginx
 ```
 
-### Deployment Platforms
-- **Vercel**: Connect GitHub repo for automatic deployments
-- **Netlify**: Drag-and-drop build folder or connect repository  
-- **GitHub Pages**: Use existing deploy-client.yml workflow
-- **Custom Hosting**: Upload build folder contents to any web server
+### Option B: ECS Fargate (containerized static hosting)
 
-## Development Workflow
-1. **Feature Development**: Edit files in `client/src/` directory
-2. **Hot Reload**: Changes trigger instant recompilation and browser refresh
-3. **Static Data**: Modify JSON data in `client/src/constants/` and services
-4. **Component Development**: Create modular components with CSS Modules
-5. **State Management**: Use custom hooks for complex application state
-6. **User Testing**: Switch between personas and scenarios to test workflows
-7. **Build Testing**: Test production builds before deployment
+Prerequisites
+- ECR repository (e.g., `myhealthplan-web`).
+- ECS cluster + Fargate service behind an ALB.
+- Task definition with container port 80 and a health check path `/`.
+
+1) Add a Dockerfile (two-stage build + Nginx serve)
+
+```dockerfile
+# Stage 1: Build
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY client/package*.json client/
+RUN cd client && npm ci
+COPY client client
+RUN cd client && npm run build
+
+# Stage 2: Serve with Nginx
+FROM nginx:1.25-alpine
+COPY --from=build /app/client/build /usr/share/nginx/html
+# SPA fallback: route all non-file paths to index.html
+RUN sed -i 's|try_files $uri $uri/ =404;|try_files $uri /index.html;|' /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+2) Build and push the image to ECR
+- Authenticate to ECR, build, tag, and push `:latest` or `:${GITHUB_SHA}`.
+
+3) Create/Update ECS task definition & service
+- Set container name (e.g., `web`), port 80, and health check path `/` on the ALB target group.
+- Update the service to use the new task definition revision.
+
+CI/CD via GitHub Actions (optional)
+- Requires: `AWS_REGION`, ECR repo name, cluster, service, task definition, container name.
+- Use OIDC or store `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY` secrets.
+
+```yaml
+name: Deploy to ECS
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'client/**'
+      - '.github/workflows/deploy-ecs.yml'
+      - 'Dockerfile'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          # If using a role: role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build, tag, and push image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Render task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ secrets.ECS_TASK_DEFINITION }}
+          container-name: ${{ secrets.CONTAINER_NAME }}
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ secrets.ECS_SERVICE }}
+          cluster: ${{ secrets.ECS_CLUSTER }}
+          wait-for-service-stability: true
+```
+
+Tip
+- Because this is a static SPA with HashRouter, S3 + CloudFront is often the simplest AWS path. If you prefer that, serve the `client/build` folder and configure a 404/SPA redirect to `index.html`.
 
 ## Troubleshooting
-
-**Development server won't start?**
-- Ensure Node.js v18+ is installed
-- Clear cache: `npm run clean`
-- Reinstall dependencies: `npm run install:all`
-- Check port 3000 is available
-
-**Hot reload not working?**
-- Save files (Ctrl+S)
-- Check terminal for compilation errors
-- Restart development server: Ctrl+C then `npm start`
-
-**CSS/Styling issues?**
-- Check Tailwind CSS configuration in `tailwind.config.js`
-- Verify PostCSS setup in `postcss.config.js`
-- Ensure CSS Modules are properly imported
-
-**Authentication issues?**
-- Clear browser localStorage
-- Check demo user credentials (password: `password123`)
-- Verify static user data in `constants/staticUserData.js`
-
-**Persona switching not working?**
-- Use admin@myhealthplan.com to access persona switching
-- Check browser console for JavaScript errors
-- Verify persona data in authentication service
-
-**Build failures?**
-- Clear `client/build` directory
-- Check for JavaScript syntax errors
-- Ensure all imports have valid file paths
-
-## Password Management
-
-### 🔒 Simple Demo Authentication
-All demo users share the same password: **`password123`**
-
-### � Available Demo Users
-- **admin@myhealthplan.com** - Full admin access with persona switching
-- **maria.hartsell@myhealthplan.com** - UM role with sepsis scenario access
-- **elise.tran@myhealthplan.com** - UM-SNF role for skilled nursing workflows
-- **karen.white@myhealthplan.com** - CM role for case management
-- **john.doe@myhealthplan.com** - Standard user
-- **jane.smith@myhealthplan.com** - Standard user
-
-### 🔧 Customizing Authentication
-To modify users or authentication:
-1. Edit `client/src/constants/staticUserData.js`
-2. Update user roles, names, or credentials
-3. Restart development server
+- Dev server doesn’t start: ensure Node 18+, run `npm run clean`; then `npm run install:all`.
+- Styles: check `tailwind.config.js` and `postcss.config.js`; ensure CSS Modules are imported as `import styles from './X.module.css'`.
+- Auth issues: clear localStorage; login as admin or Maria; use persona switcher for Elise/Karen; password is `password123`.
+- Deep linking: ensure you’re using HashRouter-style URLs (all route and query params after `#`).
 
 ---
-**Created**: December 2024 | **Updated**: July 3, 2025 | Optimized for enterprise healthcare workflows and developer experience
+Created: December 2024 • Updated: August 12, 2025

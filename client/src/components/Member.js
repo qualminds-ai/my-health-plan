@@ -49,7 +49,6 @@ const Member = ({
       if (scenarios.includes('sepsis') && (activeMode === 'UM' || activeMode === 'UM-SNF')) {
         // Future: Add other sepsis-related modifications here without alert
         console.log('🦠 Sepsis scenario active for', activeMode, 'mode');
-      console.log('📅 Build timestamp:', new Date().toISOString());
       }
 
       // Apply persona-specific modifications if needed
@@ -420,27 +419,27 @@ const Member = ({
 
   // Action button handlers
   const handleStarClick = () => {
-    console.log('ðŸŒŸ Star button clicked');
+    console.log('⭐ Star button clicked');
   };
 
   const handleCallClick = () => {
-    console.log('ðŸ“ž Call button clicked');
+    console.log('📞 Call button clicked');
   };
 
   const handleTextChatClick = () => {
-    console.log('ðŸ’¬ Text chat button clicked');
+    console.log('💬 Text chat button clicked');
   };
 
   const handleMessageClick = () => {
-    console.log('ðŸ“§ Message button clicked');
+    console.log('✉️ Message button clicked');
   };
 
   const handleWatchClick = () => {
-    console.log('ðŸ‘ï¸ Watch button clicked');
+    console.log('🕵️‍♂️ Watch button clicked');
   };
 
   const handleMedicalClick = () => {
-    console.log('ðŸ¥ Medical button clicked');
+    console.log('🏥 Medical button clicked');
   };
 
   // Handle navigation from header - prevent navigation away from member page for non-critical actions
