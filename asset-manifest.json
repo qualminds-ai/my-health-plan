@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.9b8981a6.css",
-    "main.js": "/static/js/main.2f8cc790.js",
+    "main.js": "/static/js/main.5f9e1721.js",
     "static/js/206.1430d834.chunk.js": "/static/js/206.1430d834.chunk.js",
     "static/media/background-image.jpg": "/static/media/background-image.a20d352173277356888d.jpg",
     "static/media/watch-icon.png": "/static/media/watch-icon.7a19a8563def4e1b445a.png",
@@ -30,6 +30,6 @@
   },
   "entrypoints": [
     "static/css/main.9b8981a6.css",
-    "static/js/main.2f8cc790.js"
+    "static/js/main.5f9e1721.js"
   ]
 }
